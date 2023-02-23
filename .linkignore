@@ -1,0 +1,4 @@
+.linkignore
+.git
+.github
+.gitignore

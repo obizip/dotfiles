@@ -1,0 +1,15 @@
+/*
+/.**
+
+!/.config/
+!/.config/**
+
+!/README.md
+!/LICENSE
+!/install/
+!/install/**
+!.linkignore
+!.gitignore
+!.vimrc
+!.zshenv
+!.tmux.config
