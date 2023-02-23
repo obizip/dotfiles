@@ -53,7 +53,3 @@ fi
 if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
-
-## Starship
-export STARSHIP_CONFIG="{$XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
-export STARSHIP_CACHE="{$XDG_CACHE_HOME:-$HOME/.cache}/starship"
