@@ -1,8 +1,7 @@
-brew 'gcc'
 brew 'zsh'
 brew 'tmux'
-brew 'unzip'
-brew 'make'
 brew 'ripgrep'
 brew 'fzf'
-brew 'neovim --HEAD'
+brew 'exa'
+brew 'bat'
+brew 'neovim', args: ["HEAD"]
