@@ -1,0 +1,12 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+[hostname]
+ssh_only = false
+format = '[@$hostname](bold green) '
+trim_at = '.companyname.com'
+disabled = false
+
+[cmd_duration]
+disabled = true
