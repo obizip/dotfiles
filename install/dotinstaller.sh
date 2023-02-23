@@ -32,7 +32,7 @@ function main() {
     print_info ""
 
     source $current_dir/lib/install-brew.sh
-    source $current_dir/lib/install-packages.sh
+    /home/linuxbrew/.linuxbrew/bin/brew bundle --global
     source $current_dir/lib/install-starship.sh
     source $current_dir/lib/install-prezto.sh
 
