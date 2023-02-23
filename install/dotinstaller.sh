@@ -31,11 +31,10 @@ function main() {
     print_info "#####################################################"
     print_info ""
 
+    source $current_dir/lib/install-brew.sh
     source $current_dir/lib/install-packages.sh
-    source $current_dir/lib/install-fzf.sh
     source $current_dir/lib/install-starship.sh
     source $current_dir/lib/install-prezto.sh
-    source $current_dir/lib/install-neovim.sh
 
     print_info ""
     print_info "#####################################################"
