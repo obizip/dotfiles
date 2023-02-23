@@ -1,4 +1,3 @@
-brew 'zsh'
 brew 'tmux'
 brew 'ripgrep'
 brew 'fzf'

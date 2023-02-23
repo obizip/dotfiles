@@ -35,6 +35,7 @@ function main() {
     /home/linuxbrew/.linuxbrew/bin/brew bundle --global
     source $current_dir/lib/install-starship.sh
     source $current_dir/lib/install-prezto.sh
+    chsh -s "$(which zsh)"
 
     print_info ""
     print_info "#####################################################"
