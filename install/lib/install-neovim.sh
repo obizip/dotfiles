@@ -2,14 +2,12 @@
 
 set -ue
 
-if [[ $distro == "debian" ]]; then
-    # https://www.nalabo.net/blog/2022/09/06/1307
-    sudo apt-key adv --keyserver keys.openpgp.org --recv-keys
+function neovim_nightly() {
+	mkdir -p ~/.local/
+	curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz | tar zx --strip-components 1 -C ~/.local/
+	# for nvim-treesitter
+	# https://github.com/nvim-treesitter/nvim-treesitter/blob/68e8181dbcf29330716d380e5669f2cd838eadb5/lua/nvim-treesitter/install.lua#L14
+	checkinstall gcc
+}
 
-    sudo apt-get install software-properties-common
-    sudo add-apt-repository ppa:neovim-ppa/unstable
-    sudo apt-get update
-    sudo apt-get install neovim -y
-
-    nvim --headless "+Lazy! sync" +qa
-fi
+neovim_nightly
