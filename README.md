@@ -1,13 +1,15 @@
-#dotfiles
+# dotfiles
+
 **Work In Progress**
 
-##requirements
-###nvim
+## requirements
+
+### nvim
 * fzf
 * ripgrep
 * tectonic
 * golang setup
 
-###zsh
+### zsh
 * peco
 * ghq
