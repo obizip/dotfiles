@@ -31,48 +31,17 @@ function print_debug() {
     echo -e "\e[1;34m$*\e[m" # blue
 }
 
-function chkcmd() {
-    if ! builtin command -v "$1"; then
-        print_error "${1} command not found"
-        exit
-    fi
-}
-
-function yes_or_no_select() {
-    local answer
-    print_notice "Are you ready? [yes/no]"
-    read -r answer
-    case $answer in
-        yes | y)
-            return 0
-            ;;
-        no | n)
-            return 1
-            ;;
-        *)
-            yes_or_no_select
-            ;;
-    esac
-}
-
-function append_file_if_not_exist() {
-    contents="$1"
-    target_file="$2"
-    if ! grep -q "${contents}" "${target_file}"; then
-        echo "${contents}" >>"${target_file}"
-    fi
-}
-
 function whichdistro() {
-    #which yum > /dev/null && { echo redhat; return; }
-    #which zypper > /dev/null && { echo opensuse; return; }
-    #which apt-get > /dev/null && { echo debian; return; }
-    if [ -f /etc/debian_version ]; then
-        echo debian
-        return
+    if [ "$(uname)" == 'Darwin' ]; then
+        echo mac
     else
-        print_error "Dosen't match supported distro"
-        exit 1
+        if [ -f /etc/debian_version ]; then
+            echo debian
+            return
+        else
+            print_error "Dosen't match supported distro"
+            exit 1
+        fi
     fi
 }
 
@@ -87,26 +56,6 @@ function checkinstall() {
         print_error "Dosen't match supported distro"
         exit 1
 	fi
-}
-
-function git_clone_or_fetch() {
-    local repo="$1"
-    local dest="$2"
-    local name
-    name=$(basename "$repo")
-    if [ ! -d "$dest/.git" ]; then
-        print_default "Installing $name..."
-        print_default ""
-        mkdir -p $dest
-        git clone --depth 1 $repo $dest
-    else
-        print_default "Pulling $name..."
-        (
-        builtin cd $dest && git pull --depth 1 --rebase origin "$(basename "$(git symbolic-ref --short refs/remotes/origin/HEAD)")" ||
-            print_notice "Exec in compatibility mode [git pull --rebase]" &&
-            builtin cd $dest && git fetch --unshallow && git rebase origin/"$(basename "$(git symbolic-ref --short refs/remotes/origin/HEAD)")"
-        )
-    fi
 }
 
 function mkdir_not_exist() {

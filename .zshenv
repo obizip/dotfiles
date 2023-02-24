@@ -2,6 +2,7 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export ZDOTDIR=$XDG_CONFIG_HOME/zsh
+export ZRCDIR=$ZDOTDIR/rc
 
 ## Browser
 if [[ -z "$BROWSER" && "$OSTYPE" == darwin* ]]; then
@@ -58,3 +59,5 @@ fi
 if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+export GOPATH=$HOME/.go

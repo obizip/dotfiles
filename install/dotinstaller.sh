@@ -5,22 +5,6 @@
 
 set -ue
 
-#--------------------------------------------------------------#
-##          Functions                                         ##
-#--------------------------------------------------------------#
-
-function helpmsg() {
-	print_default "Usage: ${BASH_SOURCE[0]:-$0} [install | update | link] [--with-gui] [--help | -h]" 0>&2
-	print_default "  install: add require package install and symbolic link to $HOME from dotfiles [default]"
-	print_default "  update: add require package install or update."
-	print_default "  link: only symbolic link to $HOME from dotfiles."
-	print_default ""
-}
-
-#--------------------------------------------------------------#
-##          main                                              ##
-#--------------------------------------------------------------#
-
 function main() {
 	local current_dir
 	current_dir=$(dirname "${BASH_SOURCE[0]:-$0}")
@@ -35,7 +19,14 @@ function main() {
     print_info ""
 
     source $current_dir/lib/install-brew.sh
-    /home/linuxbrew/.linuxbrew/bin/brew bundle --global
+
+    if [[ "$(whichdistro)" == "mac" ]]; then
+        checkinstall build-essential procps curl file git zsh
+        #eval "$(/opt/homebrew/bin/brew shellenv)"
+        /opt/homebrew/bin/brew bundle --global
+    else
+        /home/linuxbrew/.linuxbrew/bin/brew bundle --global
+    fi
     source $current_dir/lib/install-starship.sh
     source $current_dir/lib/install-prezto.sh
 

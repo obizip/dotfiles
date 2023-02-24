@@ -6,11 +6,13 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+# configuration
+if [ "$(uname)" == 'Darwin' ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
-export GOPATH=$HOME/.go
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-source "${ZDOTDIR:-$HOME}/rc/alias.zsh"
-source "${ZDOTDIR:-$HOME}/rc/bindkey.zsh"
+source "$ZRCDIR/alias.zsh"
+source "$ZRCDIR/bindkey.zsh"
 eval "$(starship init zsh)"
