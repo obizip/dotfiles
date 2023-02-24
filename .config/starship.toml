@@ -2,11 +2,36 @@
 
 add_newline = false
 
+format = """
+$username\
+$hostname\
+$localip\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$red\
+$buf\
+$memory_usage\
+$env_var\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\
+$os\
+$container\
+$shell\
+$character"""
+
 [hostname]
 ssh_only = false
 format = '[@$hostname](bold green) '
 trim_at = '.companyname.com'
 disabled = false
-
-[cmd_duration]
-disabled = true
