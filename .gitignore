@@ -12,5 +12,5 @@
 !.gitignore
 !.vimrc
 !.zshenv
-!.tmux.config
+!.tmux.conf
 !.Brewfile
