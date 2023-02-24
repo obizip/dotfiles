@@ -19,7 +19,6 @@ $memory_usage\
 $env_var\
 $custom\
 $sudo\
-$cmd_duration\
 $line_break\
 $jobs\
 $battery\
