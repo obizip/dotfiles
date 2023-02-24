@@ -82,7 +82,7 @@ return {
       --  mac: skim
       --  wsl: zathura
 
-      if not vim.fn.executable('tectonic') then
+      if vim.fn.executable('tectonic') then
         local pdf_cmd = ""
         local pdf_args = {}
         if vim.loop.os_uname().sysname == "Darwin" then
