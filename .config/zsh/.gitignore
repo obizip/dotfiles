@@ -6,3 +6,5 @@
 !/.zprofile
 !/.zlogin
 !/.zpreztorc
+!/rc/
+!/rc/**

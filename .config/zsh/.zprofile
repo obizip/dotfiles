@@ -9,13 +9,13 @@ fi
 
 ## Editors
 if [[ -z "$EDITOR" ]]; then
-  export EDITOR='vim'
+  export EDITOR='nvim'
 fi
 if [[ -z "$VISUAL" ]]; then
-  export VISUAL='vim'
+  export VISUAL='nvim'
 fi
 if [[ -z "$PAGER" ]]; then
-  export PAGER='less'
+  export PAGER='bat'
 fi
 
 ## Language
@@ -37,6 +37,10 @@ path=(
   $HOME/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
+  $HOME/go/bin(N-/)
+  $HOME/.go/bin(N-/)
+  $HOME/.cargo/bin(N-/)
+  $HOME/.rustup/toolchains/*/bin(N-/)
   $path
 )
 
@@ -53,3 +57,6 @@ fi
 if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export GOPATH=$HOME/.go

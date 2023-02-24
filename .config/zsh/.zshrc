@@ -7,5 +7,6 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+source "${ZDOTDIR:-$HOME}/rc/alias.zsh"
+source "${ZDOTDIR:-$HOME}/rc/bindkey.zsh"
 eval "$(starship init zsh)"
