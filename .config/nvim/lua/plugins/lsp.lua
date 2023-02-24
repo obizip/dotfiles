@@ -83,57 +83,48 @@ return {
       --  wsl: zathura
 
       if not vim.fn.executable('tectonic') then
-        goto skip
-      end
-
-      local pdf_cmd = ""
-      local pdf_args = {}
-      if vim.loop.os_uname().sysname == "Darwin" then
-        if not vim.fn.executable('displayline') then
-          goto skip
+        local pdf_cmd = ""
+        local pdf_args = {}
+        if vim.loop.os_uname().sysname == "Darwin" then
+          pdf_cmd = "displayline"
+          pdf_args = { "%l", "%p", "%f" }
+        else
+          pdf_cmd = "zathura"
+          pdf_args = { "--synctex-forward", "%l:0:%f", "%p" }
         end
-        pdf_cmd = "displayline"
-        pdf_args = { "%l", "%p", "%f" }
-      else
-        if not vim.fn.executable('zathura') then
-          goto skip
-        end
-        pdf_cmd = "zathura"
-        pdf_args = { "--synctex-forward", "%l:0:%f", "%p" }
-      end
 
-      lspconfig.texlab.setup({
-        settings = {
-          texlab = {
-            rootDirectory = nil,
-            build = {
-              executable = "tectonic",
-              args = { "-X", "compile", "--synctex", "%f", "--keep-logs", "--keep-intermediates" },
-              onSave = true,
-              forwardSearchAfter = false,
+        lspconfig.texlab.setup({
+          settings = {
+            texlab = {
+              rootDirectory = nil,
+              build = {
+                executable = "tectonic",
+                args = { "-X", "compile", "--synctex", "%f", "--keep-logs", "--keep-intermediates" },
+                onSave = true,
+                forwardSearchAfter = false,
+              },
+              auxDirectory = ".",
+              forwardSearch = {
+                executable = pdf_cmd,
+                args = pdf_args,
+              },
+              chktex = {
+                onOpenAndSave = false,
+                onEdit = false,
+              },
+              -- diagnosticsDelay = 300,
+              diagnosticsDelay = 100,
+              latexFormatter = "latexindent",
+              latexindent = {
+                ["local"] = nil, -- local is a reserved keyword
+                modifyLineBreaks = false,
+              },
+              bibtexFormatter = "texlab",
+              formatterLineLength = 80,
             },
-            auxDirectory = ".",
-            forwardSearch = {
-              executable = pdf_cmd,
-              args = pdf_args,
-            },
-            chktex = {
-              onOpenAndSave = false,
-              onEdit = false,
-            },
-            -- diagnosticsDelay = 300,
-            diagnosticsDelay = 100,
-            latexFormatter = "latexindent",
-            latexindent = {
-              ["local"] = nil, -- local is a reserved keyword
-              modifyLineBreaks = false,
-            },
-            bibtexFormatter = "texlab",
-            formatterLineLength = 80,
           },
-        },
-      })
-      ::skip::
+        })
+      end
     end,
   },
 }
