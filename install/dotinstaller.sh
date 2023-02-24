@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Reference
+# https://github.com/yutkat/dotfiles/blob/main/install_scripts/dotsinstaller.sh
+
 set -ue
 
 #--------------------------------------------------------------#
@@ -35,7 +38,9 @@ function main() {
     /home/linuxbrew/.linuxbrew/bin/brew bundle --global
     source $current_dir/lib/install-starship.sh
     source $current_dir/lib/install-prezto.sh
-    chsh -s "$(which zsh)"
+
+    mkdir -p $HOME/src
+    git config --global ghq.root "$HOME/src"
 
     print_info ""
     print_info "#####################################################"

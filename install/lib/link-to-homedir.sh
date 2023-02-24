@@ -2,7 +2,7 @@
 #
 # Reference
 # https://github.com/yutkat/dotfiles/blob/main/install_scripts/lib/dotsinstaller/link-to-homedir.sh
-#
+
 set -ue
 
 source $(dirname "${BASH_SOURCE[0]:-$0}")/util.sh

@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-#
 # Reference
 # https://github.com/yutkat/dotfiles/blob/main/install_scripts/lib/dotsinstaller/utilfunc.sh
-#
 
 function print_default() {
     echo -e "$*"
