@@ -1,15 +1,37 @@
 # dotfiles
 
-**Work In Progress**
+**For Ubuntu-22.04 in WSL**
 
-## requirements
+## How to install
+```
+git clone https://github.com/obi-3/dotfiles.git
+cd dotfiles/install
+./dotinstaller.sh
+```
 
-### nvim
+## Main packages
+* homebrew (package manager)
+* nvim
+* tmux
 * fzf
 * ripgrep
-* tectonic
-* golang setup
-
-### zsh
+* exa
+* bat
 * peco
 * ghq
+
+## Shell 
+* prezto
+* starship
+
+## After installation
+
+### Change shell
+```
+chsh -s /bin/zsh
+```
+
+### Update nvim
+```bash
+nvim --headless "+Lazy! sync" +qa
+```
