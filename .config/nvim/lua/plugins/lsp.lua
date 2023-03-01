@@ -69,9 +69,21 @@ return {
       local lspconfig = require("lspconfig")
       require("mason-lspconfig").setup_handlers({
         function(server_name)
-          lspconfig[server_name].setup({
-            capabilities = capabilities,
-          })
+          if (server_name == "omnisharp_mono") then
+            lspconfig[server_name].setup({
+              capabilities = capabilities,
+              on_attach = function(client, _)
+                client.server_capabilities.semanticTokensProvider.legend = {
+                  tokenModifiers = { "static" },
+                  tokenTypes = { "comment", "excluded", "identifier", "keyword", "keyword", "number", "operator", "operator", "preprocessor", "string", "whitespace", "text", "static", "preprocessor", "punctuation", "string", "string", "class", "delegate", "enum", "interface", "module", "struct", "typeParameter", "field", "enumMember", "constant", "local", "parameter", "method", "method", "property", "event", "namespace", "label", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp" }
+                }
+              end
+            })
+          else
+            lspconfig[server_name].setup({
+              capabilities = capabilities,
+            })
+          end
         end,
       })
 
