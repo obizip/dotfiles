@@ -15,4 +15,8 @@ fi
 
 source "$ZRCDIR/alias.zsh"
 source "$ZRCDIR/bindkey.zsh"
+
+# local configuration
+source "$ZRCDIR/local.zsh"
+
 eval "$(starship init zsh)"
