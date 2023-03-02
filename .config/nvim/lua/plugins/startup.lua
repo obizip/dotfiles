@@ -16,10 +16,11 @@ return {
         dashboard.button("SPC f", "  Find file"),
         dashboard.button("SPC i", "  Live grep"),
         dashboard.button("SPC c", "  Configuration"),
-        dashboard.button("l", "  Open Lazy", "<cmd>Lazy<CR>"),
-        dashboard.button("m", "  Open Mason", "<cmd>Mason<CR>"),
+        dashboard.button("l", "   Open Lazy", "<cmd>Lazy<CR>"),
+        dashboard.button("m", "   Open Mason", "<cmd>Mason<CR>"),
         dashboard.button("q", "  Quit", "<cmd>qa<CR>"),
       },
+
       position = "center",
     }
     local cdir = vim.fn.getcwd()
