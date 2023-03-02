@@ -16,7 +16,9 @@ fi
 source "$ZRCDIR/alias.zsh"
 source "$ZRCDIR/bindkey.zsh"
 
-# local configuration
-source "$ZRCDIR/local.zsh"
+# if local configuration exists, then load.
+if [[ -e "$ZRCDIR/local.zsh" ]]; then
+    source "$ZRCDIR/local.zsh"
+fi
 
 eval "$(starship init zsh)"
