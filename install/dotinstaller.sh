@@ -23,16 +23,16 @@ function main() {
         /opt/homebrew/bin/brew bundle --global
     else
         sudo apt update
-        checkinstall curl wget zsh tmux ripgrep fzf exa bat peco
+        checkinstall curl wget software-properties-common
+        checkinstall zsh tmux ripgrep exa bat peco
 
         # link batcat to bat
         sudo link /usr/bin/batcat /usr/bin/bat
 
-        sudo apt-get install software-properties-common
-        sudo add-apt-repository ppa:neovim-ppa/unstable
-        sudo add-apt-repository ppa:longsleep/golang-backports
+        sudo add-apt-repository -y ppa:neovim-ppa/unstable
+        sudo add-apt-repository -y ppa:longsleep/golang-backports
         sudo apt-get update
-        sudo apt-get install neovim golang
+        sudo apt-get install neovim golang -y
         go install github.com/x-motemen/ghq@latest
         mv $HOME/go $HOME/.go
 
