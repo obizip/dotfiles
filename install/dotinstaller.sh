@@ -26,7 +26,7 @@ function main() {
         checkinstall curl wget zsh tmux ripgrep fzf exa bat peco
 
         # link batcat to bat
-        sudo link /usr/bin/batcat/ /usr/bin/bat
+        sudo link /usr/bin/batcat /usr/bin/bat
 
         sudo apt-get install software-properties-common
         sudo add-apt-repository ppa:neovim-ppa/unstable ppa:longsleep/golang-backports
