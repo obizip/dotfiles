@@ -23,6 +23,7 @@ function main() {
     if [[ "$(whichdistro)" == "mac" ]]; then
         /opt/homebrew/bin/brew bundle --global
     else
+        sudo apt update
         checkinstall curl wget zsh tmux ripgrep fzf exa bat peco
 
         # link batcat to bat
