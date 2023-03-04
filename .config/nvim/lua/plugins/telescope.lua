@@ -3,7 +3,7 @@ return {
 	event = "VeryLazy",
 
 	dependencies = {
-		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		-- { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		"nvim-tree/nvim-web-devicons",
 		"nvim-treesitter/nvim-treesitter",
 		"folke/which-key.nvim",
@@ -14,7 +14,7 @@ return {
 		telescope.setup({
 			defaults = {},
 		})
-		telescope.load_extension("fzf")
+		-- telescope.load_extension("fzf")
 
 		local wk = require("which-key")
 		wk.register({
