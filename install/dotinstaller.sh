@@ -21,10 +21,9 @@ function main() {
     source $current_dir/lib/install-brew.sh
 
     if [[ "$(whichdistro)" == "mac" ]]; then
-        checkinstall build-essential procps curl file git zsh
-        #eval "$(/opt/homebrew/bin/brew shellenv)"
         /opt/homebrew/bin/brew bundle --global
     else
+        checkinstall build-essential procps curl file git zsh
         /home/linuxbrew/.linuxbrew/bin/brew bundle --global
     fi
     source $current_dir/lib/install-starship.sh
