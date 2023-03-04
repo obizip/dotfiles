@@ -18,9 +18,8 @@ function main() {
     print_info "#####################################################"
     print_info ""
 
-    source $current_dir/lib/install-brew.sh
-
     if [[ "$(whichdistro)" == "mac" ]]; then
+        source $current_dir/lib/install-brew.sh
         /opt/homebrew/bin/brew bundle --global
     else
         sudo apt update
