@@ -23,8 +23,18 @@ function main() {
     if [[ "$(whichdistro)" == "mac" ]]; then
         /opt/homebrew/bin/brew bundle --global
     else
-        checkinstall build-essential procps curl file git zsh
-        /home/linuxbrew/.linuxbrew/bin/brew bundle --global
+        checkinstall curl wget zsh tmux ripgrep fzf exa bat peco
+
+        # link batcat to bat
+        sudo link /usr/bin/batcat/ /usr/bin/bat
+
+        sudo apt-get install software-properties-common
+        sudo add-apt-repository ppa:neovim-ppa/unstable ppa:longsleep/golang-backports
+        sudo apt-get update
+        sudo apt-get install neovim golang
+        go install github.com/x-motemen/ghq@latest
+        mv $HOME/go $HOME/.go
+
     fi
     source $current_dir/lib/install-starship.sh
     source $current_dir/lib/install-prezto.sh
