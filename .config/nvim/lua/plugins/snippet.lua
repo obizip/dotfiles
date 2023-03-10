@@ -17,8 +17,6 @@ return {
     -- local r = ls.restore_node
     local fmt = require("luasnip.extras.fmt").fmt
     -- local fmta = require("luasnip.extras.fmt").fmta
-    ls.add_snippets("all", {
-    })
     ls.add_snippets("tex", {
       s("fig",
         fmt([[
@@ -61,7 +59,72 @@ return {
           \lstinputlisting[language=<>, caption=<>, label=prog:<>]{<>}
 
         ]],
-        { i(1, "language"), i(2, "caption"), i(3, "prog"), i(4, "filepath") },
+          { i(1, "language"), i(2, "caption"), i(3, "prog"), i(4, "filepath") },
+          { delimiters = "<>" })
+      ),
+
+      s("def", fmt([[
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          \begin{Def}{<>}
+              <>
+              \begin{eq}
+                    <> = <>
+              \end{eq}
+              <>
+          \end{Def}
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          ]],
+        { i(1, "number"), i(2, "def"), i(3, "lhs"), i(4, "rhs"), i(5, "") },
+        { delimiters = "<>" })
+      ),
+
+      s("ex", fmt([[
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          \begin{Ex}{<>}
+              <>
+              \begin{eq}
+                    <> = <>
+              \end{eq}
+              <>
+          \end{Ex}
+
+          \begin{proof}
+              \begin{eq}
+                %\text{LHS} \overset{\text{(2.2.1)}} & =
+                \text{LHS} & = <>
+                           & = <>
+                           & = \text{RHS}
+              \end{eq}
+          \end{proof}
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          ]],
+        {
+          i(1, "number"), i(2, "def"), i(3, "lhs"), i(4, "rhs"), i(5, ""),
+          i(6, "eq1"), i(7, "eq2")
+
+        },
+        { delimiters = "<>" })
+      ),
+
+      s("sim", fmt([[
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          \begin{Sim}
+              \textbf{Simulation <>} <>
+              \begin{eq}
+                  <> = <>
+              \end{eq}
+              <>
+          \end{Sim}
+
+          \begin{Code}
+          %\lstinputlisting[language=]{}
+          \begin{lstlisting}[language=Octave]
+          <>
+          \end{lstlisting}
+          \end{Code}
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          ]],
+        { i(1, "number"), i(2, "def"), i(3, "lhs"), i(4, "rhs"), i(5, ""), i(6, "code") },
         { delimiters = "<>" })
       ),
     })
