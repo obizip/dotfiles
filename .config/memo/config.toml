@@ -1,0 +1,11 @@
+memodir = "${DROPBOXDIR}/memo"
+editor = "nvim"
+column = 20
+width = 0
+selectcmd = "peco"
+grepcmd = "grep -nH ${PATTERN} ${FILES}"
+memotemplate = "${DROPBOXDIR}/memo/.template/md.txt"
+assetsdir = "."
+pluginsdir = "/Users/obi/.config/memo/plugins"
+templatedirfile = ""
+templatebodyfile = ""

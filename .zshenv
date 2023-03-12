@@ -4,6 +4,12 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 export ZRCDIR=$ZDOTDIR/rc
 
+if [[ "$(uname)" == 'Darwin' ]]; then
+    export DROPBOXDIR=$HOME/Dropbox
+else
+    export DROPBOXDIR=/mnt/c/Users/obiga/Dropbox
+fi
+
 ## Browser
 if [[ -z "$BROWSER" && "$OSTYPE" == darwin* ]]; then
   export BROWSER='open'

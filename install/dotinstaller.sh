@@ -34,6 +34,7 @@ function main() {
         sudo apt-get update
         sudo apt-get install neovim golang -y
         go install github.com/x-motemen/ghq@latest
+        go install github.com/mattn/memo@latest
         mv $HOME/go $HOME/.go
 
     fi
