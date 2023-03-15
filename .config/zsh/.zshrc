@@ -7,6 +7,9 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # configuration
+
+unsetopt correct
+
 if [[ "$(uname)" == 'Darwin' ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 else
