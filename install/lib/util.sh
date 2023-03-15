@@ -45,6 +45,7 @@ function whichdistro() {
     fi
 }
 
+# except for mac
 function checkinstall() {
 	local distro
 	distro=$(whichdistro)
@@ -52,6 +53,8 @@ function checkinstall() {
 	if [[ $distro == "debian" ]]; then
 		pkgs=${pkgs//python-pip/python3-pip}
 		sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $pkgs
+    elif [[ $distro == "arch" ]]; then
+        sudo pacman -S --noconfirm --needed $pkgs
     else
         print_error "Dosen't match supported distro"
         exit 1
