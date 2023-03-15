@@ -12,7 +12,7 @@ return {
   config = function ()
     vim.g.memolist_path = os.getenv("DROPBOXDIR") .. "/memo"
     vim.g.memolist_memo_suffix = "md"
-    -- vim.g.memolist_fzf = 1
+    vim.g.memolist_fzf = 1
     vim.g.memolist_template_dir_path = os.getenv("DROPBOXDIR") .. "/memo/.template"
 
     require'telescope'.load_extension'memo'

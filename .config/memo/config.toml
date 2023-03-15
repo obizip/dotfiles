@@ -1,11 +1,9 @@
-memodir = "${DROPBOXDIR}/memo"
+memodir = "$DROPBOXDIR/memo"
 editor = "nvim"
 column = 20
 width = 0
 selectcmd = "fzf"
 grepcmd = "grep -nH ${PATTERN} ${FILES}"
-memotemplate = "${DROPBOXDIR}/memo/.template/md.txt"
+memotemplate = "$DROPBOXDIR/memo/.template/md.txt"
 assetsdir = "."
 pluginsdir = "/Users/obi/.config/memo/plugins"
-templatedirfile = ""
-templatebodyfile = ""
