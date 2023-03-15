@@ -5,5 +5,4 @@ brew 'exa'
 brew 'bat'
 brew 'neovim', args: ["HEAD"]
 brew 'go'
-brew 'peco'
 brew 'ghq'

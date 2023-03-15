@@ -17,10 +17,9 @@ cd dotfiles/install
 * ripgrep
 * exa
 * bat
-* peco
 * ghq
 
-## Shell 
+## Shell
 * prezto
 * starship
 
