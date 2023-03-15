@@ -3,13 +3,23 @@ import:
 
 window:
   opacity: 0.8
+  padding:
+    x: 5
+    y: 5
 
 draw_bold_text_with_bright_colors: true
 
 font:
   normal:
     family: PlemolJP35 Console NF
-  size: 17.0
-  offset:
-    x: 1
-    y: 1
+    style: Regular
+  bold:
+    family: PlemolJP35 Console NF
+    style: Bold
+  italic:
+    family: PlemolJP35 Console NF
+    style: Italic
+  bold_italic:
+    family: PlemolJP35 Console NF
+    style: BoldItalic
+  size: 17
