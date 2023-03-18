@@ -16,7 +16,7 @@ require("options")
 
 require("lazy").setup("rc", {
 	defaults = { lazy = true },
-	checker = { enabled = true },
+	checker = { enabled = false },
 	performance = {
 		cache = {
 			enabled = true,
@@ -46,4 +46,3 @@ vim.api.nvim_create_autocmd("User", {
 		require("mappings")
 	end,
 })
-

@@ -6,6 +6,7 @@ return {
     "nvim-tree/nvim-web-devicons",
     "nvim-treesitter/nvim-treesitter",
     "folke/which-key.nvim",
+    "nvim-lua/plenary.nvim",
   },
   config = function()
     local telescope = require("telescope")
