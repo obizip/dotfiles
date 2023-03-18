@@ -1,16 +1,15 @@
 # dotfiles
 
-**For Ubuntu-22.04 in WSL**
+**For ArcWSL**
 
 ## How to install
 ```
 git clone https://github.com/obi-3/dotfiles.git
-cd dotfiles/install
-./dotinstaller.sh
+cd dotfiles/setup
+./setup.sh
 ```
 
 ## Main packages
-* homebrew (package manager)
 * nvim
 * tmux
 * fzf
