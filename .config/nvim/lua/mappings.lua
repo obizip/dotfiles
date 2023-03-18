@@ -36,7 +36,7 @@ wk.register({
 })
 
 -- Insert mode --
-vim.keymap.set("i", "<C-k>", "<C-o>D", nm) -- カーソルから右を全て削除
+-- vim.keymap.set("i", "<C-k>", "<C-o>D", nm) -- カーソルから右を全て削除
 vim.keymap.set("i", "<C-j>", "<C-o>o", nm) -- 改行
 vim.keymap.set("i", "<C-y>", "<esc>p==a", nm) -- paste
 vim.keymap.set("i", "<C-c>", "<ESC>", nm)
