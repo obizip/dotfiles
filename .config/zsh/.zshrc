@@ -9,6 +9,7 @@ fi
 # configuration
 
 unsetopt correct
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 
 if [[ "$(uname)" == 'Darwin' ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
