@@ -28,6 +28,6 @@ alias gcm='git commit -m'
 
 # tmux
 alias ta="tmux a -t"
-alias tn="tmux new -s"
-alias tl="tmux ls"
+alias tn="~/.config/tmux/tmux-new.sh"
+alias tl="~/.config/tmux/tmux-session-fzf.sh"
 alias ts="tmux source ~/.tmux.conf"
