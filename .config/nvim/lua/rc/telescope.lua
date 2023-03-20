@@ -10,6 +10,7 @@ return {
   },
   config = function()
     local telescope = require("telescope")
+    telescope.load_extension("fzf")
     telescope.setup({
       defaults = {},
       extensions = {
@@ -22,7 +23,6 @@ return {
         }
       }
     })
-    telescope.load_extension("fzf")
 
     local wk = require("which-key")
     wk.register({

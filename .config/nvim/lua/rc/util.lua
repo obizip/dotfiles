@@ -102,5 +102,22 @@ return {
         },
       })
     end
+  },
+
+  {
+    'norcalli/nvim-colorizer.lua',
+    event = 'VeryLazy',
+    config = function()
+      require'colorizer'.setup()
+    end,
+  },
+
+  {
+    'folke/todo-comments.nvim',
+    event = 'VeryLazy',
+    dependencies = 'nvim-lua/plenary.nvim',
+    config = function()
+      require'todo-comments'.setup()
+    end,
   }
 }
