@@ -16,7 +16,7 @@ require("options")
 
 require("lazy").setup("rc", {
 	defaults = { lazy = true },
-	checker = { enabled = false },
+	checker = { enabled = true },
 	performance = {
 		cache = {
 			enabled = true,
