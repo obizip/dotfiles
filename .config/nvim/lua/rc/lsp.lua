@@ -2,14 +2,14 @@ return {
   {
     "neovim/nvim-lspconfig",
     lazy = false,
-
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "j-hui/fidget.nvim",
+      -- "j-hui/fidget.nvim",
       "folke/which-key.nvim",
-      { "folke/lsp-colors.nvim",
+      {
+        "folke/lsp-colors.nvim",
         config = function()
           require("lsp-colors").setup({
             Error = "#db4b4b",
@@ -17,13 +17,13 @@ return {
             Information = "#0db9d7",
             Hint = "#10B981"
           })
-        end },
+        end
+      },
     },
-
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup()
-      require("fidget").setup()
+      -- require("fidget").setup()
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] =
           vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
@@ -57,13 +57,42 @@ return {
       local lspconfig = require("lspconfig")
       require("mason-lspconfig").setup_handlers({
         function(server_name)
-          if (server_name == "omnisharp_mono") then
+          if (server_name == "lua_ls") then
+            require 'lspconfig'.lua_ls.setup {
+              settings = {
+                Lua = {
+                  runtime = {
+                    -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                    version = 'LuaJIT',
+                  },
+                  diagnostics = {
+                    -- Get the language server to recognize the `vim` global
+                    globals = { 'vim' },
+                  },
+                  workspace = {
+                    -- Make the server aware of Neovim runtime files
+                    library = vim.api.nvim_get_runtime_file("", true),
+                  },
+                  -- Do not send telemetry data containing a randomized but unique identifier
+                  telemetry = {
+                    enable = false,
+                  },
+                },
+              },
+            }
+          elseif (server_name == "omnisharp_mono") then
             lspconfig[server_name].setup({
               capabilities = capabilities,
               on_attach = function(client, _)
                 client.server_capabilities.semanticTokensProvider.legend = {
                   tokenModifiers = { "static" },
-                  tokenTypes = { "comment", "excluded", "identifier", "keyword", "keyword", "number", "operator", "operator", "preprocessor", "string", "whitespace", "text", "static", "preprocessor", "punctuation", "string", "string", "class", "delegate", "enum", "interface", "module", "struct", "typeParameter", "field", "enumMember", "constant", "local", "parameter", "method", "method", "property", "event", "namespace", "label", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp", "regexp" }
+                  tokenTypes = { "comment", "excluded", "identifier", "keyword", "keyword", "number", "operator",
+                    "operator", "preprocessor", "string", "whitespace", "text", "static", "preprocessor", "punctuation",
+                    "string", "string", "class", "delegate", "enum", "interface", "module", "struct", "typeParameter",
+                    "field", "enumMember", "constant", "local", "parameter", "method", "method", "property", "event",
+                    "namespace", "label", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml",
+                    "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "xml", "regexp", "regexp", "regexp",
+                    "regexp", "regexp", "regexp", "regexp", "regexp", "regexp" }
                 }
               end
             })
