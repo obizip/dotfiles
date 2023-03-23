@@ -57,30 +57,7 @@ return {
       local lspconfig = require("lspconfig")
       require("mason-lspconfig").setup_handlers({
         function(server_name)
-          if (server_name == "lua_ls") then
-            require 'lspconfig'.lua_ls.setup {
-              settings = {
-                Lua = {
-                  runtime = {
-                    -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                    version = 'LuaJIT',
-                  },
-                  diagnostics = {
-                    -- Get the language server to recognize the `vim` global
-                    globals = { 'vim' },
-                  },
-                  workspace = {
-                    -- Make the server aware of Neovim runtime files
-                    library = vim.api.nvim_get_runtime_file("", true),
-                  },
-                  -- Do not send telemetry data containing a randomized but unique identifier
-                  telemetry = {
-                    enable = false,
-                  },
-                },
-              },
-            }
-          elseif (server_name == "omnisharp_mono") then
+          if (server_name == "omnisharp_mono") then
             lspconfig[server_name].setup({
               capabilities = capabilities,
               on_attach = function(client, _)
@@ -104,6 +81,16 @@ return {
         end,
       })
 
+      lspconfig.lua_ls.setup {
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { 'vim' }
+            }
+          }
+        }
+      }
+
       -- go to last loc when opening a buffer
       vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
         pattern = "*.tex",
@@ -119,7 +106,6 @@ return {
               pdf_args = { "--synctex-forward", "%l:0:%f", "%p" }
             end
 
-            local lspconfig = require("lspconfig")
             lspconfig.texlab.setup({
               settings = {
                 texlab = {

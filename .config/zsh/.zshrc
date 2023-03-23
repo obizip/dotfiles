@@ -12,6 +12,12 @@ unsetopt correct
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 
 if [[ "$(uname)" == 'Darwin' ]]; then
+    export DROPBOXDIR=$HOME/Dropbox
+else
+    export DROPBOXDIR=/mnt/c/Users/obiga/Dropbox
+fi
+
+if [[ "$(uname)" == 'Darwin' ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 else
     # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
