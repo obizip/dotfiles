@@ -1,5 +1,6 @@
 -- local opts = { noremap = true, silent = true }
 local nm = { noremap = true }
+
 -- Normal mode --
 vim.keymap.set("n", "j", "gj", nm)
 vim.keymap.set("n", "k", "gk", nm)
@@ -29,7 +30,7 @@ vim.keymap.set("n", "<C-n>", ":<C-u>Numbertoggle<cr>", nm)
 
 local wk = require("which-key")
 wk.register({
-  ["<leader>c"] = { ":e $MYVIMRC<Cr>", "Open init.lua" },
+  -- ["<leader>c"] = { ":e $MYVIMRC<Cr>", "Open init.lua" },
   ["<leader>2"] = { ":set tabstop=2<Cr>", "Set tab to 2 spaces" },
   ["<leader>4"] = { ":set tabstop=4<Cr>", "Set tab to 4 spaces" },
   ["<leader>z"] = { ":Zen<Cr>", "Start ZenMode" },

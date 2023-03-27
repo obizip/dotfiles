@@ -42,14 +42,15 @@ return {
 
     local wk = require("which-key")
     wk.register({
-      ["<leader>b"] = { "<cmd>Telescope buffers<cr>", "Open buffer picker" },
-      ["<leader>d"] = { "<cmd>Telescope diagnostics<cr>", "Open diagnostic picker" },
-      ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Open file picker" },
-      ["<leader>h"] = { "<cmd>Telescope help_tags<cr>", "Open help picker" },
-      ["<leader>i"] = { "<cmd>Telescope live_grep<cr>", "Open live grep" },
-      ["<leader>o"] = { "<cmd>Telescope oldfiles<cr>", "Open file picker at oldfiles" },
-      ["<leader>q"] = { "<cmd>Telescope quickfix<cr>", "Open quickfix picker" },
-      ["<leader>s"] = { "<cmd>Telescope treesitter<cr>", "Open symbol picker" },
+      ["<leader>b"] = { "<cmd>Telescope buffers<cr>", "Find Buffer" },
+      ["<leader>d"] = { "<cmd>Telescope diagnostics<cr>", "Find Diagnostics" },
+      ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Find File" },
+      ["<leader>h"] = { "<cmd>Telescope help_tags<cr>", "Find Help" },
+      ["<leader>i"] = { "<cmd>Telescope live_grep<cr>", "Grep File" },
+      ["<leader>o"] = { "<cmd>Telescope oldfiles<cr>", "Find Old File" },
+      ["<leader>q"] = { "<cmd>Telescope quickfix<cr>", "Find Quickfix" },
+      ["<leader>s"] = { "<cmd>Telescope treesitter<cr>", "Find Symbol" },
+      ["<leader>c"] = { "<cmd>lua require('telescope.builtin').find_files({cwd = '~/.config/nvim'})<cr>", "Find Neovim Config File" },
       -- ["<leader>e"] = { "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>", "Open file browser" },
     })
   end,
