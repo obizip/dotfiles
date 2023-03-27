@@ -27,6 +27,7 @@ function main() {
 
         mkdir -p $HOME/src
         git config --global ghq.root "$HOME/src"
+        git config --global include.path "$HOME/.config/git/gitconfig_shared"
         print_info Finished installing
     }
 
