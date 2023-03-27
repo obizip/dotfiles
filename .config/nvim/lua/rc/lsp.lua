@@ -8,6 +8,7 @@ return {
       "williamboman/mason-lspconfig.nvim",
       -- "j-hui/fidget.nvim",
       "folke/which-key.nvim",
+      "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
       {
         "folke/lsp-colors.nvim",
         config = function()
@@ -23,6 +24,7 @@ return {
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup()
+      require("lsp_lines").setup()
       -- require("fidget").setup()
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] =
@@ -90,6 +92,13 @@ return {
           }
         }
       }
+
+      local signs = { Error = ' ', Warn = ' ', Hint = " ", Info= ' ' }
+
+      for type, icon in pairs(signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      end
 
       -- go to last loc when opening a buffer
       vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {

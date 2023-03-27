@@ -43,82 +43,160 @@ return {
   },
 
   {
-    "akinsho/nvim-bufferline.lua",
+    "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
     config = function()
-      require("bufferline").setup({
-        options = {
-          diagnostics = "nvim_lsp",
-          show_close_icon = false,
-          show_buffer_close_icon = false,
-          always_show_bufferline = false,
-          show_buffer_icons = true,
-          show_buffer_default_icon = false,
-          buffer_close_icon = "",
-          separator_style = "thin",
-          diagnostics_indicator = function(_, level, diagnostics_dict, context)
-            local icon = level:match("error") and " " or " "
-            return " " .. icon
-          end,
+      require('gitsigns').setup {
+        signs                        = {
+          add          = { text = '│' },
+          change       = { text = '│' },
+          delete       = { text = '_' },
+          topdelete    = { text = '‾' },
+          changedelete = { text = '~' },
+          untracked    = { text = '┆' },
         },
-      })
-    end,
-  },
-
-  {
-    "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
-    config = function()
-      local custom_nightfly = require("lualine.themes.nightfly")
-      local bg = "#1a1b26"
-      local fg = "#a9b1d6"
-
-      custom_nightfly.replace.b.fg = fg
-      custom_nightfly.replace.b.bg = bg
-
-      custom_nightfly.normal.b.fg = fg
-      custom_nightfly.normal.b.bg = bg
-      custom_nightfly.normal.c.fg = fg
-      custom_nightfly.normal.c.bg = bg
-
-      custom_nightfly.inactive.b.fg = fg
-      custom_nightfly.inactive.b.bg = bg
-      custom_nightfly.inactive.c.fg = fg
-      custom_nightfly.inactive.c.bg = bg
-
-      custom_nightfly.visual.b.fg = fg
-      custom_nightfly.visual.b.bg = bg
-
-      custom_nightfly.insert.b.fg = fg
-      custom_nightfly.insert.b.bg = bg
-
-      require("lualine").setup({
-        options = {
-          theme = custom_nightfly,
+        signcolumn                   = true,  -- Toggle with `:Gitsigns toggle_signs`
+        numhl                        = false, -- Toggle with `:Gitsigns toggle_numhl`
+        linehl                       = false, -- Toggle with `:Gitsigns toggle_linehl`
+        word_diff                    = false, -- Toggle with `:Gitsigns toggle_word_diff`
+        watch_gitdir                 = {
+          interval = 1000,
+          follow_files = true
         },
-      })
-    end,
+        attach_to_untracked          = true,
+        current_line_blame           = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+        current_line_blame_opts      = {
+          virt_text = true,
+          virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+          delay = 1000,
+          ignore_whitespace = false,
+        },
+        current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+        sign_priority                = 6,
+        update_debounce              = 100,
+        status_formatter             = nil,   -- Use default
+        max_file_length              = 40000, -- Disable if file is longer than this (in lines)
+        preview_config               = {
+          -- Options passed to nvim_open_win
+          border = 'single',
+          style = 'minimal',
+          relative = 'cursor',
+          row = 0,
+          col = 1
+        },
+        yadm                         = {
+          enable = false
+        },
+      }
+    end
   },
 
   -- {
-  --   "vigoux/notifier.nvim",
+  --   "akinsho/nvim-bufferline.lua",
   --   event = "VeryLazy",
   --   config = function()
-  --     require 'notifier'.setup {
-  --       ignore_messages = {}, -- Ignore message from LSP servers with this name
-  --       components = {        -- Order of the components to draw from top to bottom (first nvim notifications, then lsp)
-  --         "nvim",             -- Nvim notifications (vim.notify and such)
+  --     require("bufferline").setup({
+  --       options = {
+  --         diagnostics = "nvim_lsp",
+  --         show_close_icon = false,
+  --         show_buffer_close_icon = false,
+  --         always_show_bufferline = false,
+  --         show_buffer_icons = true,
+  --         show_buffer_default_icon = false,
+  --         buffer_close_icon = "",
+  --         separator_style = "thin",
+  --         diagnostics_indicator = function(_, level, diagnostics_dict, context)
+  --           local icon = level:match("error") and " " or " "
+  --           return " " .. icon
+  --         end,
   --       },
-  --       notify = {
-  --         clear_time = 5000,         -- Time in milliseconds before removing a vim.notify notification, 0 to make them sticky
-  --         min_level = vim.log.levels.INFO, -- Minimum log level to print the notification
-  --       },
-  --       component_name_recall = false, -- Whether to prefix the title of the notification by the component name
-  --       zindex = 50,                 -- The zindex to use for the floating window. Note that changing this value may cause visual bugs with other windows overlapping the notifier window.
-  --     }
-  --   end
+  --     })
+  --   end,
   -- },
+
+  -- {
+  --   "nvim-lualine/lualine.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     local custom_nightfly = require("lualine.themes.nightfly")
+  --     local bg = "#1a1b26"
+  --     local fg = "#a9b1d6"
   --
+  --     custom_nightfly.replace.b.fg = fg
+  --     custom_nightfly.replace.b.bg = bg
+  --
+  --     custom_nightfly.normal.b.fg = fg
+  --     custom_nightfly.normal.b.bg = bg
+  --     custom_nightfly.normal.c.fg = fg
+  --     custom_nightfly.normal.c.bg = bg
+  --
+  --     custom_nightfly.inactive.b.fg = fg
+  --     custom_nightfly.inactive.b.bg = bg
+  --     custom_nightfly.inactive.c.fg = fg
+  --     custom_nightfly.inactive.c.bg = bg
+  --
+  --     custom_nightfly.visual.b.fg = fg
+  --     custom_nightfly.visual.b.bg = bg
+  --
+  --     custom_nightfly.insert.b.fg = fg
+  --     custom_nightfly.insert.b.bg = bg
+  --
+  --     require('lualine').setup {
+  --       options = {
+  --         icons_enabled = true,
+  --         theme = 'auto',
+  --         component_separators = { left = '', right = '' },
+  --         section_separators = { left = '', right = '' },
+  --         disabled_filetypes = {
+  --           statusline = {},
+  --           winbar = {},
+  --         },
+  --         ignore_focus = {},
+  --         always_divide_middle = true,
+  --         globalstatus = false,
+  --         refresh = {
+  --           statusline = 1000,
+  --           tabline = 1000,
+  --           winbar = 1000,
+  --         }
+  --       },
+  --       sections = {
+  --         lualine_a = { 'mode' },
+  --         lualine_b = { 'branch', 'diff' },
+  --         lualine_c = { 'encoding', 'fileformat', 'filetype' },
+  --         lualine_x = {},
+  --         lualine_y = {},
+  --         lualine_z = {}
+  --       },
+  --       inactive_sections = {
+  --         lualine_a = {},
+  --         lualine_b = {},
+  --         lualine_c = { 'filename' },
+  --         lualine_x = { 'location' },
+  --         lualine_y = {},
+  --         lualine_z = {}
+  --       },
+  --       tabline = {},
+  --       winbar = {},
+  --       inactive_winbar = {},
+  --       extensions = {}
+  --     }
+  --     -- require("lualine").setup({
+  --     --   options = {
+  --     --     -- theme = custom_nightfly,
+  --     --     sections = {
+  --     --       lualine_a = { 'mode' },
+  --     --       lualine_b = { 'branch', 'diff' },
+  --     --       lualine_c = { { 'filename', file_status = true, path = 2 } },
+  --     --       lualine_x = { 'encoding', 'fileformat', 'filetype' },
+  --     --       lualine_y = { 'progress' },
+  --     --       lualine_z = { 'location' }
+  --     --     },
+  --     --   },
+  --     -- })
+  --   end,
+  -- },
+
   {
     "andymass/vim-matchup",
     event = "VeryLazy",
