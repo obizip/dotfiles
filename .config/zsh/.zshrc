@@ -31,4 +31,5 @@ if [[ -e "$ZRCDIR/local.zsh" ]]; then
     source "$ZRCDIR/local.zsh"
 fi
 
+eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
