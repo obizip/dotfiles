@@ -14,8 +14,9 @@ function install_packages() {
         source $current_dir/install-brew.sh
         /opt/homebrew/bin/brew bundle --global
     elif [[ $distro == "arch" ]]; then
-        checkinstall curl wget make gcc go
-        checkinstall zsh tmux ripgrep fzf exa bat neovim tectonic
+        checkinstall wget make gcc go zsh tmux
+        checkinstall neovim ripgrep fzf tectonic
+        checkinstall exa bat bat-extras git-delta fd zoxide
         go install github.com/x-motemen/ghq@latest
         go install github.com/mattn/memo@latest
     elif [[ $distro == "debian" ]]; then

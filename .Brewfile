@@ -3,6 +3,8 @@ brew 'ripgrep'
 brew 'fzf'
 brew 'exa'
 brew 'bat'
+brwe 'bat-extras'
+brwe 'git-delta'
 brew 'neovim', args: ["HEAD"]
 brew 'go'
 brew 'ghq'

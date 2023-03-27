@@ -12,7 +12,14 @@ alias l='exa'
 alias ls='exa'
 alias ll='exa -l'
 alias la='exa -la'
+
+# bat commands
 alias cat="bat"
+alias grep="batgrep"
+alias man="batman"
+alias pipe="batpipe"
+alias watch="batwatch"
+alias diff="batdiff"
 
 # git
 alias g='git'
