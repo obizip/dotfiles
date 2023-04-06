@@ -24,7 +24,7 @@ return {
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup()
-      require("lsp_lines").setup()
+      -- require("lsp_lines").setup()
       -- require("fidget").setup()
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] =

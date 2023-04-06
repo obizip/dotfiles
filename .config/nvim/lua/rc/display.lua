@@ -114,88 +114,88 @@ return {
   --   end,
   -- },
 
-  -- {
-  --   "nvim-lualine/lualine.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     local custom_nightfly = require("lualine.themes.nightfly")
-  --     local bg = "#1a1b26"
-  --     local fg = "#a9b1d6"
-  --
-  --     custom_nightfly.replace.b.fg = fg
-  --     custom_nightfly.replace.b.bg = bg
-  --
-  --     custom_nightfly.normal.b.fg = fg
-  --     custom_nightfly.normal.b.bg = bg
-  --     custom_nightfly.normal.c.fg = fg
-  --     custom_nightfly.normal.c.bg = bg
-  --
-  --     custom_nightfly.inactive.b.fg = fg
-  --     custom_nightfly.inactive.b.bg = bg
-  --     custom_nightfly.inactive.c.fg = fg
-  --     custom_nightfly.inactive.c.bg = bg
-  --
-  --     custom_nightfly.visual.b.fg = fg
-  --     custom_nightfly.visual.b.bg = bg
-  --
-  --     custom_nightfly.insert.b.fg = fg
-  --     custom_nightfly.insert.b.bg = bg
-  --
-  --     require('lualine').setup {
-  --       options = {
-  --         icons_enabled = true,
-  --         theme = 'auto',
-  --         component_separators = { left = '', right = '' },
-  --         section_separators = { left = '', right = '' },
-  --         disabled_filetypes = {
-  --           statusline = {},
-  --           winbar = {},
-  --         },
-  --         ignore_focus = {},
-  --         always_divide_middle = true,
-  --         globalstatus = false,
-  --         refresh = {
-  --           statusline = 1000,
-  --           tabline = 1000,
-  --           winbar = 1000,
-  --         }
-  --       },
-  --       sections = {
-  --         lualine_a = { 'mode' },
-  --         lualine_b = { 'branch', 'diff' },
-  --         lualine_c = { 'encoding', 'fileformat', 'filetype' },
-  --         lualine_x = {},
-  --         lualine_y = {},
-  --         lualine_z = {}
-  --       },
-  --       inactive_sections = {
-  --         lualine_a = {},
-  --         lualine_b = {},
-  --         lualine_c = { 'filename' },
-  --         lualine_x = { 'location' },
-  --         lualine_y = {},
-  --         lualine_z = {}
-  --       },
-  --       tabline = {},
-  --       winbar = {},
-  --       inactive_winbar = {},
-  --       extensions = {}
-  --     }
-  --     -- require("lualine").setup({
-  --     --   options = {
-  --     --     -- theme = custom_nightfly,
-  --     --     sections = {
-  --     --       lualine_a = { 'mode' },
-  --     --       lualine_b = { 'branch', 'diff' },
-  --     --       lualine_c = { { 'filename', file_status = true, path = 2 } },
-  --     --       lualine_x = { 'encoding', 'fileformat', 'filetype' },
-  --     --       lualine_y = { 'progress' },
-  --     --       lualine_z = { 'location' }
-  --     --     },
-  --     --   },
-  --     -- })
-  --   end,
-  -- },
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    config = function()
+      local custom_nightfly = require("lualine.themes.nightfly")
+      local bg = "#1a1b26"
+      local fg = "#a9b1d6"
+
+      custom_nightfly.replace.b.fg = fg
+      custom_nightfly.replace.b.bg = bg
+
+      custom_nightfly.normal.b.fg = fg
+      custom_nightfly.normal.b.bg = bg
+      custom_nightfly.normal.c.fg = fg
+      custom_nightfly.normal.c.bg = bg
+
+      custom_nightfly.inactive.b.fg = fg
+      custom_nightfly.inactive.b.bg = bg
+      custom_nightfly.inactive.c.fg = fg
+      custom_nightfly.inactive.c.bg = bg
+
+      custom_nightfly.visual.b.fg = fg
+      custom_nightfly.visual.b.bg = bg
+
+      custom_nightfly.insert.b.fg = fg
+      custom_nightfly.insert.b.bg = bg
+
+      require('lualine').setup {
+        options = {
+          icons_enabled = true,
+          theme = 'auto',
+          component_separators = { left = '', right = '' },
+          section_separators = { left = '', right = '' },
+          disabled_filetypes = {
+            statusline = {},
+            winbar = {},
+          },
+          ignore_focus = {},
+          always_divide_middle = true,
+          globalstatus = false,
+          refresh = {
+            statusline = 1000,
+            tabline = 1000,
+            winbar = 1000,
+          }
+        },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
+          lualine_c = { { 'filename', path = 1 } },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = {},
+          lualine_z = {}
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { 'filename' },
+          lualine_x = { 'location' },
+          lualine_y = {},
+          lualine_z = {}
+        },
+        tabline = {},
+        winbar = {},
+        inactive_winbar = {},
+        extensions = {}
+      }
+      -- require("lualine").setup({
+      --   options = {
+      --     -- theme = custom_nightfly,
+      --     sections = {
+      --       lualine_a = { 'mode' },
+      --       lualine_b = { 'branch', 'diff' },
+      --       lualine_c = { { 'filename', file_status = true, path = 2 } },
+      --       lualine_x = { 'encoding', 'fileformat', 'filetype' },
+      --       lualine_y = { 'progress' },
+      --       lualine_z = { 'location' }
+      --     },
+      --   },
+      -- })
+    end,
+  },
 
   {
     "andymass/vim-matchup",
