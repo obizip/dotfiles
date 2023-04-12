@@ -109,4 +109,22 @@ return {
     { i(1, "number"), i(2, "def"), i(3, "lhs"), i(4, "rhs"), i(5, ""), i(6, "code") },
     { delimiters = "<>" })
   ),
+
+  s("kadai", fmt([[
+  \Kadai{5}
+  {
+    <>
+  }
+
+  プログラムは次のようになった.
+  \begin{lstlisting}[language=matlab]
+  \end{lstlisting}
+
+  結果は次のようになった.
+  \begin{lstlisting}
+  \end{lstlisting}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  ]], { i(1, "title") }, { delimiters = "<>" })
+  ),
 }
