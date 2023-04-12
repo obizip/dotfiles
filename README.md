@@ -1,6 +1,6 @@
 # dotfiles
 
-**For ArcWSL**
+**For ArchWSL**
 
 ## How to install
 ```
