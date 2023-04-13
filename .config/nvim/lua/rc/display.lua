@@ -1,76 +1,5 @@
 return {
   {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    dependencies = {
-      "petertriho/nvim-scrollbar",
-      "kevinhwang91/nvim-hlslens",
-    },
-    config = function()
-      require("tokyonight").setup({
-        style = "night",
-        transparent = true,
-        on_highlights = function(hl, c)
-          hl.EndOfBuffer = {
-            fg = c.comment,
-          }
-        end,
-      })
-      vim.cmd([[colorscheme tokyonight]])
-      local colors = require("tokyonight.colors").setup()
-
-      require("scrollbar").setup({
-        handle = {
-          color = colors.bg_highlight,
-        },
-        marks = {
-          Search = { color = colors.orange },
-          Error = { color = colors.error },
-          Warn = { color = colors.warning },
-          Info = { color = colors.info },
-          Hint = { color = colors.hint },
-          Misc = { color = colors.purple },
-        }
-      })
-
-      -- require('hlslens').setup() is not required
-      require("scrollbar.handlers.search").setup({
-        -- hlslens config overrides
-        nearest_only = true
-      })
-    end,
-  },
-  --
-  -- {
-  --   "sainnhe/everforest",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     -- vim.cmd('colorschme everforest')
-  --     vim.cmd([[
-  --       " Important!!
-  --       if has('termguicolors')
-  --         set termguicolors
-  --       endif
-  --
-  --       " For dark version.
-  --       set background=dark
-  --
-  --       " Set contrast.
-  --       " This configuration option should be placed before `colorscheme everforest`.
-  --       " Available values: 'hard', 'medium'(default), 'soft'
-  --       let g:everforest_background = 'hard'
-  --
-  --       " For better performance
-  --       let g:everforest_better_performance = 1
-  --       let g:everforest_colors_override = {'bg0': ['#151515', '234'], 'bg2': ['#282828', '235']}
-  --
-  --       colorscheme everforest
-  --         ]])
-  --   end
-  -- },
-  {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
     config = function()
@@ -83,8 +12,8 @@ return {
           changedelete = { text = '~' },
           untracked    = { text = '┆' },
         },
-        signcolumn                   = true,  -- Toggle with `:Gitsigns toggle_signs`
-        numhl                        = false, -- Toggle with `:Gitsigns toggle_numhl`
+        signcolumn                   = false,  -- Toggle with `:Gitsigns toggle_signs`
+        numhl                        = true, -- Toggle with `:Gitsigns toggle_numhl`
         linehl                       = false, -- Toggle with `:Gitsigns toggle_linehl`
         word_diff                    = false, -- Toggle with `:Gitsigns toggle_word_diff`
         watch_gitdir                 = {
@@ -118,29 +47,6 @@ return {
       }
     end
   },
-
-  -- {
-  --   "akinsho/nvim-bufferline.lua",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("bufferline").setup({
-  --       options = {
-  --         diagnostics = "nvim_lsp",
-  --         show_close_icon = false,
-  --         show_buffer_close_icon = false,
-  --         always_show_bufferline = false,
-  --         show_buffer_icons = true,
-  --         show_buffer_default_icon = false,
-  --         buffer_close_icon = "",
-  --         separator_style = "thin",
-  --         diagnostics_indicator = function(_, level, diagnostics_dict, context)
-  --           local icon = level:match("error") and " " or " "
-  --           return " " .. icon
-  --         end,
-  --       },
-  --     })
-  --   end,
-  -- },
 
   {
     "nvim-lualine/lualine.nvim",
@@ -242,47 +148,47 @@ return {
     end
   },
 
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "BufReadPre",
-    config = {
-      buftype_exclude = { "terminal", "nofile" },
-      filetype_exclude = {
-        "help",
-        "startify",
-        "dashboard",
-        "packer",
-        "neogitstatus",
-        "NvimTree",
-        "neo-tree",
-        "Trouble",
-      },
-      char = "▏",
-      use_treesitter_scope = true,
-      show_trailing_blankline_indent = false,
-      show_current_context = true,
-      context_patterns = {
-        "class",
-        "return",
-        "function",
-        "method",
-        "^if",
-        "^while",
-        "jsx_element",
-        "^for",
-        "^object",
-        "^table",
-        "block",
-        "arguments",
-        "if_statement",
-        "else_clause",
-        "jsx_element",
-        "jsx_self_closing_element",
-        "try_statement",
-        "catch_clause",
-        "import_statement",
-        "operation_type",
-      },
-    },
-  },
+  -- {
+  --   "lukas-reineke/indent-blankline.nvim",
+  --   event = "BufReadPre",
+  --   config = {
+  --     buftype_exclude = { "terminal", "nofile" },
+  --     filetype_exclude = {
+  --       "help",
+  --       "startify",
+  --       "dashboard",
+  --       "packer",
+  --       "neogitstatus",
+  --       "NvimTree",
+  --       "neo-tree",
+  --       "Trouble",
+  --     },
+  --     char = "▏",
+  --     use_treesitter_scope = true,
+  --     show_trailing_blankline_indent = false,
+  --     show_current_context = true,
+  --     context_patterns = {
+  --       "class",
+  --       "return",
+  --       "function",
+  --       "method",
+  --       "^if",
+  --       "^while",
+  --       "jsx_element",
+  --       "^for",
+  --       "^object",
+  --       "^table",
+  --       "block",
+  --       "arguments",
+  --       "if_statement",
+  --       "else_clause",
+  --       "jsx_element",
+  --       "jsx_self_closing_element",
+  --       "try_statement",
+  --       "catch_clause",
+  --       "import_statement",
+  --       "operation_type",
+  --     },
+  --   },
+  -- },
 }
