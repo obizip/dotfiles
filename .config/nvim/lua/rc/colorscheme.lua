@@ -1,46 +1,4 @@
 return {
-  -- {
-  --   "folke/tokyonight.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   dependencies = {
-  --     "petertriho/nvim-scrollbar",
-  --     "kevinhwang91/nvim-hlslens",
-  --   },
-  --   config = function()
-  --     require("tokyonight").setup({
-  --       style = "night",
-  --       transparent = true,
-  --       on_highlights = function(hl, c)
-  --         hl.EndOfBuffer = {
-  --           fg = c.comment,
-  --         }
-  --       end,
-  --     })
-  --     vim.cmd([[colorscheme tokyonight]])
-  --     local colors = require("tokyonight.colors").setup()
-  --
-  --     require("scrollbar").setup({
-  --       handle = {
-  --         color = colors.bg_highlight,
-  --       },
-  --       marks = {
-  --         Search = { color = colors.orange },
-  --         Error = { color = colors.error },
-  --         Warn = { color = colors.warning },
-  --         Info = { color = colors.info },
-  --         Hint = { color = colors.hint },
-  --         Misc = { color = colors.purple },
-  --       }
-  --     })
-  --
-  --     -- require('hlslens').setup() is not required
-  --     require("scrollbar.handlers.search").setup({
-  --       -- hlslens config overrides
-  --       nearest_only = true
-  --     })
-  --   end,
-  -- },
   {
     "rebelot/kanagawa.nvim",
     lazy = false,
@@ -106,4 +64,47 @@ return {
       vim.cmd("colorscheme kanagawa")
     end
   },
+
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   dependencies = {
+  --     "petertriho/nvim-scrollbar",
+  --     "kevinhwang91/nvim-hlslens",
+  --   },
+  --   config = function()
+  --     require("tokyonight").setup({
+  --       style = "night",
+  --       transparent = true,
+  --       on_highlights = function(hl, c)
+  --         hl.EndOfBuffer = {
+  --           fg = c.comment,
+  --         }
+  --       end,
+  --     })
+  --     vim.cmd([[colorscheme tokyonight]])
+  --     local colors = require("tokyonight.colors").setup()
+  --
+  --     require("scrollbar").setup({
+  --       handle = {
+  --         color = colors.bg_highlight,
+  --       },
+  --       marks = {
+  --         Search = { color = colors.orange },
+  --         Error = { color = colors.error },
+  --         Warn = { color = colors.warning },
+  --         Info = { color = colors.info },
+  --         Hint = { color = colors.hint },
+  --         Misc = { color = colors.purple },
+  --       }
+  --     })
+  --
+  --     -- require('hlslens').setup() is not required
+  --     require("scrollbar.handlers.search").setup({
+  --       -- hlslens config overrides
+  --       nearest_only = true
+  --     })
+  --   end,
+  -- },
 }

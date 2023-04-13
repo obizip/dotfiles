@@ -48,89 +48,71 @@ return {
     end
   },
 
-  {
+{
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     config = function()
-      local custom_nightfly = require("lualine.themes.nightfly")
-      local bg = "#1a1b26"
-      local fg = "#a9b1d6"
 
-      custom_nightfly.replace.b.fg = fg
-      custom_nightfly.replace.b.bg = bg
+      -- stylua: ignore
+      local colors = {
+        blue   = '#80a0ff',
+        cyan   = '#79dac8',
+        black  = '#080808',
+        white  = '#c6c6c6',
+        red    = '#ff5189',
+        violet = '#d183e8',
+        grey   = '#303030',
+      }
 
-      custom_nightfly.normal.b.fg = fg
-      custom_nightfly.normal.b.bg = bg
-      custom_nightfly.normal.c.fg = fg
-      custom_nightfly.normal.c.bg = bg
-
-      custom_nightfly.inactive.b.fg = fg
-      custom_nightfly.inactive.b.bg = bg
-      custom_nightfly.inactive.c.fg = fg
-      custom_nightfly.inactive.c.bg = bg
-
-      custom_nightfly.visual.b.fg = fg
-      custom_nightfly.visual.b.bg = bg
-
-      custom_nightfly.insert.b.fg = fg
-      custom_nightfly.insert.b.bg = bg
+      local bubbles_theme = {
+        normal = {
+          a = { fg = colors.black, bg = colors.violet },
+          b = { fg = colors.white, bg = colors.grey },
+          c = { fg = colors.white, bg = colors.black },
+        },
+        insert = { a = { fg = colors.black, bg = colors.blue } },
+        visual = { a = { fg = colors.black, bg = colors.cyan } },
+        replace = { a = { fg = colors.black, bg = colors.red } },
+        inactive = {
+          a = { fg = colors.white, bg = colors.black },
+          b = { fg = colors.white, bg = colors.black },
+          c = { fg = colors.white, bg = colors.black },
+        },
+      }
 
       require('lualine').setup {
         options = {
-          icons_enabled = true,
-          theme = 'auto',
-          component_separators = { left = '', right = '' },
-          section_separators = { left = '', right = '' },
-          disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-          },
-          ignore_focus = {},
-          always_divide_middle = true,
-          globalstatus = false,
-          refresh = {
-            statusline = 1000,
-            tabline = 1000,
-            winbar = 1000,
-          }
+          theme = bubbles_theme,
+          component_separators = '|',
+          section_separators = { left = '', right = '' },
         },
         sections = {
-          lualine_a = { 'mode' },
-          lualine_b = { 'branch' },
+          lualine_a = {
+            { 'mode', separator = { left = '' }, right_padding = 2 },
+          },
+          -- lualine_b = { 'filename', 'branch' },
+          lualine_b = {  'branch' },
+          -- lualine_c = { 'fileformat' },
           lualine_c = { { 'filename', path = 1 } },
-          lualine_x = { 'encoding', 'fileformat', 'filetype' },
-          lualine_y = {},
-          lualine_z = {}
+          lualine_x = {},
+          lualine_y = { 'filetype', 'progress' },
+          lualine_z = {
+            { 'location', separator = { right = '' }, left_padding = 2 },
+          },
         },
         inactive_sections = {
-          lualine_a = {},
+          lualine_a = { 'filename' },
           lualine_b = {},
-          lualine_c = { 'filename' },
-          lualine_x = { 'location' },
+          lualine_c = {},
+          lualine_x = {},
           lualine_y = {},
-          lualine_z = {}
+          lualine_z = { 'location' },
         },
         tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        extensions = {}
+        extensions = {},
       }
-      -- require("lualine").setup({
-      --   options = {
-      --     -- theme = custom_nightfly,
-      --     sections = {
-      --       lualine_a = { 'mode' },
-      --       lualine_b = { 'branch', 'diff' },
-      --       lualine_c = { { 'filename', file_status = true, path = 2 } },
-      --       lualine_x = { 'encoding', 'fileformat', 'filetype' },
-      --       lualine_y = { 'progress' },
-      --       lualine_z = { 'location' }
-      --     },
-      --   },
-      -- })
     end,
   },
-
   {
     "andymass/vim-matchup",
     event = "VeryLazy",
