@@ -35,7 +35,7 @@ return {
     config = function()
       require("nvim-rooter").setup({
         rooter_patterns = { ".git", ".hg", ".svn" },
-        trigger_patterns = {"*"},
+        trigger_patterns = { "*" },
         manual = false,
       })
     end,
@@ -83,6 +83,24 @@ return {
     end,
   },
 
+  {
+    'phaazon/hop.nvim',
+    version = 'v2', -- optional but strongly recommended
+    event = "VeryLazy",
+    config = function()
+      -- you can configure Hop the way you like here; see :h hop-config
+      require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+      -- place this in one of your configuration file(s)
+      local hop = require('hop')
+      local directions = require('hop.hint').HintDirection
+      vim.keymap.set('', 't', function()
+        hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = false, hint_offset = -1 })
+      end, { remap = true })
+      vim.keymap.set('', 'T', function()
+        hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = false, hint_offset = 1 })
+      end, { remap = true })
+    end
+  },
   -- {
   --   "ggandor/leap.nvim",
   --   event = "VeryLazy",
@@ -109,7 +127,7 @@ return {
     'norcalli/nvim-colorizer.lua',
     event = 'VeryLazy',
     config = function()
-      require'colorizer'.setup()
+      require 'colorizer'.setup()
     end,
   },
 
@@ -118,7 +136,7 @@ return {
     event = 'VeryLazy',
     dependencies = 'nvim-lua/plenary.nvim',
     config = function()
-      require'todo-comments'.setup()
+      require 'todo-comments'.setup()
     end,
   }
 }
