@@ -27,7 +27,8 @@ return {
             lotus = {},
             dragon = {
               ui = {
-                bg = "#101010"
+                bg = "#101010",
+                bg_gutter = "#505050"
               }
             },
             all = {}

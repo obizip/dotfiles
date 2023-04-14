@@ -36,5 +36,5 @@ trim_at = '.companyname.com'
 disabled = false
 
 [directory]
-truncation_length = 8
+truncation_length = 100
 truncation_symbol = '…/'

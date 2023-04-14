@@ -3,6 +3,8 @@ if vim.loop.os_uname().sysname == "Darwin" then
 	vim.cmd("language en_US.UTF-8")
 	vim.o.clipboard = "unnamedplus"
 end
+
+vim.o.clipboard = "unnamedplus"
 vim.g.encoding = "utf-8"
 vim.g.fileencodings = "ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,latin1"
 vim.o.history = 1000

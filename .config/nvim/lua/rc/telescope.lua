@@ -21,20 +21,6 @@ return {
           case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
           -- the default case_mode is "smart_case"
         },
-        -- file_browser = {
-        --   theme = "ivy",
-        --   -- disables netrw and use telescope-file-browser in its place
-        --   hijack_netrw = true,
-        --   mappings = {
-        --     ["i"] = {
-        --       -- ["<C-h>"] = fb_actions.goto_home_dir
-        --       -- your custom insert mode mappings
-        --     },
-        --     ["n"] = {
-        --       -- your custom normal mode mappings
-        --     },
-        --   },
-        -- }
       }
     })
     -- telescope.load_extension "file_browser"
@@ -50,7 +36,11 @@ return {
       ["<leader>o"] = { "<cmd>Telescope oldfiles<cr>", "Find Old File" },
       ["<leader>q"] = { "<cmd>Telescope quickfix<cr>", "Find Quickfix" },
       ["<leader>s"] = { "<cmd>Telescope treesitter<cr>", "Find Symbol" },
-      ["<leader>c"] = { "<cmd>lua require('telescope.builtin').find_files({cwd = '~/.config/nvim'})<cr>", "Find Neovim Config File" },
+      ["<leader>c"] = { function() require('telescope.builtin').find_files({ cwd = '~/.config/nvim' }) end,
+        "Find Neovim Config File" },
+      ["<leader>w"] = { function() require('telescope.builtin').find_files({
+          cwd = vim.fn.system("git rev-parse --show-toplevel | tr -d '\\n'") }) end,
+        "Find file in git repository" },
       -- ["<leader>e"] = { "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>", "Open file browser" },
     })
   end,

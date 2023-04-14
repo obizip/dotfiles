@@ -28,18 +28,18 @@ return {
     cmd = "StartupTime",
   },
 
-  {
-    "notjedi/nvim-rooter.lua",
-    lazy = false,
-    cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
-    config = function()
-      require("nvim-rooter").setup({
-        rooter_patterns = { ".git", ".hg", ".svn" },
-        trigger_patterns = { "*" },
-        manual = false,
-      })
-    end,
-  },
+  -- {
+  --   "notjedi/nvim-rooter.lua",
+  --   lazy = false,
+  --   cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
+  --   config = function()
+  --     require("nvim-rooter").setup({
+  --       rooter_patterns = { ".git", ".hg", ".svn" },
+  --       trigger_patterns = { "*" },
+  --       manual = false,
+  --     })
+  --   end,
+  -- },
 
   {
     "tpope/vim-repeat",
