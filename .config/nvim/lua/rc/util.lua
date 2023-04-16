@@ -76,6 +76,7 @@ return {
     config = function()
       require("nvim-autopairs").setup({
         disable_filetype = { "TelescopePrompt", "vim" },
+        enable_moveright = false,
         map_c_h = true,
       })
       require("nvim-autopairs").remove_rule("'")
