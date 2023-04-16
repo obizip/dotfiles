@@ -9,6 +9,7 @@ return {
       -- "j-hui/fidget.nvim",
       "folke/which-key.nvim",
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+      "jubnzv/virtual-types.nvim",
       {
         "folke/lsp-colors.nvim",
         config = function()
@@ -93,12 +94,32 @@ return {
         }
       }
 
-      local signs = { Error = ' ', Warn = ' ', Hint = " ", Info= ' ' }
+      local signs = { Error = ' ', Warn = ' ', Hint = " ", Info = ' ' }
 
       for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
       end
+
+      vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
+        pattern = "*.hs",
+        callback = function()
+          lspconfig.hls.setup {
+            capabilities = capabilities,
+            on_attach = require 'virtualtypes'.on_attach
+          }
+        end
+      })
+
+      vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
+        pattern = "*.ml",
+        callback = function()
+          lspconfig.ocamllsp.setup {
+            capabilities = capabilities,
+            on_attach = require 'virtualtypes'.on_attach
+          }
+        end
+      })
 
       -- go to last loc when opening a buffer
       vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {

@@ -57,3 +57,8 @@ vim.keymap.set("c", "<C-b>", "<left>", nm)
 vim.keymap.set("c", "<C-f>", "<right>", nm)
 vim.keymap.set("c", "<C-a>", "<home>", nm)
 vim.keymap.set("c", "<C-e>", "<end>", nm)
+
+-- Terminal mode --
+vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", nm)
+-- vim.keymap.set("t", "<C-h>", "<C-\\><C-n>:bp<Cr>", nm)
+-- vim.keymap.set("t", "<C-l>", "<C-\\><C-n>:bn<Cr>", nm)
