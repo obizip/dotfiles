@@ -1,5 +1,25 @@
 return {
   {
+    "petertriho/nvim-scrollbar",
+    event = "VeryLazy",
+    dependencies = {
+      "kevinhwang91/nvim-hlslens",
+    },
+    config = function()
+      require("scrollbar.handlers.search").setup()
+      require("scrollbar").setup({
+        handlers = {
+          cursor = true,
+          diagnostic = true,
+          gitsigns = false, -- Requires gitsigns
+          handle = true,
+          search = true, -- Requires hlslens
+          ale = false,    -- Requires ALE
+        },
+      })
+    end
+  },
+  {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
     config = function()
@@ -12,8 +32,8 @@ return {
           changedelete = { text = '~' },
           untracked    = { text = '┆' },
         },
-        signcolumn                   = false,  -- Toggle with `:Gitsigns toggle_signs`
-        numhl                        = true, -- Toggle with `:Gitsigns toggle_numhl`
+        signcolumn                   = false, -- Toggle with `:Gitsigns toggle_signs`
+        numhl                        = true,  -- Toggle with `:Gitsigns toggle_numhl`
         linehl                       = false, -- Toggle with `:Gitsigns toggle_linehl`
         word_diff                    = false, -- Toggle with `:Gitsigns toggle_word_diff`
         watch_gitdir                 = {
@@ -48,11 +68,10 @@ return {
     end
   },
 
-{
+  {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     config = function()
-
       -- stylua: ignore
       local colors = {
         blue   = '#80a0ff',
@@ -91,7 +110,7 @@ return {
             { 'mode', separator = { left = '' }, right_padding = 2 },
           },
           -- lualine_b = { 'filename', 'branch' },
-          lualine_b = {  'branch' },
+          lualine_b = { 'branch' },
           -- lualine_c = { 'fileformat' },
           lualine_c = { { 'filename', path = 1 } },
           lualine_x = {},

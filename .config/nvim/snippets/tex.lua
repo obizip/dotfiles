@@ -111,12 +111,11 @@ return {
   ),
 
   s("kadai", fmt([[
-  \Kadai{5}
+  \Kadai{<>}
   {
-    <>
   }
 
-  プログラムは次のようになった.
+  実行したプログラムを次に示す.
   \begin{lstlisting}[language=matlab]
   \end{lstlisting}
 

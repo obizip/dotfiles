@@ -37,6 +37,7 @@ return {
         overrides = function(colors) -- add/modify highlights
           local theme = colors.theme
           return {
+            WinSeparator = { fg = theme.ui.bg_gutter },
             EndOfBuffer = { fg = theme.ui.bg_gutter },
             LineNr = { fg = theme.ui.nontext, bg = theme.ui.bg },
             SignColumn = { fg = theme.ui.special, bg = theme.ui.bg },

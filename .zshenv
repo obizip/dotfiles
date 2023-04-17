@@ -40,6 +40,7 @@ path=(
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
   $HOME/go/bin(N-/)
+  $HOME/.local/bin(N-/)
   $HOME/.go/bin(N-/)
   $HOME/.cargo/bin(N-/)
   $HOME/.rustup/toolchains/*/bin(N-/)

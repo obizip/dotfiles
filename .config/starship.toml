@@ -19,6 +19,7 @@ $memory_usage\
 $env_var\
 $custom\
 $sudo\
+$python\
 $line_break\
 $jobs\
 $battery\
