@@ -42,12 +42,15 @@ return {
       vim.keymap.set("n", "ga", vim.lsp.buf.code_action, opts)
       vim.keymap.set("n", "ge", vim.diagnostic.open_float, opts)
 
+      vim.keymap.set("n", "gj", vim.diagnostic.goto_prev, opts)
+      vim.keymap.set("n", "gk", vim.diagnostic.goto_next, opts)
+      vim.keymap.set("n", "gf", vim.lsp.buf.format, opts)
+      vim.keymap.set("n", "gn", vim.lsp.buf.rename, opts)
+
       local wk = require("which-key")
       wk.register({
         ["<leader>a"] = { vim.lsp.buf.format, "Format" },
         ["<leader>r"] = { vim.lsp.buf.rename, "Rename" },
-        ["<leader>j"] = { vim.diagnostic.goto_prev, "Prev diagnostic" },
-        ["<leader>k"] = { vim.diagnostic.goto_next, "Next diagnostic" },
       })
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()

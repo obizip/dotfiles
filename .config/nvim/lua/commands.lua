@@ -7,14 +7,22 @@ vim.api.nvim_create_user_command("Zen", function()
   vim.o.laststatus = 1 - vim.o.laststatus
 end, {})
 
--- Trim all trailling whitespaces
-vim.api.nvim_create_autocmd("BufWritePre", {
+vim.api.nvim_create_autocmd("WinEnter", {
   callback = function()
-    local save = vim.fn.winsaveview()
-    vim.api.nvim_exec(string.format("silent! %s", [[%s/\s\+$//e]]), false)
-    vim.fn.winrestview(save)
-  end
+    local ok, cl = pcall(vim.api.nvim_win_get_var, 0, "auto-cursorline")
+    if ok and cl then
+      vim.wo.cursorline = true
+      vim.api.nvim_win_del_var(0, "auto-cursorline")
+    end
+  end,
 })
+
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   callback = function()
+--   local current_buf_dir = vim.fn.expand("%:p:h")
+--   vim.cmd("cd " .. current_buf_dir)
+--   end
+-- })
 
 -- Check if we need to reload the file when it changed
 vim.api.nvim_create_autocmd("FocusGained", { command = "checktime" })
