@@ -30,7 +30,9 @@ return {
     wk.register({
       ["<leader>b"] = { "<cmd>Telescope buffers<cr>", "Find Buffer" },
       ["<leader>d"] = { "<cmd>Telescope diagnostics<cr>", "Find Diagnostics" },
-      ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Find File" },
+      -- ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Find File" },
+      ["<leader>f"] = { function()  require("telescope-util").find_project_files() end,
+      "Find file" },
       ["<leader>h"] = { "<cmd>Telescope help_tags<cr>", "Find Help" },
       ["<leader>i"] = { "<cmd>Telescope live_grep<cr>", "Grep File" },
       ["<leader>o"] = { "<cmd>Telescope oldfiles<cr>", "Find Old File" },
@@ -38,9 +40,10 @@ return {
       ["<leader>s"] = { "<cmd>Telescope treesitter<cr>", "Find Symbol" },
       ["<leader>c"] = { function() require('telescope.builtin').find_files({ cwd = '~/.config/nvim' }) end,
         "Find Neovim Config File" },
-      ["<leader>w"] = { function() require('telescope.builtin').find_files({
-          cwd = vim.fn.system("git rev-parse --show-toplevel | tr -d '\\n'") }) end,
-        "Find file in git repository" },
+        ["<leader>p"] = { function() require('telescope.builtin').find_files() end,
+        "Find PWD File" },
+      -- ["<leader>w"] = { function()  require("telescope-util").project_dir() end,
+        -- "Find file in git repository" },
       -- ["<leader>e"] = { "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>", "Open file browser" },
     })
   end,

@@ -25,12 +25,12 @@ return {
     { delimiters = "<>" })
   ),
 
-  s("equ",
+  s("eq",
     fmt([[
-          \begin{equation}
+          \begin{eq}
               \label{eq:<>}
               <>
-          \end{equation}
+          \end{eq}
           ]],
       { i(1, "label"), i(2, "equation") },
       { delimiters = "<>" })
