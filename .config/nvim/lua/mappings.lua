@@ -28,13 +28,13 @@ vim.keymap.set("n", "<C-d>", ":bwipe<Cr>", nm)
 
 vim.keymap.set("n", "<C-n>", ":<C-u>Numbertoggle<cr>", nm)
 
-local wk = require("which-key")
-wk.register({
-  -- ["<leader>c"] = { ":e $MYVIMRC<Cr>", "Open init.lua" },
-  ["<leader>2"] = { ":set tabstop=2<Cr>", "Set tab to 2 spaces" },
-  ["<leader>4"] = { ":set tabstop=4<Cr>", "Set tab to 4 spaces" },
-  ["<leader>z"] = { ":Zen<Cr>", "Start ZenMode" },
-})
+-- local wk = require("which-key")
+-- wk.register({
+--   -- ["<leader>c"] = { ":e $MYVIMRC<Cr>", "Open init.lua" },
+--   ["<leader>2"] = { ":set tabstop=2<Cr>", "Set tab to 2 spaces" },
+--   ["<leader>4"] = { ":set tabstop=4<Cr>", "Set tab to 4 spaces" },
+--   ["<leader>z"] = { ":Zen<Cr>", "Start ZenMode" },
+-- })
 
 -- Insert mode --
 -- vim.keymap.set("i", "<C-k>", "<C-o>D", nm) -- カーソルから右を全て削除

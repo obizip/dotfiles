@@ -19,16 +19,14 @@ return {
         colors = {
           -- add/modify theme and palette colors
           palette = {
-            sumiInk0 = "#000000",
-            fujiWhite = "#FFFFFF",
           },
           theme = {
             wave = {},
             lotus = {},
             dragon = {
               ui = {
-                bg = "#101010",
-                bg_gutter = "#505050"
+                bg = "#16171F",
+                bg_gutter = "#6A70FA"
               }
             },
             all = {}
@@ -37,6 +35,8 @@ return {
         overrides = function(colors) -- add/modify highlights
           local theme = colors.theme
           return {
+            StatusLine = { fg = "#000000", bg = "#D1D1D1" },
+            StatusLineNC = { fg = theme.ui.nontext, bg = theme.ui.bg_m3 },
             WinSeparator = { fg = theme.ui.bg_gutter },
             EndOfBuffer = { fg = theme.ui.bg_gutter },
             LineNr = { fg = theme.ui.nontext, bg = theme.ui.bg },
