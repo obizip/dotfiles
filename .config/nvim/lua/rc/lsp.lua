@@ -6,7 +6,7 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      -- "j-hui/fidget.nvim",
+      "j-hui/fidget.nvim",
       "folke/which-key.nvim",
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
       "jubnzv/virtual-types.nvim",
@@ -26,7 +26,7 @@ return {
       require("mason").setup()
       require("mason-lspconfig").setup()
       -- require("lsp_lines").setup()
-      -- require("fidget").setup()
+      require("fidget").setup()
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] =
           vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })

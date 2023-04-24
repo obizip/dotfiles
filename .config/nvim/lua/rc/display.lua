@@ -1,7 +1,7 @@
 return {
   {
     "petertriho/nvim-scrollbar",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
     dependencies = {
       "kevinhwang91/nvim-hlslens",
     },

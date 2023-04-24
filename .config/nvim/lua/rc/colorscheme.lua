@@ -35,6 +35,7 @@ return {
         overrides = function(colors) -- add/modify highlights
           local theme = colors.theme
           return {
+            MsgArea = {fg = theme.ui.fg},
             StatusLine = { fg = "#000000", bg = "#D1D1D1" },
             StatusLineNC = { fg = theme.ui.nontext, bg = theme.ui.bg_m3 },
             WinSeparator = { fg = theme.ui.bg_gutter },
