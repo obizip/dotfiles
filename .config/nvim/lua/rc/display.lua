@@ -13,8 +13,8 @@ return {
           diagnostic = true,
           gitsigns = false, -- Requires gitsigns
           handle = true,
-          search = true, -- Requires hlslens
-          ale = false,    -- Requires ALE
+          search = true,    -- Requires hlslens
+          ale = false,      -- Requires ALE
         },
       })
     end
@@ -64,6 +64,44 @@ return {
         yadm                         = {
           enable = false
         },
+      }
+    end
+  },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    -- event = "VeryLazy",
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = "onelight",
+          component_separators = '|',
+          section_separators = { left = '', right = '' },
+        },
+        sections = {
+          lualine_a = {
+            { 'mode', separator = { left = '' }, right_padding = 2 },
+          },
+          -- lualine_b = { 'filename', 'branch' },
+          lualine_b = { 'branch' },
+          -- lualine_c = { 'fileformat' },
+          lualine_c = { { 'filename', path = 1 } },
+          lualine_x = {},
+          lualine_y = { 'filetype', 'progress' },
+          lualine_z = {
+            { 'location', separator = { right = '' }, left_padding = 2 },
+          },
+        },
+        inactive_sections = {
+          lualine_a = { 'filename' },
+          lualine_b = {},
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = { 'location' },
+        },
+        tabline = {},
+        extensions = {},
       }
     end
   },
