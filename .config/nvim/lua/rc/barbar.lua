@@ -110,7 +110,7 @@ return {
     local opts = { noremap = true, silent = true }
 
     -- Move to previous/next
-    map('n', '<C-j>', '<Cmd>BufferPrevious<CR>', opts)
-    map('n', '<C-k>', '<Cmd>BufferNext<CR>', opts)
+    map('n', '<C-h>', '<Cmd>BufferPrevious<CR>', opts)
+    map('n', '<C-l>', '<Cmd>BufferNext<CR>', opts)
   end
 }
