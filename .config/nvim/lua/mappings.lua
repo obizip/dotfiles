@@ -22,8 +22,8 @@ vim.keymap.set("n", "<C-c>", "<ESC>", nm)
 vim.keymap.set("n", "<C-f>", "<C-d>", nm)
 vim.keymap.set("n", "<C-b>", "<C-u>", nm)
 
-vim.keymap.set("n", "<C-h>", ":bp<Cr>", nm)
-vim.keymap.set("n", "<C-l>", ":bn<Cr>", nm)
+-- vim.keymap.set("n", "<C-h>", ":bp<Cr>", nm)
+-- vim.keymap.set("n", "<C-l>", ":bn<Cr>", nm)
 vim.keymap.set("n", "<C-d>", ":bwipe<Cr>", nm)
 
 vim.keymap.set("n", "<C-n>", ":<C-u>Numbertoggle<cr>", nm)

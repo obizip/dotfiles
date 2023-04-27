@@ -48,7 +48,6 @@ vim.o.cursorline = false
 vim.o.list = true
 vim.o.conceallevel = 0
 vim.o.concealcursor = ""
-vim.opt.listchars:append("space: ")
 vim.opt.listchars:append("trail: ")
 vim.opt.listchars:append("tab:▸ ")
 
