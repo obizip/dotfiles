@@ -14,13 +14,6 @@ return {
       })
     end,
   },
-  {
-    "lewis6991/impatient.nvim",
-    lazy = false,
-    config = function()
-      require("impatient")
-    end,
-  },
 
   {
     "dstein64/vim-startuptime",
@@ -30,7 +23,7 @@ return {
 
   {
     "notjedi/nvim-rooter.lua",
-    lazy = false,
+    event = "BufWinEnter",
     cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
     config = function()
       require("nvim-rooter").setup({

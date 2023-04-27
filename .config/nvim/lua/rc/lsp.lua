@@ -1,7 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    lazy = false,
+    event = "BufWinEnter",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",

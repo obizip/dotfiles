@@ -1,6 +1,12 @@
 return {
   "tamago324/lir.nvim",
-  lazy = false,
+  keys = { {
+    "<leader>e",
+    function()
+      require('lir.float').init()
+    end,
+    desc = "Open filer"
+  } },
   dependencies = {
     "folke/which-key.nvim",
   },
