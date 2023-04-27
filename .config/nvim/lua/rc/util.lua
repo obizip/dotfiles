@@ -28,18 +28,18 @@ return {
     cmd = "StartupTime",
   },
 
-  -- {
-  --   "notjedi/nvim-rooter.lua",
-  --   lazy = false,
-  --   cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
-  --   config = function()
-  --     require("nvim-rooter").setup({
-  --       rooter_patterns = { ".git", ".hg", ".svn" },
-  --       trigger_patterns = { "*" },
-  --       manual = false,
-  --     })
-  --   end,
-  -- },
+  {
+    "notjedi/nvim-rooter.lua",
+    lazy = false,
+    cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
+    config = function()
+      require("nvim-rooter").setup({
+        rooter_patterns = { ".git", ".hg", ".svn" },
+        trigger_patterns = { "*" },
+        manual = false,
+      })
+    end,
+  },
 
   {
     "tpope/vim-repeat",
@@ -48,7 +48,7 @@ return {
 
   {
     "numToStr/Comment.nvim",
-    event = "VeryLazy",
+    event = {"BufRead", "InsertEnter"},
     config = function()
       require("Comment").setup()
     end,
@@ -87,7 +87,7 @@ return {
   {
     'phaazon/hop.nvim',
     version = 'v2', -- optional but strongly recommended
-    event = "VeryLazy",
+    event = {"BufRead", "InsertEnter"},
     config = function()
       -- you can configure Hop the way you like here; see :h hop-config
       require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
@@ -102,13 +102,6 @@ return {
       end, { remap = true })
     end
   },
-  -- {
-  --   "ggandor/leap.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("leap").add_default_mappings()
-  --   end,
-  -- },
 
   {
     'cappyzawa/trim.nvim',
@@ -126,7 +119,7 @@ return {
 
   {
     'norcalli/nvim-colorizer.lua',
-    event = 'VeryLazy',
+    event = {"BufRead", "InsertEnter"},
     config = function()
       require 'colorizer'.setup()
     end,
@@ -134,7 +127,7 @@ return {
 
   {
     'folke/todo-comments.nvim',
-    event = 'VeryLazy',
+    event = {"BufRead", "InsertEnter"},
     dependencies = 'nvim-lua/plenary.nvim',
     config = function()
       require 'todo-comments'.setup()

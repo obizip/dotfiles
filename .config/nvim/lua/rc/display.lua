@@ -21,7 +21,7 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    event = "VeryLazy",
+    event = "BufReadPre",
     config = function()
       require('gitsigns').setup {
         signs                        = {
@@ -172,7 +172,7 @@ return {
   -- },
   {
     "andymass/vim-matchup",
-    event = "VeryLazy",
+    event = "BufReadPre",
     config = function()
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
     end,
@@ -180,7 +180,7 @@ return {
 
   {
     "m-demare/hlargs.nvim",
-    event = "VeryLazy",
+    event = "BufReadPre",
     dependencies = 'nvim-treesitter/nvim-treesitter',
     config = function()
       require 'hlargs'.setup()

@@ -1,7 +1,7 @@
 return {
   "fatih/vim-go",
   ft = { "go" },
-  event = "VeryLazy",
+  event = "BufReadPre",
   config = function()
     vim.g.go_def_mapping_enabled = 1
     vim.g.go_metalinter_autosave = 0
