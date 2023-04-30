@@ -2,8 +2,6 @@
 
 set -ue
 
-source $current_dir/util.sh
-
 if [[ ! -d $HOME/.config/zsh/.zprezto ]]; then
     git clone --recursive https://github.com/sorin-ionescu/prezto.git "$HOME/.config/zsh/.zprezto"
 else
