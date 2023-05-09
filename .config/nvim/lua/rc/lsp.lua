@@ -1,7 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    event = "BufWinEnter",
+    event = "BufReadPre",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
@@ -125,19 +125,19 @@ return {
       })
 
       -- go to last loc when opening a buffer
-      vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
-        pattern = "*.tex",
-        callback = function()
-          if vim.fn.executable('tectonic') then
-            local pdf_cmd = ""
-            local pdf_args = {}
-            if vim.loop.os_uname().sysname == "Darwin" then
-              pdf_cmd = "displayline"
-              pdf_args = { "%l", "%p", "%f" }
-            else
-              pdf_cmd = "zathura"
-              pdf_args = { "--synctex-forward", "%l:0:%f", "%p" }
-            end
+      -- vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
+      --   pattern = "*.tex",
+      --   callback = function()
+      --     if vim.fn.executable('tectonic') then
+      --       local pdf_cmd = ""
+      --       local pdf_args = {}
+      --       if vim.loop.os_uname().sysname == "Darwin" then
+      --         pdf_cmd = "displayline"
+      --         pdf_args = { "%l", "%p", "%f" }
+      --       else
+      --         pdf_cmd = "zathura"
+      --         pdf_args = { "--synctex-forward", "%l:0:%f", "%p" }
+      --       end
 
             lspconfig.texlab.setup({
               settings = {
@@ -170,9 +170,9 @@ return {
                 },
               },
             })
-          end
-        end,
-      })
+      --     end
+      --   end,
+      -- })
     end,
   },
 }
