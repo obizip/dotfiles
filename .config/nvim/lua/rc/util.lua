@@ -23,7 +23,7 @@ return {
 
   {
     "notjedi/nvim-rooter.lua",
-    event = "BufWinEnter",
+    -- event = "BufWinEnter",
     cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
     config = function()
       require("nvim-rooter").setup({
