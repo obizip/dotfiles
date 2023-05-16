@@ -21,18 +21,18 @@ return {
     cmd = "StartupTime",
   },
 
-  {
-    "notjedi/nvim-rooter.lua",
-    -- event = "BufWinEnter",
-    cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
-    config = function()
-      require("nvim-rooter").setup({
-        rooter_patterns = { ".git", ".hg", ".svn" },
-        trigger_patterns = { "*" },
-        manual = false,
-      })
-    end,
-  },
+  -- {
+  --   "notjedi/nvim-rooter.lua",
+  --   -- event = "BufWinEnter",
+  --   cond = vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree"),
+  --   config = function()
+  --     require("nvim-rooter").setup({
+  --       rooter_patterns = { ".git", ".hg", ".svn" },
+  --       trigger_patterns = { "*" },
+  --       manual = false,
+  --     })
+  --   end,
+  -- },
 
   {
     "tpope/vim-repeat",
@@ -69,8 +69,9 @@ return {
     config = function()
       require("nvim-autopairs").setup({
         disable_filetype = { "TelescopePrompt", "vim" },
-        enable_moveright = false,
+        enable_moveright = true,
         map_c_h = true,
+        check_ts = true,
       })
       require("nvim-autopairs").remove_rule("'")
       require("nvim-autopairs").remove_rule('"')
