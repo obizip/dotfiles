@@ -15,9 +15,9 @@ alias la='exa -la'
 
 # bat commands
 alias cat="bat"
-alias grep="batgrep"
+# alias grep="batgrep"
 alias man="batman"
-alias pipe="batpipe"
+# alias pipe="batpipe"
 alias watch="batwatch"
 alias diff="batdiff"
 
