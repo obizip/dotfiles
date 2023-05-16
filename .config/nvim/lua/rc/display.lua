@@ -76,7 +76,7 @@ return {
           lualine_b = { 'branch', 'diagnostics' },
           lualine_c = { { 'filename', path = 1 } },
           lualine_x = { 'filetype' },
-          lualine_y = { 'progress' },
+          lualine_y = { 'diff' },
           lualine_z = { 'location' }
         },
         inactive_sections = {

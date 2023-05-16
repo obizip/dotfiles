@@ -15,27 +15,57 @@ return {
       -- Enable/disable current/total tabpages indicator (top right corner)
       tabpages = true,
 
-      -- Enable/disable close button
-      closable = false,
-
       -- Enables/disable clickable tabs
       --  - left-click: go to buffer
       --  - middle-click: delete buffer
       clickable = true,
 
-      -- Enables / disables diagnostic symbols
-      diagnostics = {
-        -- you can use a list
-        { enabled = true, icon = 'ﬀ' }, -- ERROR
-        { enabled = false },            -- WARN
-        { enabled = false },            -- INFO
-        { enabled = true },             -- HINT
-        -- OR `vim.diagnostic.severity`
-        -- [vim.diagnostic.severity.ERROR] = { enabled = true, icon = 'ﬀ' },
-        [vim.diagnostic.severity.ERROR] = { enabled = true, icon = ' ' },
-        [vim.diagnostic.severity.WARN] = { enabled = true, icon = ' '},
-        [vim.diagnostic.severity.INFO] = { enabled = true, icon = ' '},
-        [vim.diagnostic.severity.HINT] = { enabled = false },
+      -- Enable highlighting visible buffers
+      highlight_visible = true,
+
+      icons = {
+        -- Configure the base icons on the bufferline.
+        -- Valid options to display the buffer index and -number are `true`, 'superscript' and 'subscript'
+        buffer_index = false,
+        buffer_number = false,
+        button = '',
+        -- Enables / disables diagnostic symbols
+        diagnostics = {
+          [vim.diagnostic.severity.ERROR] = { enabled = true, icon = ' ' },
+          [vim.diagnostic.severity.WARN] = { enabled = true, icon = ' ' },
+          [vim.diagnostic.severity.INFO] = { enabled = true, icon = ' ' },
+          [vim.diagnostic.severity.HINT] = { enabled = false },
+        },
+
+        gitsigns = {
+          added = { enabled = false, icon = '+' },
+          changed = { enabled = false, icon = '~' },
+          deleted = { enabled = false, icon = '-' },
+        },
+        filetype = {
+          -- Sets the icon's highlight group.
+          -- If false, will use nvim-web-devicons colors
+          custom_colors = false,
+
+          -- Requires `nvim-web-devicons` if `true`
+          enabled = true,
+        },
+        separator = { left = '▎', right = '' },
+
+        -- Configure the icons on the bufferline when modified or pinned.
+        -- Supports all the base icon options.
+        modified = { button = '●' },
+        pinned = { button = '', filename = true },
+
+        -- Use a preconfigured buffer appearance— can be 'default', 'powerline', or 'slanted'
+        preset = 'default',
+
+        -- Configure the icons on the bufferline based on the visibility of a buffer.
+        -- Supports all the base icon options, plus `modified` and `pinned`.
+        alternate = { filetype = { enabled = false } },
+        current = { buffer_index = true },
+        inactive = { button = '×' },
+        visible = { modified = { buffer_number = false } },
       },
 
       -- Excludes buffers from the tabline
@@ -55,34 +85,13 @@ return {
       -- Disable highlighting file icons in inactive buffers
       highlight_inactive_file_icons = false,
 
-      -- Enable highlighting visible buffers
-      highlight_visible = true,
-
-      -- Enable/disable icons
-      -- if set to 'numbers', will show buffer index in the tabline
-      -- if set to 'both', will show buffer index and icons in the tabline
-      icons = false,
-
-      -- If set, the icon color will follow its corresponding buffer
-      -- highlight group. By default, the Buffer*Icon group is linked to the
-      -- Buffer* group (see Highlighting below). Otherwise, it will take its
-      -- default value as defined by devicons.
-      icon_custom_colors = false,
-
-      -- Configure icons on the bufferline.
-      icon_separator_active = '▎',
-      icon_separator_inactive = '▎',
-      icon_close_tab = '',
-      icon_close_tab_modified = '●',
-      icon_pinned = '車',
-
       -- If true, new buffers will be inserted at the start/end of the list.
       -- Default is to insert after current buffer.
       insert_at_end = true,
       insert_at_start = false,
 
       -- Sets the maximum padding width with which to surround each tab
-      maximum_padding = 3,
+      maximum_padding = 1,
 
       -- Sets the minimum padding width with which to surround each tab
       minimum_padding = 1,
@@ -105,11 +114,11 @@ return {
       -- where X is the buffer number. But only a static string is accepted here.
       no_name_title = nil,
     }
-
+    --
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-
-    -- Move to previous/next
+    --
+    -- -- Move to previous/next
     map('n', '<C-h>', '<Cmd>BufferPrevious<CR>', opts)
     map('n', '<C-l>', '<Cmd>BufferNext<CR>', opts)
   end
