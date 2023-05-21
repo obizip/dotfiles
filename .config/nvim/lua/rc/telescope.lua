@@ -1,6 +1,6 @@
 return {
   "nvim-telescope/telescope.nvim",
-  event = "BufWinEnter",
+  event = "VeryLazy",
   dependencies = {
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-tree/nvim-web-devicons",

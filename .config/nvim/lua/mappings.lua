@@ -26,6 +26,9 @@ vim.keymap.set("n", "<C-b>", "<C-u>", nm)
 -- vim.keymap.set("n", "<C-l>", ":bn<Cr>", nm)
 vim.keymap.set("n", "<C-d>", ":bwipe<Cr>", nm)
 
+vim.api.nvim_create_user_command("Numbertoggle", function()
+  vim.wo.number = not vim.wo.number
+end, {})
 vim.keymap.set("n", "<C-n>", ":<C-u>Numbertoggle<cr>", nm)
 
 -- local wk = require("which-key")

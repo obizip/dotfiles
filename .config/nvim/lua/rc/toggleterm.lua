@@ -1,7 +1,7 @@
 return {
   'akinsho/toggleterm.nvim',
   version = "*",
-  event = "BufWinEnter",
+  event = {"BufReadPost", "BufNewFile"},
   config = function()
     function _G.set_terminal_keymaps()
       local opts = { buffer = 0 }

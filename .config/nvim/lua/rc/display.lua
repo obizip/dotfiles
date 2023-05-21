@@ -50,7 +50,7 @@ return {
 
   {
     "nvim-lualine/lualine.nvim",
-    event = "UiEnter",
+    lazy = false,
     config = function()
       require('lualine').setup {
         options = {
