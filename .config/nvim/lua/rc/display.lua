@@ -117,8 +117,8 @@ return {
     event = "BufReadPre",
     config = function()
       vim.opt.termguicolors = true
-      vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1a1b23 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent2 guibg=#16171F gui=nocombine]]
+      -- vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1a1b23 gui=nocombine]]
+      -- vim.cmd [[highlight IndentBlanklineIndent2 guibg=#16171F gui=nocombine]]
 
       require("indent_blankline").setup {
         char = "",

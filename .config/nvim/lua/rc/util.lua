@@ -127,8 +127,8 @@ return {
       require 'todo-comments'.setup({
         keywords = {
           FIX = {
-            icon = " ",                        -- icon used for the sign, and in search results
-            color = "error",                      -- can be a hex color, or a named color (see below)
+            icon = " ",                              -- icon used for the sign, and in search results
+            color = "error",                            -- can be a hex color, or a named color (see below)
             alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
             -- signs = false, -- configure signs for some keywords individually
           },
@@ -141,5 +141,35 @@ return {
         },
       })
     end,
-  }
+  },
+  {
+    "yamatsum/nvim-cursorline",
+    -- event = "VeryLazy",
+    config = function()
+      require('nvim-cursorline').setup {
+        cursorline = {
+          enable = true,
+          timeout = 1000,
+          number = false,
+        },
+        cursorword = {
+          enable = true,
+          min_length = 3,
+          hl = { underline = true },
+        }
+      }
+    end
+  },
+  {
+    'echasnovski/mini.cursorword',
+    version = '*',
+    event = "VeryLazy",
+    config = function ()
+      require('mini.cursorword').setup({
+        delay = 100,
+      })
+    end
+
+  },
+
 }

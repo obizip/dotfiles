@@ -1,20 +1,34 @@
 return {
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+  --   priority = 1000, -- make sure to load this before all the other start plugins
+  --   config = function()
+  --     require('tokyonight').setup({
+  --       on_highlights = function(hl, c)
+  --         hl.EndOfBuffer = {
+  --           fg = c.fg_gutter
+  --         }
+  --       end
+  --     })
+  --     -- load the colorscheme here
+  --     vim.cmd([[colorscheme tokyonight-night]])
+  --   end,
+  -- },
+  --
   {
-    "folke/tokyonight.nvim",
-    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      require('tokyonight').setup({
-        on_highlights = function(hl, c)
-          hl.EndOfBuffer = {
-            fg = c.fg_gutter
-          }
-        end
-      })
-      -- load the colorscheme here
-      vim.cmd([[colorscheme tokyonight-night]])
-    end,
-  },
+    "mcchrish/zenbones.nvim",
+    lazy = false,
+    priority = 1000,
+    -- Optionally install Lush. Allows for more configuration or extending the colorscheme
+    -- If you don't want to install lush, make sure to set g:zenbones_compat = 1
+    -- In Vim, compat mode is turned on as Lush only works in Neovim.
+    dependencies = "rktjmp/lush.nvim",
+    config = function ()
+      vim.g.zenbones = {darkness = 'stark'}
+      vim.cmd([[colorscheme zenbones]])
+    end
+  }
 }
 -- return {
 --   {
