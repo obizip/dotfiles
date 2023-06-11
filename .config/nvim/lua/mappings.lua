@@ -46,8 +46,17 @@ vim.keymap.set("i", "<C-y>", "<esc>p==a", nm) -- paste
 vim.keymap.set("i", "<C-c>", "<ESC>", nm)
 vim.keymap.set("i", "<C-b>", "<left>", nm)
 vim.keymap.set("i", "<C-f>", "<right>", nm)
+vim.keymap.set("i", "<C-n>", "<down>", nm)
+vim.keymap.set("i", "<C-p>", "<up>", nm)
 vim.keymap.set("i", "<C-a>", "<home>", nm)
 vim.keymap.set("i", "<C-e>", "<end>", nm)
+
+-- Insert today date
+vim.api.nvim_create_user_command("Today", function()
+  local time = vim.fn.strftime("%Y年%m月%d日")
+  vim.cmd(":normal a" .. time)
+end, {})
+vim.keymap.set("i", "<C-s>", "<C-o>:Today<cr>", nm)
 
 -- Visual mode --
 vim.keymap.set("v", "j", "gj", nm)

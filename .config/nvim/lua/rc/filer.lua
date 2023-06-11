@@ -30,7 +30,7 @@ return {
         ["l"] = actions.edit,
         ["<C-s>"] = actions.split,
         ["<C-v>"] = actions.vsplit,
-        ["<C-t>"] = actions.tabedit,
+        ["<C-t>"] = actions.edit,
 
         ["h"] = actions.up,
         ["q"] = actions.quit,

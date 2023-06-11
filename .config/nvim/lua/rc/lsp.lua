@@ -1,7 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    event = {"BufReadPre", "BufNewfile"},
+    event = { "BufReadPre", "BufNewfile" },
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
@@ -97,22 +97,26 @@ return {
         }
       }
 
-      local signs = { Error = ' ', Warn = ' ', Hint = " ", Info = ' ' }
+      -- local signs = { Error = ' ', Warn = ' ', Hint = " ", Info = ' ' }
 
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-      end
+      -- for type, icon in pairs(signs) do
+      --   local hl = "DiagnosticSign" .. type
+      --   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      -- end
 
-      vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
-        pattern = "*.hs",
-        callback = function()
-          lspconfig.hls.setup {
-            capabilities = capabilities,
-            on_attach = require 'virtualtypes'.on_attach
-          }
-        end
-      })
+      lspconfig.hls.setup {
+        capabilities = capabilities,
+      }
+
+      -- vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
+      --   pattern = "*.hs",
+      --   callback = function()
+      --     lspconfig.hls.setup {
+      --       capabilities = capabilities,
+      --       on_attach = require 'virtualtypes'.on_attach
+      --     }
+      --   end
+      -- })
 
       vim.api.nvim_create_autocmd({ "BufNewfile", "BufReadPre" }, {
         pattern = "*.ml",
@@ -129,47 +133,48 @@ return {
       --   pattern = "*.tex",
       --   callback = function()
       --     if vim.fn.executable('tectonic') then
-      --       local pdf_cmd = ""
-      --       local pdf_args = {}
-      --       if vim.loop.os_uname().sysname == "Darwin" then
-      --         pdf_cmd = "displayline"
-      --         pdf_args = { "%l", "%p", "%f" }
+      local pdf_cmd = ""
+      local pdf_args = {}
+      -- if vim.loop.os_uname().sysname == "Darwin" then
+        pdf_cmd = "displayline"
+        pdf_args = { "%l", "%p", "%f" }
+      -- end
       --       else
       --         pdf_cmd = "zathura"
       --         pdf_args = { "--synctex-forward", "%l:0:%f", "%p" }
       --       end
 
-            lspconfig.texlab.setup({
-              settings = {
-                texlab = {
-                  rootDirectory = nil,
-                  build = {
-                    executable = "tectonic",
-                    args = { "-X", "compile", "--synctex", "%f", "--keep-logs", "--keep-intermediates" },
-                    onSave = true,
-                    forwardSearchAfter = false,
-                  },
-                  auxDirectory = ".",
-                  forwardSearch = {
-                    executable = pdf_cmd,
-                    args = pdf_args,
-                  },
-                  chktex = {
-                    onOpenAndSave = false,
-                    onEdit = false,
-                  },
-                  -- diagnosticsDelay = 300,
-                  diagnosticsDelay = 100,
-                  latexFormatter = "latexindent",
-                  latexindent = {
-                    ["local"] = nil, -- local is a reserved keyword
-                    modifyLineBreaks = false,
-                  },
-                  bibtexFormatter = "texlab",
-                  formatterLineLength = 80,
-                },
-              },
-            })
+      lspconfig.texlab.setup({
+        settings = {
+          texlab = {
+            rootDirectory = nil,
+            build = {
+              executable = "tectonic",
+              args = { "-X", "compile", "--synctex", "%f", "--keep-logs", "--keep-intermediates" },
+              onSave = true,
+              forwardSearchAfter = false,
+            },
+            auxDirectory = ".",
+            forwardSearch = {
+              executable = pdf_cmd,
+              args = pdf_args,
+            },
+            chktex = {
+              onOpenAndSave = false,
+              onEdit = false,
+            },
+            -- diagnosticsDelay = 300,
+            diagnosticsDelay = 100,
+            latexFormatter = "latexindent",
+            latexindent = {
+              ["local"] = nil,       -- local is a reserved keyword
+              modifyLineBreaks = false,
+            },
+            bibtexFormatter = "texlab",
+            formatterLineLength = 80,
+          },
+        },
+      })
       --     end
       --   end,
       -- })

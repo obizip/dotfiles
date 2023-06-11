@@ -1,7 +1,10 @@
 -- Base --
+vim.cmd([[
+au BufNewfile,BufRead *.typ setfiletype typst
+]])
 if vim.loop.os_uname().sysname == "Darwin" then
-	vim.cmd("language en_US.UTF-8")
-	vim.o.clipboard = "unnamedplus"
+    vim.cmd("language en_US.UTF-8")
+    vim.o.clipboard = "unnamedplus"
 end
 
 vim.o.clipboard = "unnamedplus"
@@ -24,7 +27,7 @@ vim.o.autowrite = true
 
 local undodir = os.getenv("HOME") .. "/.local/share/nvim/undo"
 if not vim.fn.isdirectory(undodir) then
-	vim.fn.mkdir(undodir, "p", 0770)
+    vim.fn.mkdir(undodir, "p", 0770)
 end
 vim.o.undofile = true
 vim.o.undodir = undodir
@@ -52,8 +55,8 @@ vim.opt.listchars:append("trail: ")
 vim.opt.listchars:append("tab:▸ ")
 
 -- Tab & Indent --
-vim.o.tabstop = 4 -- only set tabstop
-vim.o.shiftwidth = 0 -- tabstopに従う
+vim.o.tabstop = 4      -- only set tabstop
+vim.o.shiftwidth = 0   -- tabstopに従う
 vim.o.softtabstop = -1 -- shiftwidthに従う
 vim.o.expandtab = true -- expand tab to spaces
 vim.o.smarttab = true
@@ -65,8 +68,8 @@ vim.o.showbreak = "+ "
 vim.o.breakindent = true
 
 -- Search --
-vim.o.wrapscan = true -- 最後まで検索したら先頭へ戻る
+vim.o.wrapscan = true   -- 最後まで検索したら先頭へ戻る
 vim.o.ignorecase = true -- 大文字小文字無視
-vim.o.smartcase = true -- 大文字ではじめたら大文字小文字無視しない
-vim.o.incsearch = true -- インクリメンタルサーチ
-vim.o.hlsearch = true -- 検索文字をハイライト
+vim.o.smartcase = true  -- 大文字ではじめたら大文字小文字無視しない
+vim.o.incsearch = true  -- インクリメンタルサーチ
+vim.o.hlsearch = true   -- 検索文字をハイライト
