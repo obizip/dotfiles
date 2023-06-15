@@ -6,7 +6,10 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "j-hui/fidget.nvim",
+      {
+        "j-hui/fidget.nvim",
+        tag = "legacy"
+      },
       "folke/which-key.nvim",
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
       "jubnzv/virtual-types.nvim",
@@ -136,8 +139,8 @@ return {
       local pdf_cmd = ""
       local pdf_args = {}
       -- if vim.loop.os_uname().sysname == "Darwin" then
-        pdf_cmd = "displayline"
-        pdf_args = { "%l", "%p", "%f" }
+      pdf_cmd = "displayline"
+      pdf_args = { "%l", "%p", "%f" }
       -- end
       --       else
       --         pdf_cmd = "zathura"
@@ -167,7 +170,7 @@ return {
             diagnosticsDelay = 100,
             latexFormatter = "latexindent",
             latexindent = {
-              ["local"] = nil,       -- local is a reserved keyword
+              ["local"] = nil, -- local is a reserved keyword
               modifyLineBreaks = false,
             },
             bibtexFormatter = "texlab",
