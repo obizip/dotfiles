@@ -24,6 +24,7 @@ else
 fi
 
 source "$ZRCDIR/alias.zsh"
+bindkey -e
 source "$ZRCDIR/bindkey.zsh"
 
 # if local configuration exists, then load.
