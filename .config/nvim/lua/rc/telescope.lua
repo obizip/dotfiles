@@ -42,9 +42,9 @@ return {
     wk.register({
       ["<leader>b"] = { "<cmd>Telescope buffers<cr>", "Find Buffer" },
       ["<leader>d"] = { "<cmd>Telescope diagnostics<cr>", "Find Diagnostics" },
-      ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Find File" },
-      -- ["<leader>f"] = { function()  require("telescope-util").find_project_files() end,
-      -- "Find file" },
+      -- ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Find File" },
+      ["<leader>f"] = { function()  require("telescope-util").find_project_files() end,
+      "Find file" },
       ["<leader>h"] = { "<cmd>Telescope help_tags<cr>", "Find Help" },
       ["<leader>i"] = { "<cmd>Telescope live_grep<cr>", "Grep File" },
       ["<leader>o"] = { "<cmd>Telescope oldfiles<cr>", "Find Old File" },

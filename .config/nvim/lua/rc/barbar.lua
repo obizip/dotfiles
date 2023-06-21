@@ -114,10 +114,9 @@ return {
       -- where X is the buffer number. But only a static string is accepted here.
       no_name_title = nil,
     }
-    --
+
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-    --
     -- -- Move to previous/next
     map('n', '<C-h>', '<Cmd>BufferPrevious<CR>', opts)
     map('n', '<C-l>', '<Cmd>BufferNext<CR>', opts)

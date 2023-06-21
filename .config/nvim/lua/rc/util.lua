@@ -142,24 +142,7 @@ return {
       })
     end,
   },
-  {
-    "yamatsum/nvim-cursorline",
-    -- event = "VeryLazy",
-    config = function()
-      require('nvim-cursorline').setup {
-        cursorline = {
-          enable = true,
-          timeout = 1000,
-          number = false,
-        },
-        cursorword = {
-          enable = true,
-          min_length = 3,
-          hl = { underline = true },
-        }
-      }
-    end
-  },
+
   {
     'echasnovski/mini.cursorword',
     version = '*',
@@ -176,7 +159,7 @@ return {
         -- Add any disabling global or filetype-specific logic here
         local blocklist = {}
         if filetype == 'lua' then
-          blocklist = { 'local', 'require', 'vim'}
+          blocklist = { 'local', 'require', 'vim' }
         elseif filetype == 'javascript' then
           blocklist = { 'import' }
         end
