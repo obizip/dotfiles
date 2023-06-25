@@ -2,7 +2,7 @@ import:
  - ~/.config/alacritty/tokyo-night.yaml
 
 window:
-  opacity: 0.8
+  opacity: 1
   # padding:
   #   x: 1
   #   y: 1

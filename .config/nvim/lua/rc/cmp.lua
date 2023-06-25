@@ -22,7 +22,7 @@ function M.config()
   local cmp = require("cmp")
   local luasnip = require('luasnip')
   local lspkind = require("lspkind")
-
+  -- For `luasnip` users.
   local has_words_before = function()
     unpack = unpack or table.unpack
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -32,17 +32,17 @@ function M.config()
   cmp.setup({
     preselect = require('cmp').PreselectMode.None,
     -- disable completion in comments
-    enabled = function()
-      local context = require("cmp.config.context")
-      local buftype = vim.api.nvim_buf_get_option(0, "buftype")
-      -- keep command mode completion enabled when cursor is in a comment
-      if vim.api.nvim_get_mode().mode == "c" then
-        return true
-      else
-        return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment") and
-            not (buftype == "prompt")
-      end
-    end,
+    -- enabled = function()
+    --   local context = require("cmp.config.context")
+    --   local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+    --   -- keep command mode completion enabled when cursor is in a comment
+    --   if vim.api.nvim_get_mode().mode == "c" then
+    --     return true
+    --   else
+    --     return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment") and
+    --         not (buftype == "prompt")
+    --   end
+    -- end,
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body) -- For `luasnip` users.
@@ -58,7 +58,7 @@ function M.config()
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "s", "c" }),
 
       ["<C-p>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -66,7 +66,7 @@ function M.config()
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "s", "c" }),
 
       ["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -93,7 +93,7 @@ function M.config()
       end, { "i", "s" }),
 
       -- ["<C-Space>"] = cmp.mapping.complete(),
-      ["<C-e>"] = cmp.mapping.abort(),
+      ["<C-c>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping(function(fallback)
         if cmp.visible() and cmp.get_active_entry() then
           cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
@@ -105,7 +105,12 @@ function M.config()
     }),
     sources = cmp.config.sources({
       { name = "luasnip" },
-      { name = "nvim_lsp" },
+      {
+        name = 'nvim_lsp',
+        entry_filter = function(entry, ctx)
+          return require('cmp.types').lsp.CompletionItemKind[entry:get_kind()] ~= 'Text'
+        end
+      },
       { name = "nvim_lsp_signature_help" },
       { name = "buffer" },
       { name = "path" },

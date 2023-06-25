@@ -52,6 +52,7 @@ return {
       ["<leader>s"] = { "<cmd>Telescope treesitter<cr>", "Find Symbol" },
       ["<leader>c"] = { function() require('telescope.builtin').find_files({ cwd = '~/.config/nvim' }) end,
         "Find Neovim Config File" },
+        ["<leader>tc"] = { "<cmd>Telescope colorscheme<cr>", "telescope colorscheme" },
         -- ["<leader>p"] = { function() require('telescope.builtin').find_files() end,
         -- "Find PWD File" },
       -- ["<leader>w"] = { function()  require("telescope-util").project_dir() end,

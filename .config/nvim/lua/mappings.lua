@@ -18,7 +18,6 @@ vim.keymap.set("n", "<C-x>", "<Nop>", nm) -- tmux leader key
 vim.keymap.set("n", "<Esc><Esc>", ":noh<Cr>", nm)
 vim.keymap.set("n", "<C-s>", ":wall<Cr>", nm)
 vim.keymap.set("n", "<C-c>", "<ESC>", nm)
-
 vim.keymap.set("n", "<C-f>", "<C-d>", nm)
 vim.keymap.set("n", "<C-b>", "<C-u>", nm)
 
@@ -41,7 +40,7 @@ vim.keymap.set("n", "<C-n>", ":<C-u>Numbertoggle<cr>", nm)
 
 -- Insert mode --
 -- vim.keymap.set("i", "<C-k>", "<C-o>D", nm) -- カーソルから右を全て削除
-vim.keymap.set("i", "<C-j>", "<C-o>o", nm) -- 改行
+vim.keymap.set("i", "<C-j>", "", nm)
 vim.keymap.set("i", "<C-y>", "<esc>p==a", nm) -- paste
 vim.keymap.set("i", "<C-c>", "<ESC>", nm)
 vim.keymap.set("i", "<C-b>", "<left>", nm)

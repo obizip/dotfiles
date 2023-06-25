@@ -95,6 +95,10 @@ return {
           Lua = {
             diagnostics = {
               globals = { 'vim' }
+            },
+            completion = {
+              workspaceWord = false,
+              showWord = "Disable"
             }
           }
         }
