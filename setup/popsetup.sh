@@ -11,12 +11,15 @@ function install() {
     local current_dir=$(dirname "${BASH_SOURCE[0]:-$0}")
 
     sudo add-apt-repository ppa:longsleep/golang-backports
-    sudo add-apt-repository ppa:neoim-ppa/unstable 
+    sudo add-apt-repository ppa:neoim-ppa/unstable
 
     sudo apt update
     sudo apt upgrade
 
     sudo apt install -y wget make gcc golang zsh tmux ripgrep exa bat neovim gawk shfmt
+
+    mkdir -p ~/.local/bin
+    ln -s /usr/bin/batcat ~/.local/bin/bat
 
     # clone bat-extra and build it (gawk, shfmt)
     alias awk="gawk"
@@ -60,6 +63,6 @@ link
 
 # print_info installing...
 install
- 
+
 # print_info config git...
 git_config

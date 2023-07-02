@@ -64,3 +64,4 @@ if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
 fi
 
 export GOPATH=$HOME/.go
+. "$HOME/.cargo/env"

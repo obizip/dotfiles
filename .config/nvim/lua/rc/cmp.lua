@@ -43,6 +43,9 @@ function M.config()
     --         not (buftype == "prompt")
     --   end
     -- end,
+    completion = {
+        completeopt = 'menu,menuone,noinsert,noselect'
+    },
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body) -- For `luasnip` users.
