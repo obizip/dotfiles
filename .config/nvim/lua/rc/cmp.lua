@@ -28,47 +28,42 @@ function M.config()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
   end
+  local t = function(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+  end
 
   cmp.setup({
     preselect = require('cmp').PreselectMode.None,
     -- disable completion in comments
-    -- enabled = function()
-    --   local context = require("cmp.config.context")
-    --   local buftype = vim.api.nvim_buf_get_option(0, "buftype")
-    --   -- keep command mode completion enabled when cursor is in a comment
-    --   if vim.api.nvim_get_mode().mode == "c" then
-    --     return true
-    --   else
-    --     return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment") and
-    --         not (buftype == "prompt")
-    --   end
-    -- end,
+    enabled = function()
+      local context = require("cmp.config.context")
+      local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+      -- keep command mode completion enabled when cursor is in a comment
+      if vim.api.nvim_get_mode().mode == "c" then
+        return true
+      else
+        return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment") and
+            not (buftype == "prompt")
+      end
+    end,
     completion = {
-        completeopt = 'menu,menuone,noinsert,noselect'
+      completeopt = 'menu,menuone,noinsert,noselect'
     },
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body) -- For `luasnip` users.
       end,
     },
-    mapping = cmp.mapping.preset.insert({
+    mapping = {
       -- ["<C-f>"] = cmp.mapping.scroll_docs( -4),
       -- ["<C-b>"] = cmp.mapping.scroll_docs(4),
 
       ["<C-n>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        else
-          fallback()
-        end
+        vim.api.nvim_feedkeys(t("<Down>"), "n", true)
       end, { "i", "s", "c" }),
 
       ["<C-p>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        else
-          fallback()
-        end
+        vim.api.nvim_feedkeys(t("<Up>"), "n", true)
       end, { "i", "s", "c" }),
 
       ["<Tab>"] = cmp.mapping(function(fallback)
@@ -83,7 +78,7 @@ function M.config()
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "s", "c" }),
 
       ["<S-Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -93,9 +88,8 @@ function M.config()
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "s", "c" }),
 
-      -- ["<C-Space>"] = cmp.mapping.complete(),
       ["<C-c>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping(function(fallback)
         if cmp.visible() and cmp.get_active_entry() then
@@ -105,7 +99,7 @@ function M.config()
         end
       end, { "i", "s", "c" }
       ),
-    }),
+    },
     sources = cmp.config.sources({
       { name = "luasnip" },
       {
@@ -137,7 +131,6 @@ function M.config()
 
   -- Use buffer source for `/` and `?`
   cmp.setup.cmdline({ "/", "?" }, {
-    mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
     },
@@ -145,7 +138,6 @@ function M.config()
 
   -- Use cmdline & path source for ':'
   cmp.setup.cmdline(":", {
-    mapping = cmp.mapping.preset.cmdline(),
     sources = cmp.config.sources({
       { name = "path" },
       { name = "cmdline" },

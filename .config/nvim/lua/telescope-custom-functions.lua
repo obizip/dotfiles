@@ -7,9 +7,9 @@ M.find_project_files = function ()
   local git_root = vim.fn.system("git rev-parse --show-toplevel | tr -d '\\n'")
   vim.cmd("cd " .. cwd)
   if string.match(git_root, "%s") ~= nil then
-    require"telescope.builtin".find_files({cwd = buf_dir})
+    require"telescope.builtin".find_files({ cwd = buf_dir})
   else
-    require"telescope.builtin".find_files({cwd = git_root})
+    require"telescope.builtin".find_files({ cwd = git_root})
   end
 end
 

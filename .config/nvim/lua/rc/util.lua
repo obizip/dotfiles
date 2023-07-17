@@ -124,53 +124,79 @@ return {
     event = { "BufRead", "InsertEnter" },
     dependencies = 'nvim-lua/plenary.nvim',
     config = function()
-      require 'todo-comments'.setup({
-        keywords = {
-          FIX = {
-            icon = " ",                              -- icon used for the sign, and in search results
-            color = "error",                            -- can be a hex color, or a named color (see below)
-            alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
-            -- signs = false, -- configure signs for some keywords individually
-          },
-          TODO = { icon = " ", color = "info" },
-          HACK = { icon = " ", color = "warning" },
-          WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
-          PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-          NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
-          TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
-        },
-      })
+      require 'todo-comments'.setup()
     end,
   },
 
   {
-    'echasnovski/mini.cursorword',
-    version = '*',
-    event = "VeryLazy",
+    'Wansmer/treesj',
+    keys = {{
+      'J',
+      function()
+        require('treesj').toggle()
+      end,
+    }},
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = function()
-      require('mini.cursorword').setup({
-        delay = 100,
+      local tsj = require('treesj')
+
+      local langs = { --[[ configuration for languages ]] }
+
+      tsj.setup({
+        -- Use default keymaps
+        -- (<space>m - toggle, <space>j - join, <space>s - split)
+        use_default_keymaps = false,
+
+        -- Node with syntax error will not be formatted
+        check_syntax_error = true,
+
+        -- If line after join will be longer than max value,
+        -- node will not be formatted
+        max_join_length = 120,
+
+        -- hold|start|end:
+        -- hold - cursor follows the node/place on which it was called
+        -- start - cursor jumps to the first symbol of the node being formatted
+        -- end - cursor jumps to the last symbol of the node being formatted
+        cursor_behavior = 'hold',
+
+        -- Notify about possible problems or not
+        notify = true,
+        langs = langs,
+
+        -- Use `dot` for repeat action
+        dot_repeat = true,
       })
+    end,
+  }
 
-      _G.cursorword_blocklist = function()
-        local curword = vim.fn.expand('<cword>')
-        local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
-
-        -- Add any disabling global or filetype-specific logic here
-        local blocklist = {}
-        if filetype == 'lua' then
-          blocklist = { 'local', 'require', 'vim' }
-        elseif filetype == 'javascript' then
-          blocklist = { 'import' }
-        end
-
-        vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
-      end
-
-      -- Make sure to add this autocommand *before* calling module's `setup()`.
-      vim.cmd('au CursorMoved * lua _G.cursorword_blocklist()')
-    end
-
-  },
+  -- {
+  --   'echasnovski/mini.cursorword',
+  --   version = '*',
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require('mini.cursorword').setup({
+  --       delay = 100,
+  --     })
+  --
+  --     _G.cursorword_blocklist = function()
+  --       local curword = vim.fn.expand('<cword>')
+  --       local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
+  --
+  --       -- Add any disabling global or filetype-specific logic here
+  --       local blocklist = {}
+  --       if filetype == 'lua' then
+  --         blocklist = { 'local', 'require', 'vim' }
+  --       elseif filetype == 'javascript' then
+  --         blocklist = { 'import' }
+  --       end
+  --
+  --       vim.b.minicursorword_disable = vim.tbl_contains(blocklist, curword)
+  --     end
+  --
+  --     -- Make sure to add this autocommand *before* calling module's `setup()`.
+  --     vim.cmd('au CursorMoved * lua _G.cursorword_blocklist()')
+  --   end
+  -- },
 
 }

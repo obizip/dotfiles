@@ -13,18 +13,10 @@ return {
     local telescope = require("telescope")
     local actions = require("telescope.actions")
     telescope.setup({
-      -- defaults = {
-      --   mappings = {
-      --     n = {
-      --       ["<C-[>"] = actions.close,
-      --     }
-      --   }
-      -- },
-      -- pickers = {
-      --   buffers = {
-      --     initial_mode = "normal"
-      --   }
-      -- },
+      defaults = {
+        file_ignore_patterns = { ".git/", ".cache", "%.o", "%.a", "%.out", "%.class", "%.pdf", "%.mkv", "%.mp4", "%.zip" },
+        hidden = true
+      },
       extensions = {
         fzf = {
           fuzzy = true,                   -- false will only do exact matching
@@ -43,20 +35,29 @@ return {
       ["<leader>b"] = { "<cmd>Telescope buffers<cr>", "Find Buffer" },
       ["<leader>d"] = { "<cmd>Telescope diagnostics<cr>", "Find Diagnostics" },
       -- ["<leader>f"] = { "<cmd>Telescope find_files<cr>", "Find File" },
-      ["<leader>f"] = { function()  require("telescope-util").find_project_files() end,
-      "Find file" },
+      ["<leader>f"] = {
+        function()
+          require("telescope-custom-functions").find_project_files()
+        end,
+        "Find file"
+      },
       ["<leader>h"] = { "<cmd>Telescope help_tags<cr>", "Find Help" },
       ["<leader>i"] = { "<cmd>Telescope live_grep<cr>", "Grep File" },
       ["<leader>o"] = { "<cmd>Telescope oldfiles<cr>", "Find Old File" },
       ["<leader>q"] = { "<cmd>Telescope quickfix<cr>", "Find Quickfix" },
       ["<leader>s"] = { "<cmd>Telescope treesitter<cr>", "Find Symbol" },
-      ["<leader>c"] = { function() require('telescope.builtin').find_files({ cwd = '~/.config/nvim' }) end,
-        "Find Neovim Config File" },
-        ["<leader>tc"] = { "<cmd>Telescope colorscheme<cr>", "telescope colorscheme" },
-        -- ["<leader>p"] = { function() require('telescope.builtin').find_files() end,
-        -- "Find PWD File" },
+      ["<leader>c"] = {
+        function()
+          require('telescope.builtin')
+              .find_files({ cwd = '~/.config/nvim' })
+        end,
+        "Find Neovim Config File"
+      },
+      ["<leader>tc"] = { "<cmd>Telescope colorscheme<cr>", "telescope colorscheme" },
+      -- ["<leader>p"] = { function() require('telescope.builtin').find_files() end,
+      -- "Find PWD File" },
       -- ["<leader>w"] = { function()  require("telescope-util").project_dir() end,
-        -- "Find file in git repository" },
+      -- "Find file in git repository" },
       -- ["<leader>e"] = { "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>", "Open file browser" },
     })
   end,

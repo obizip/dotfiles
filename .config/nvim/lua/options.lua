@@ -46,12 +46,13 @@ vim.o.wildmenu = true
 vim.o.wildmode = "list:longest,full"
 vim.o.completeopt = "menu,preview,menuone,noselect"
 vim.o.scrolloff = 4
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = "no"
 vim.o.cursorline = false
 vim.o.list = true
 vim.o.conceallevel = 0
 vim.o.concealcursor = ""
 vim.opt.listchars:append("trail: ")
+vim.opt.listchars:append("lead: ")
 vim.opt.listchars:append("tab:▸ ")
 
 -- Tab & Indent --

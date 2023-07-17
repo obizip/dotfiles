@@ -64,6 +64,8 @@ vim.keymap.set("v", "+", "<C-a>", nm)
 vim.keymap.set("v", "-", "<C-x>", nm)
 
 -- Command mode --
+vim.keymap.set("c", "<C-n>", "<down>", nm)
+vim.keymap.set("c", "<C-p>", "<up>", nm)
 vim.keymap.set("c", "<C-b>", "<left>", nm)
 vim.keymap.set("c", "<C-f>", "<right>", nm)
 vim.keymap.set("c", "<C-a>", "<home>", nm)

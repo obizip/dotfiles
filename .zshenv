@@ -4,6 +4,7 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 export ZRCDIR=$ZDOTDIR/rc
 export NVIM_APPNAME=nvim
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/.ripgreprc"
 
 ## Browser
 if [[ -z "$BROWSER" && "$OSTYPE" == darwin* ]]; then
