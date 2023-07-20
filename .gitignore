@@ -11,6 +11,7 @@
 !.linkignore
 !.gitignore
 !.vimrc
+!.ideavimrc
 !.zshenv
 !.tmux.conf
 !.Brewfile

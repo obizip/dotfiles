@@ -23,7 +23,10 @@ return {
           end,
           desc = "Markdown Preview"
         },
-        opts = { theme = "dark" }
+      },
+      opts = {
+        app = 'browser',
+        theme = "dark",
       }
     }
   },

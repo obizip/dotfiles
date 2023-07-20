@@ -27,7 +27,7 @@ function install() {
     sudo ~/.bat-extras/build.sh --install
 
     # install git-delta
-    local git_delta = "git-delta_0.16.5_amd64.deb"
+    local git_delta="git-delta_0.16.5_amd64.deb"
     wget -P ~/Downloads https://github.com/dandavison/delta/releases/download/0.16.5/"{$git_delta}"
     sudo dpkg -i ~/Downloads/"{$git_delta}"
     rm ~/Downloads/"{$git_delta}"
