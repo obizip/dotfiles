@@ -11,6 +11,7 @@ local M = {
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lsp-signature-help",
     "dmitmel/cmp-cmdline-history",
+    "f3fora/cmp-spell",
     "ray-x/cmp-treesitter",
     "onsails/lspkind.nvim",
     "kdheepak/cmp-latex-symbols",
@@ -58,13 +59,32 @@ function M.config()
       -- ["<C-f>"] = cmp.mapping.scroll_docs( -4),
       -- ["<C-b>"] = cmp.mapping.scroll_docs(4),
 
-      ["<C-n>"] = cmp.mapping(function(fallback)
-        vim.api.nvim_feedkeys(t("<Down>"), "n", true)
-      end, { "i", "s", "c" }),
 
-      ["<C-p>"] = cmp.mapping(function(fallback)
-        vim.api.nvim_feedkeys(t("<Up>"), "n", true)
-      end, { "i", "s", "c" }),
+      ["<C-n>"] = cmp.mapping({
+        c = function(fallback)
+          vim.api.nvim_feedkeys(t("<Down>"), "n", true)
+        end,
+        i = function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          else
+            fallback()
+          end
+        end
+      }),
+
+      ["<C-p>"] = cmp.mapping({
+        c = function(fallback)
+          vim.api.nvim_feedkeys(t("<Down>"), "n", true)
+        end,
+        i = function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          else
+            fallback()
+          end
+        end
+      }),
 
       ["<Tab>"] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -114,6 +134,7 @@ function M.config()
       { name = "nvim_lua" },
       { name = "treesitter" },
       { name = "kdheepak/cmp-latex-symbols" },
+      { name = "spell" },
     }),
     experimental = {
       ghost_text = {
@@ -147,6 +168,15 @@ function M.config()
   -- Insert '(' after select function or method
   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
+  -- For crates.nvim
+  vim.api.nvim_create_autocmd("BufRead", {
+    group = vim.api.nvim_create_augroup("CmpSourceCargo", { clear = true }),
+    pattern = "Cargo.toml",
+    callback = function()
+      cmp.setup.buffer({ sources = { { name = "crates" } } })
+    end,
+  })
 end
 
 return M

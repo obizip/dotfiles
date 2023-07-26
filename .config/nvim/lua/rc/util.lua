@@ -97,19 +97,19 @@ return {
     end
   },
 
-  {
-    'cappyzawa/trim.nvim',
-    event = 'BufWritePre',
-    config = function()
-      require('trim').setup({
-        -- disable = { "markdown" },
-        -- if you want to remove multiple blank lines
-        patterns = {
-          [[%s/\(\n\n\)\n\+/\1/]], -- replace multiple blank lines with a single line
-        },
-      })
-    end
-  },
+  -- {
+  --   'cappyzawa/trim.nvim',
+  --   event = 'BufWritePre',
+  --   config = function()
+  --     require('trim').setup({
+  --       -- disable = { "markdown" },
+  --       -- if you want to remove multiple blank lines
+  --       patterns = {
+  --         [[%s/\(\n\n\)\n\+/\1/]], -- replace multiple blank lines with a single line
+  --       },
+  --     })
+  --   end
+  -- },
 
   {
     'norcalli/nvim-colorizer.lua',

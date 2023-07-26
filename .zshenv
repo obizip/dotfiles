@@ -41,6 +41,7 @@ path=(
   $HOME/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
+  /usr/local/bin/texlive(N-/)
   $HOME/go/bin(N-/)
   $HOME/.local/bin(N-/)
   $HOME/.go/bin(N-/)
