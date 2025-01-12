@@ -1,0 +1,24 @@
+[user]
+	name = obizip
+	email = git@obizip.jp
+[ghq]
+	root = ~/Code
+[core]
+    editor = vim
+[init]
+    defaultBranch = main
+[alias]
+    a = add
+    s = status
+    b = branch
+    l = log
+    c = commit
+    d = diff
+    cm = commit -m
+    ss = status -s
+    co = checkout
+    rb = rebase
+    st = stash
+    sh = show
+    pr = pull -r
+    ps = push

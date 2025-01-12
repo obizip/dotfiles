@@ -1,0 +1,46 @@
+set clipboard=unnamed,unnamedplus
+
+set hlsearch
+set ignorecase
+set incsearch
+set smartcase
+
+set scrolloff=10
+
+set iminsert=2
+
+set shellslash
+set expandtab
+set autoindent
+set smartindent
+
+" idea only
+set ideajoin
+
+" Plugins
+set surround
+set commentary
+set quickscope
+
+vnoremap < <gv
+vnoremap > >gv
+
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$<Right>
+inoremap <C-b> <Left>
+inoremap <C-f> <Right>
+inoremap <C-h> <BS>
+inoremap <C-k> <C-o>D<Right>
+
+nnoremap j gj
+nnoremap k gk
+
+let mapleader = "\<Space>"
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gs :action GotoSuperMethod<CR>
+nnoremap ge :action ShowErrorDescription<CR>
+nnoremap K :action QuickImplementation<CR>
+nnoremap <leader>j :action NotebookSelectCellBelowAction<cr>
+nnoremap <leader>k :action NotebookSelectCellAboveAction<cr>
+nnoremap <leader>f :action GoToFile<cr>

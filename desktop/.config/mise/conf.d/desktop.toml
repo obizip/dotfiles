@@ -1,0 +1,6 @@
+[tools]
+deno = "latest"
+go = "latest"
+jq = "latest"
+node = "latest"
+rust = "latest"

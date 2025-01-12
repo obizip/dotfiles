@@ -1,0 +1,26 @@
+<leader> k: open this keymap.txt
+
+<leader> t: toggle nvim tree
+<leader> z: zen mode
+
+-- Telescope
+<leader> f: pick file
+<leader> g: live grep
+<leader> c: pick config file
+<leader> b: pick buffer
+<leader> h: pick help
+
+-- LSP
+ K: hover
+gr: references
+gd: definition
+gD: declaration
+gi: implementation
+gK: signature_help
+gt: type_definition
+ga: code_action
+ge: open_float
+g[: goto_prev
+g]: goto_next
+gn: rename
+<leader> r: rename

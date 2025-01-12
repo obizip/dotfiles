@@ -1,0 +1,19 @@
+[tools]
+bat = "latest"
+eza = "latest"
+fzf = "latest"
+ghq = "latest"
+ripgrep = "latest"
+lazygit = "latest"
+neovim = "latest"
+github-cli = "latest"
+gum = "latest"
+pre-commit = "latest"
+uv = "latest"
+python = "3.11"
+
+[settings]
+experimental = true
+
+[settings.python]
+uv_venv_auto = true

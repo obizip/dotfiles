@@ -1,0 +1,39 @@
+[env]
+TERM = "alacritty"
+
+[font]
+size = 17
+
+[font.normal]
+family = "Explex35 Console NF"
+style = "Regular"
+
+[font.bold]
+family = "Explex35 Console NF"
+style = "Bold"
+
+[font.italic]
+family = "Explex35 Console NF"
+style = "Italic"
+
+[font.bold_italic]
+family = "Explex35 Console NF"
+style = "BoldItalic"
+
+[mouse]
+hide_when_typing = true
+
+[window]
+decorations = "full"
+startup_mode = "Maximized"
+opacity = 0.80
+blur = true
+
+[window.padding]
+x = 5
+y = 5
+
+[general]
+import = [
+  "~/.config/alacritty/cyber.toml",
+]
