@@ -10,11 +10,9 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
 CONFIG_DIR="${XDG_CONFIG_HOME}/bash/conf.d"
 if [ -d ${CONFIG_DIR} ]; then
-  for file in "${CONFIG_DIR}"/*.sh;
-  do
-    if [ -f "$file" ]; then
-      source "$file"
-    fi
+  configs=(`find $CONFIG_DIR -name "*.sh" | sort`)
+  for config in ${configs[*]}; do
+    source $config
   done
 fi
 
