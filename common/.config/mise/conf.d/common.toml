@@ -10,7 +10,6 @@ github-cli = "latest"
 gum = "latest"
 pre-commit = "latest"
 uv = "latest"
-python = "3.11"
 
 # [settings]
 # experimental = true
