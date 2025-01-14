@@ -6,10 +6,12 @@ ghq = "latest"
 ripgrep = "latest"
 lazygit = "latest"
 neovim = "latest"
+node = "latest"
 github-cli = "latest"
 gum = "latest"
 pre-commit = "latest"
 uv = "latest"
+jq = "latest"
 
 # [settings]
 # experimental = true
