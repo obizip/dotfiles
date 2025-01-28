@@ -19,7 +19,7 @@ return {
       require("mason-lspconfig").setup()
 
       vim.lsp.handlers["textDocument/publishDiagnostics"] =
-        vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false, signs = true })
+          vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false, signs = true })
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
@@ -47,6 +47,15 @@ return {
       nnoremap("<leader>r", vim.lsp.buf.rename)
 
       local lspconfig = require("lspconfig")
+
+      lspconfig["gopls"].setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig["rust_analyzer"].setup({
+        capabilities = capabilities,
+      })
+
       require("mason-lspconfig").setup_handlers({
         function(server_name)
           if server_name == "lua_ls" then
