@@ -1,12 +1,34 @@
 return {
+  -- {
+  --   "stevearc/oil.nvim",
+  --   keys = {
+  --     { "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
+  --   },
+  --   config = function()
+  --     require("oil").setup()
+  --   end,
+  -- },
+  ---@type LazySpec
   {
-    "stevearc/oil.nvim",
+    "mikavilpas/yazi.nvim",
+    lazy = false,
     keys = {
-      { "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
+      -- 👇 in this section, choose your own keymappings!
+      {
+        "-",
+        mode = { "n" },
+        "<cmd>Yazi<cr>",
+        desc = "Open yazi at the current file",
+      },
     },
-    config = function()
-      require("oil").setup()
-    end,
+    ---@type YaziConfig
+    opts = {
+      -- if you want to open yazi instead of netrw, see below for more info
+      open_for_directories = true,
+      keymaps = {
+        show_help = "<f1>",
+      },
+    },
   },
 
   {
@@ -62,7 +84,7 @@ return {
       nnoremap("<leader>c", function()
         builtin.find_files({ cwd = "~/.config" })
       end)
-      nnoremap("<leader>g", builtin.live_grep)
+      nnoremap("<leader>/", builtin.live_grep)
       nnoremap("<leader>b", builtin.buffers)
       nnoremap("<leader>h", builtin.help_tags)
 
