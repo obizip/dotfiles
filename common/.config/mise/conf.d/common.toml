@@ -15,7 +15,8 @@ pre-commit = "latest"
 uv = "latest"
 jq = "latest"
 
-# [settings]
+[settings]
+ignored_config_paths = ["~/Dotfiles/common/.config/mise", "~/Dotfiles/server/.config/mise", "~/Dotfiles/desktop/.config/mise", "~/Dotfiles/mac/.config/mise"]
 # experimental = true
 # 
 # [settings.python]
