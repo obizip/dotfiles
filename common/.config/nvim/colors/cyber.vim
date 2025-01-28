@@ -13,7 +13,7 @@ let s:t_Co = &t_Co
 
 hi Normal       guifg=#d1ffcd guibg=NONE    gui=NONE    cterm=NONE
 hi Comment      guifg=#009900 guibg=NONE    gui=NONE    cterm=NONE
-hi Statement      guifg=#00CC00 guibg=NONE    gui=NONE    cterm=NONE
+hi Statement    guifg=#00CC00 guibg=NONE    gui=NONE    cterm=NONE
 hi Search       guifg=#032000 guibg=#15ff00 gui=NONE    cterm=NONE
 hi CurSearch    guifg=#ffaf00 guibg=NONE    gui=reverse cterm=reverse
 hi Visual       guifg=NONE    guibg=#424242 gui=NONE    cterm=NONE
@@ -23,6 +23,7 @@ hi LineNr       guifg=#006500 guibg=NONE    gui=NONE    cterm=NONE
 hi CursorLineNr guifg=#15ff00 guibg=NONE    gui=NONE    cterm=NONE
 hi Pmenu        guifg=NONE    guibg=#1A1A1A gui=NONE    cterm=NONE
 hi Constant     guifg=#72FF65    guibg=NONE    gui=NONE    cterm=NONE
+hi ColorColumn  guifg=NONE    guibg=#006500    gui=NONE    cterm=NONE
 
 hi! link Boolean           Constant
 hi! link Character         Constant
@@ -32,7 +33,6 @@ hi! link Type              Constant
 hi! link StorageClass      Constant
 hi! link Structure         Constant
 
-hi! link ColorColumn       Normal
 hi! link Conceal           Normal
 hi! link Conditional       Statement
 hi! link Cursor            Normal
