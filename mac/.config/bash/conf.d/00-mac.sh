@@ -13,6 +13,7 @@ if [ -f /opt/homebrew/bin/brew ]; then
     fi
 fi
 
+alias skim="open -a Skim.app"
 
 new_repo() {
     echo "Input the repository name:"
