@@ -2,4 +2,3 @@
 deno = "latest"
 go = "latest"
 rust = "latest"
-zig = "latest"
