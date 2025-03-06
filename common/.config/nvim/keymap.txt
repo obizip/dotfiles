@@ -5,10 +5,16 @@
 
 -- Telescope
 <leader> f: pick file
-<leader> g: live grep
+<leader> /: live grep
 <leader> c: pick config file
 <leader> b: pick buffer
 <leader> h: pick help
+
+-- Trouble
+<leader>xx: Diagnostics (Trouble)
+<leader>xX: Buffer Diagnostics (Trouble)
+<leader>xL: Location List (Trouble)
+<leader>xQ: Quickfix List (Trouble)
 
 -- LSP
  K: hover

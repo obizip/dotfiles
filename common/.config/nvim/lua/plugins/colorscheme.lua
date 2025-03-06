@@ -8,6 +8,17 @@ return {
   --     vim.cmd([[colorscheme tokyonight]])
   --   end,
   -- },
+  -- Lazy
+  {
+    "vague2k/vague.nvim",
+    event = "VeryLazy",
+    config = function()
+      -- NOTE: you do not need to call setup if you don't want to.
+      require("vague").setup({
+        -- optional configuration here
+      })
+    end
+  },
   {
     "scottmckendry/cyberdream.nvim",
     -- lazy = ,

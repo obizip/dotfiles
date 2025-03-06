@@ -34,6 +34,7 @@ vim.o.undodir = undodir
 vim.o.title = true
 vim.o.termguicolors = true
 vim.o.number = true
+vim.o.relativenumber = true
 vim.o.cmdheight = 1
 vim.o.showmode = false
 vim.o.showmatch = true
@@ -56,8 +57,8 @@ vim.opt.listchars = { nbsp = "+", trail = "-", tab = "  " }
 -- vim.opt.listchars:append("tab:▸ ")
 
 -- Tab & Indent --
-vim.o.tabstop = 4      -- only set tabstop
-vim.o.shiftwidth = 0   -- tabstopに従う
+vim.o.tabstop = 4 -- only set tabstop
+vim.o.shiftwidth = 0 -- tabstopに従う
 vim.o.softtabstop = -1 -- shiftwidthに従う
 vim.o.expandtab = true -- expand tab to spaces
 vim.o.smarttab = true
@@ -69,8 +70,8 @@ vim.o.showbreak = "+ "
 vim.o.breakindent = true
 
 -- Search --
-vim.o.wrapscan = true   -- 最後まで検索したら先頭へ戻る
+vim.o.wrapscan = true -- 最後まで検索したら先頭へ戻る
 vim.o.ignorecase = true -- 大文字小文字無視
-vim.o.smartcase = true  -- 大文字ではじめたら大文字小文字無視しない
-vim.o.incsearch = true  -- インクリメンタルサーチ
-vim.o.hlsearch = true   -- 検索文字をハイライト
+vim.o.smartcase = true -- 大文字ではじめたら大文字小文字無視しない
+vim.o.incsearch = true -- インクリメンタルサーチ
+vim.o.hlsearch = true -- 検索文字をハイライト

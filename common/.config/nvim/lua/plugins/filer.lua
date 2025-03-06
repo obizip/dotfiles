@@ -1,35 +1,35 @@
 return {
-  -- {
-  --   "stevearc/oil.nvim",
-  --   keys = {
-  --     { "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
-  --   },
-  --   config = function()
-  --     require("oil").setup()
-  --   end,
-  -- },
-  ---@type LazySpec
   {
-    "mikavilpas/yazi.nvim",
-    lazy = false,
+    "stevearc/oil.nvim",
     keys = {
-      -- 👇 in this section, choose your own keymappings!
-      {
-        "-",
-        mode = { "n" },
-        "<cmd>Yazi<cr>",
-        desc = "Open yazi at the current file",
-      },
+      { "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
     },
-    ---@type YaziConfig
-    opts = {
-      -- if you want to open yazi instead of netrw, see below for more info
-      open_for_directories = true,
-      keymaps = {
-        show_help = "<f1>",
-      },
-    },
+    config = function()
+      require("oil").setup()
+    end,
   },
+  -- ---@type LazySpec
+  -- {
+  --   "mikavilpas/yazi.nvim",
+  --   lazy = false,
+  --   keys = {
+  --     -- 👇 in this section, choose your own keymappings!
+  --     {
+  --       "-",
+  --       mode = { "n" },
+  --       "<cmd>Yazi<cr>",
+  --       desc = "Open yazi at the current file",
+  --     },
+  --   },
+  --   ---@type YaziConfig
+  --   opts = {
+  --     -- if you want to open yazi instead of netrw, see below for more info
+  --     open_for_directories = true,
+  --     keymaps = {
+  --       show_help = "<f1>",
+  --     },
+  --   },
+  -- },
 
   {
     "nvim-tree/nvim-tree.lua",
