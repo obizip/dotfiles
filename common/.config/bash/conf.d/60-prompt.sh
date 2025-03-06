@@ -10,7 +10,7 @@ CYAN="\\[\\e[0;36m\\]"
 WHITE="\\[\\e[0;37m\\]"
 ENDC="\\[\\e[0m\\]"
 
-GIT_PROMPT_PATH="${XDG_CONFIG_HOME}/bash/plugins/git-prompt.sh"
+GIT_PROMPT_PATH="${XDG_CONFIG_HOME:-$HOME}/bash/plugins/git-prompt.sh"
 if [ ! -f "${GIT_PROMPT_PATH}" ]; then
     echo "git-prompt.sh does not exists."
 
@@ -47,9 +47,19 @@ else
     GIT_PS1_SHOWSTASHSTATE=true
     GIT_PS1_SHOWUPSTREAM=auto
 
-    export _INFO_PS1="${GREEN}\u${MAGENTA}@\h${WHITE} ${BLUE}\$(shorten_path)${ENDC} ${WHITE}\$(jobs | wc -l | tr -d 0 | sed \"s/ //g\")${ENDC}"
-    export _PROMPT_PS1="${RED}\$(__git_ps1 \"(%s) \")${ENDC}\$ "
-    export PS1="${_INFO_PS1}\n${_PROMPT_PS1}"
+    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+        host_ps1="${BLUE}@\h${ENDC} "
+    else
+        host_ps1=""
+    fi
+
+    cwd_ps1="${GREEN}\W${ENDC} "
+    git_ps1="${RED}\$(__git_ps1 \"%s \")${ENDC}"
+
+    # export _INFO_PS1="${GREEN}\u${MAGENTA}@\h${ENDC} ${BLUE}\W${ENDC} ${WHITE}\$(jobs | wc -l | tr -d 0 | sed \"s/ //g\")${ENDC}"
+    export _INFO_PS1="${host_ps1}"
+    export prompt_ps1="\n\$ "
+    export PS1="${host_ps1}${cwd_ps1}${git_ps1}${prompt_ps1}"
 fi
 
 if [[ -n "$IN_NIX_SHELL" ]]; then
@@ -57,4 +67,3 @@ if [[ -n "$IN_NIX_SHELL" ]]; then
     echo "$_PROMPT_PS1"
     export PS1="${_INFO_PS1}\n${_PROMPT_PS1}"
 fi
-
