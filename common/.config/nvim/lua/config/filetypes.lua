@@ -1,6 +1,8 @@
 vim.filetype.add({
   extension = {
     vto = "vento",
+    xwl = "xml",
+    lwx = "xml",
   },
 })
 

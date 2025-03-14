@@ -18,9 +18,10 @@ return {
       require("mason").setup()
       require("mason-lspconfig").setup()
 
-      vim.lsp.handlers["textDocument/publishDiagnostics"] =
-          vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
-            { virtual_text = false, signs = true, underline = false })
+      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+        vim.lsp.diagnostic.on_publish_diagnostics,
+        { virtual_text = false, signs = true, underline = false }
+      )
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)

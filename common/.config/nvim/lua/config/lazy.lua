@@ -21,6 +21,27 @@ require("lazy").setup({
   spec = {
     -- import your plugins
     { import = "plugins" },
+    -- Lua
+    {
+      "obizip/quietbuddy.nvim",
+      lazy = false,
+      priority = 1000,
+      config = function()
+        vim.cmd.colorscheme("quietbuddy")
+      end,
+      dependencies = {
+        "tjdevries/colorbuddy.nvim",
+      },
+    },
+    -- {
+    --   "tjdevries/colorbuddy.nvim",
+    --   lazy = false,
+    --   config = function()
+    --     -- require("color")
+    --     -- vim.cmd.colorscheme("quietbuddy")
+    --     vim.cmd.colorscheme("quietbuddy")
+    --   end,
+    -- },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.

@@ -14,4 +14,4 @@ require("config.lazy")
 
 -- vim.cmd("colorscheme yozakura")
 -- vim.cmd("colorscheme cyber")
-vim.cmd("colorscheme quietty")
+-- vim.cmd("colorscheme quietty")
