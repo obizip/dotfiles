@@ -2,32 +2,40 @@
 TERM = "alacritty"
 
 [font]
-size = 17
+size = 15
 
 [font.normal]
-family = "Explex35 Console NF"
+# family = "Explex35 Console NF"
+# family = "NewComputerModernMono10"
+family = "GoMono Nerd Font Mono"
 style = "Regular"
 
 [font.bold]
-family = "Explex35 Console NF"
+# family = "NewComputerModernMono10"
+# family = "Explex35 Console NF"
+family = "GoMono Nerd Font Mono"
 style = "Bold"
 
 [font.italic]
-family = "Explex35 Console NF"
+# family = "NewComputerModernMono10"
+# family = "Explex35 Console NF"
+family = "GoMono Nerd Font Mono"
 style = "Italic"
 
 [font.bold_italic]
-family = "Explex35 Console NF"
-style = "BoldItalic"
+# family = "Explex35 Console NF"
+# style = "BoldItalic"
+family = "GoMono Nerd Font Mono"
+style = "Bold Italic"
 
 [mouse]
-hide_when_typing = true
+hide_when_typing = false
 
 [window]
 decorations = "full"
 startup_mode = "Maximized"
 # opacity = 0.80
-blur = true
+# blur = true
 
 [window.padding]
 x = 5
