@@ -1,4 +1,25 @@
 return {
+  { 
+    'echasnovski/mini.jump2d', 
+    version = '*' ,
+    event = "VeryLazy",
+    opts = {
+      mappings = {
+        start_jumping = 's',
+      }
+    },
+  },
+  {
+    "echasnovski/mini.bufremove",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      local nnoremap = require("utils").nnoremap
+      local MiniBufremove = require("mini.bufremove")
+      MiniBufremove.setup()
+      nnoremap("<leader>q", MiniBufremove.wipeout)
+    end,
+  },
   {
     "junegunn/vim-easy-align",
     event = "VeryLazy",
@@ -83,8 +104,8 @@ return {
     -- setting the keybinding for LazyGit with 'keys' is recommended in
     -- order to load the plugin when the command is run for the first time
     keys = {
-      { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-    }
+      { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+    },
   },
   {
     "folke/trouble.nvim",
@@ -122,7 +143,7 @@ return {
         desc = "Quickfix List (Trouble)",
       },
     },
-  }
+  },
   -- {
   --   -- Remove phpcs linter.
   --   "mfussenegger/nvim-lint",
