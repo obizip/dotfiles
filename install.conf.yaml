@@ -17,6 +17,11 @@
     ~/.config/nvim: nvim/**
     ~/.config/yazi: yazi/**
     ~/.config/mise: mise/**
+    ~/.config/alacritty: alacritty/**
+    ~/.config/wezterm: wezterm/**
+    ~/.config/tmux: tmux/**
+
+    ~/.ideavimrc: jetbrains/ideavimrc
 
 
 - shell:
