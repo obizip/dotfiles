@@ -1,5 +1,4 @@
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
-vim.env.PATH = "/mise/shims:" .. vim.env.PATH
 
 -------------------------------
 -- Options
@@ -26,8 +25,7 @@ vim.o.relativenumber = false
 
 vim.o.cmdheight = 1
 vim.o.showmode = false
-vim.o.showcmd = false
-vim.o.laststatus = 2
+vim.o.laststatus = 1
 vim.o.wildmode = "list:longest,list:full"
 vim.o.scrolloff = 4
 vim.o.signcolumn = "yes:1"
@@ -105,7 +103,7 @@ local function set_ft_indent(pattern, indent)
   })
 end
 
-
+vim.api.nvim_create_user_command('CopyRelPath', "let @* = expand('%')", {})
 
 autocmd("TermOpen", {
   pattern = "*",
@@ -122,9 +120,6 @@ set_ft_indent({
   "typescriptreact",
   "ocaml",
 }, 2)
-
-local usercmd = vim.api.nvim_create_user_command
-usercmd('CopyRelPath', "let @* = expand('%')", {})
 
 -------------------------------
 -- Keymaps
@@ -262,34 +257,6 @@ require("lazy").setup({
         end,
       },
       {
-        "nvim-treesitter/nvim-treesitter",
-        lazy = false,
-        config = function()
-          require("nvim-treesitter.configs").setup({
-            -- A list of parser names, or "all" (the five listed parsers should always be installed)
-            ensure_installed = { "rust", "go", "python", "lua", "vim", "vimdoc", "yaml", "json", "javascript", "typescript", "html", "css" },
-
-            -- Install parsers synchronously (only applied to `ensure_installed`)
-            sync_install = true,
-
-            -- Automatically install missing parsers when entering buffer
-            -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-            auto_install = false,
-
-            highlight = {
-              enable = true,
-              disable = { "dockerfile" },
-              additional_vim_regex_highlighting = false,
-            },
-
-            indent = {
-              enable = false,
-            },
-
-          })
-        end,
-      },
-      {
         "folke/which-key.nvim",
         lazy = false,
         opts = {
@@ -297,9 +264,6 @@ require("lazy").setup({
           triggers = {
             { "<leader>", mode = { "n", "v" } },
             { "g",        mode = { "n", "v" } },
-          },
-          icons = {
-            mappings = false,
           },
           plugins = {
             marks = false,     -- shows a list of your marks on ' and `
@@ -355,17 +319,7 @@ require("lazy").setup({
         opts = {
           formatters_by_ft = {
             lua = { "stylua" },
-            go = { "goimports", "gofmt" },
-            -- You can also customize some of the format options for the filetype
             rust = { "rustfmt", lsp_format = "fallback" },
-            -- You can use a function here to determine the formatters dynamically
-            python = function(bufnr)
-              if require("conform").get_formatter_info("ruff_format", bufnr).available then
-                return { "ruff_format" }
-              else
-                return { "isort", "black" }
-              end
-            end,
             ocaml = { "ocamlformat" },
           },
           formatters = {
@@ -492,13 +446,14 @@ require("lazy").setup({
 
       {
         "saghen/blink.cmp",
-        event = "InsertEnter",
+        lazy = false,
         -- optional: provides snippets for the snippet source
         dependencies = "rafamadriz/friendly-snippets",
         version = "*",
         opts = {
           keymap = {
-            -- preset = "enter",
+            preset = "default",
+            -- ["<Enter>"] = { "select_and_accept" },
           },
           completion = {
             list = {
@@ -511,15 +466,17 @@ require("lazy").setup({
               draw = {
                 columns = {
                   { "label", "label_description", gap = 1 },
-                  { "kind" }, },
+                  { "kind" },
+                },
               },
             },
           },
           sources = {
             default = { "lsp", "path", "snippets", "buffer" },
           },
-          fuzzy = { implementation = "lua" },
+          fuzzy = { implementation = "prefer_rust_with_warning" },
         },
+        opts_extend = { "sources.default" },
       },
 
       {
@@ -541,7 +498,7 @@ require("lazy").setup({
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewfile" },
         dependencies = {
-          -- "saghen/blink.cmp",
+          "saghen/blink.cmp",
           "williamboman/mason.nvim",
           "williamboman/mason-lspconfig.nvim",
         },
@@ -581,61 +538,33 @@ require("lazy").setup({
           require("mason-lspconfig").setup({
             ensure_installed = { "lua_ls" },
           })
-          vim.lsp.config('lua_ls', {
-            settings = {
-              Lua = {
-                diagnostics = {
-                  globals = { 'vim' }
-                },
-              }
-            },
+          require("mason-lspconfig").setup_handlers({
+            function(server_name)
+              local config = {}
+              if server_name == "lua_ls" then
+                config.settings = {
+                  Lua = {
+                    diagnostics = {
+                      globals = { "vim" },
+                    },
+                  },
+                }
+              end
+
+              require("lspconfig")[server_name].setup(config)
+            end,
           })
-
-          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols" })
-
-          -- vim.cmd [[set completeopt+=menuone,noselect,popup]]
-          -- vim.lsp.start({
-          --   name = '*',
-          --   on_attach = function(client, bufnr)
-          --     vim.lsp.completion.enable(true, client.id, bufnr, {
-          --       autotrigger = true, -- 自動補完を有効にする
-          --       convert = function(item)
-          --         return { abbr = item.label:gsub('%b()', '') }
-          --       end,
-          --     })
-          --   end,
-          -- })
         end,
       },
       {
         "lewis6991/gitsigns.nvim",
         event = "BufReadPre",
         opts = {
-          signcolumn = false, -- Toggle with `:Gitsigns toggle_signs`
-          numhl = true,       -- Toggle with `:Gitsigns toggle_numhl`
-          linehl = false,     -- Toggle with `:Gitsigns toggle_linehl`
-          word_diff = false,  -- Toggle with `:Gitsigns toggle_word_diff`
+          signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+          numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
+          linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
+          word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
         },
-      },
-      {
-        "kdheepak/lazygit.nvim",
-        lazy = true,
-        cmd = {
-          "LazyGit",
-          "LazyGitConfig",
-          "LazyGitCurrentFile",
-          "LazyGitFilter",
-          "LazyGitFilterCurrentFile",
-        },
-        -- optional for floating window border decoration
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-        },
-        -- setting the keybinding for LazyGit with 'keys' is recommended in
-        -- order to load the plugin when the command is run for the first time
-        keys = {
-          { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-        }
       },
       {
         "kevinhwang91/nvim-hlslens",
