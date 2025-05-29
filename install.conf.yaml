@@ -1,0 +1,23 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+      glob: true
+
+- clean: ['~']
+
+- link:
+    ~/.gitconfig: git/gitconfig
+    ~/.config/git/ignore: git/ignore
+
+    ~/.bashrc: bash/bashrc
+    ~/.bash_profile: bash/bash_profile
+    ~/.config/bash/conf.d: bash/conf.d/*
+
+    ~/.config/nvim: nvim/**
+    ~/.config/yazi: yazi/**
+    ~/.config/mise: mise/**
+
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
