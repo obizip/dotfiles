@@ -7,25 +7,36 @@ size = 15
 [font.normal]
 # family = "Explex35 Console NF"
 # family = "NewComputerModernMono10"
-family = "GoMono Nerd Font Mono"
+# family = "GoMono Nerd Font Mono"
+# family = "Menlo"
+# family = "ComicShannsMono Nerd Font Mono"
+family = "CodeNewRoman Nerd Font Mono"
 style = "Regular"
+# family = "Comic Mono"
+# style = "Normal"
 
 [font.bold]
 # family = "NewComputerModernMono10"
 # family = "Explex35 Console NF"
-family = "GoMono Nerd Font Mono"
+# family = "GoMono Nerd Font Mono"
+# family = "ComicShannsMono Nerd Font Mono"
+family = "CodeNewRoman Nerd Font Mono"
+# family = "ComicShannsMonoNerdFontMono"
 style = "Bold"
 
 [font.italic]
 # family = "NewComputerModernMono10"
 # family = "Explex35 Console NF"
-family = "GoMono Nerd Font Mono"
+# family = "GoMono Nerd Font Mono"
+# family = "ComicShannsMonoNerdFontMono"
+family = "CodeNewRoman Nerd Font Mono"
 style = "Italic"
 
 [font.bold_italic]
 # family = "Explex35 Console NF"
 # style = "BoldItalic"
-family = "GoMono Nerd Font Mono"
+# family = "GoMono Nerd Font Mono"
+family = "CodeNewRoman Nerd Font Mono"
 style = "Bold Italic"
 
 [mouse]
@@ -34,12 +45,13 @@ hide_when_typing = false
 [window]
 decorations = "full"
 startup_mode = "Maximized"
+option_as_alt = "OnlyLeft" # (macos only)
 # opacity = 0.80
 # blur = true
 
 [window.padding]
-x = 5
-y = 5
+x = 0
+y = 0
 
 [general]
 import = [

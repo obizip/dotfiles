@@ -66,6 +66,22 @@ local function nnoremap(lhs, rhs, desc)
   vim.keymap.set({ "n" }, lhs, rhs, { desc = desc, noremap = true })
 end
 
+local function inoremap(lhs, rhs, desc)
+  vim.keymap.set({ "i" }, lhs, rhs, { desc = desc, noremap = true })
+end
+
+local function vnoremap(lhs, rhs, desc)
+  vim.keymap.set({ "v" }, lhs, rhs, { desc = desc, noremap = true })
+end
+
+local function cnoremap(lhs, rhs, desc)
+  vim.keymap.set({ "c" }, lhs, rhs, { desc = desc, noremap = true })
+end
+
+local function tnoremap(lhs, rhs, desc)
+  vim.keymap.set({ "t" }, lhs, rhs, { desc = desc, noremap = true })
+end
+
 local function cmd(command)
   return "<CMD>" .. command .. "<CR>"
 end
@@ -73,7 +89,7 @@ end
 local autocmd = vim.api.nvim_create_autocmd
 
 local function set_ft_indent(pattern, indent)
-  vim.api.nvim_create_autocmd("FileType", {
+  autocmd("FileType", {
     pattern = pattern,
     callback = function()
       vim.o.tabstop = indent -- only set tabstop
@@ -84,7 +100,21 @@ local function set_ft_indent(pattern, indent)
   })
 end
 
-set_ft_indent({ "c", "cpp", "lua", "javascript", "typescript", "javascriptreact", "typescriptreact" }, 2)
+autocmd("TermOpen", {
+  pattern = "*",
+  command = "startinsert",
+})
+
+set_ft_indent({
+  "c",
+  "cpp",
+  "lua",
+  "javascript",
+  "typescript",
+  "javascriptreact",
+  "typescriptreact",
+  "ocaml",
+}, 2)
 
 -------------------------------
 -- Keymaps
@@ -94,6 +124,32 @@ nnoremap("<C-h>", cmd("bn"))
 nnoremap("<C-l>", cmd("bp"))
 nnoremap("<C-k>", "<C-w><C-w>")
 nnoremap("<ESC><ESC>", cmd("noh"))
+
+inoremap("<C-b>", "<left>")
+inoremap("<C-f>", "<right>")
+inoremap("<C-a>", "<C-o>^")
+inoremap("<C-e>", "<end>")
+inoremap("<C-y>", "<C-r>+") -- paste
+
+cnoremap("<C-b>", "<left>")
+cnoremap("<C-f>", "<right>")
+cnoremap("<C-a>", "<home>")
+cnoremap("<C-e>", "<end>")
+cnoremap("<C-y>", "<C-r>+") -- paste
+cnoremap("<C-x>", "<C-f>") -- open cmdwin
+
+nnoremap("j", "gj")
+nnoremap("k", "gk")
+nnoremap("gj", "j")
+nnoremap("gk", "k")
+nnoremap("Y", "y$")
+
+vnoremap("j", "gj")
+vnoremap("k", "gk")
+vnoremap("gj", "j")
+vnoremap("gk", "k")
+
+tnoremap("<Esc>", [[<C-\><C-n>]])
 
 -- ref: https://zenn.dev/vim_jp/articles/2024-10-07-vim-insert-uppercase
 vim.keymap.set("i", "<C-l>", function()
@@ -207,7 +263,22 @@ now(function()
 
   require("blink.cmp").setup({
     keymap = {
-      preset = "enter",
+      preset = "none",
+      ["<C-g>"] = { "show", "show_documentation", "hide_documentation" },
+      ["<C-c>"] = { "cancel", "fallback" },
+      ["<CR>"] = { "accept", "fallback" },
+
+      ["<Tab>"] = { "select_next", "fallback" },
+      ["<S-Tab>"] = { "select_prev", "fallback" },
+
+      ["<Up>"] = { "select_prev", "fallback" },
+      ["<Down>"] = { "select_next", "fallback" },
+
+      ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
+      ["<C-n>"] = { "snippet_forward", "select_next", "fallback" },
+      ["<C-p>"] = { "snippet_backward", "select_prev", "fallback" },
     },
     completion = {
       list = {
@@ -255,6 +326,8 @@ now(function()
     end,
   })
 
+  require("lspconfig")["ocamllsp"].setup({})
+
   require("fidget").setup()
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] =
@@ -270,6 +343,13 @@ now(function()
       nnoremap("<C-s>", vim.lsp.buf.signature_help, "Signature Help")
       nnoremap("grt", vim.lsp.buf.type_definition, "Type Definition")
       nnoremap("gra", vim.lsp.buf.code_action, "Code Action")
+
+      nnoremap("gd", vim.lsp.buf.definition, "Definition")
+      nnoremap("gD", vim.lsp.buf.declaration, "Declaration")
+      nnoremap("gi", vim.lsp.buf.implementation, "Implementation")
+      nnoremap("gt", vim.lsp.buf.type_definition, "Type Definition")
+      nnoremap("ga", vim.lsp.buf.code_action, "Code Action")
+
       nnoremap("ge", vim.diagnostic.open_float, "Open Floating Diagnostic Window")
       nnoremap("g[", vim.diagnostic.goto_prev, "Go To Previous Diagnostic")
       nnoremap("g]", vim.diagnostic.goto_next, "Go To Next Diagnostic")
@@ -378,6 +458,26 @@ later(function()
     formatters_by_ft = {
       lua = { "stylua" },
       rust = { "rustfmt", lsp_format = "fallback" },
+      ocaml = { "ocamlformat" },
+    },
+    formatters = {
+      ocamlformat = {
+        command = "ocamlformat",
+        args = {
+          "--if-then-else",
+          "vertical",
+          "--break-cases",
+          "fit-or-vertical",
+          "--type-decl",
+          "sparse",
+          "--enable-outside-detected-project",
+          "--parens-tuple-patterns",
+          "always",
+          "--name",
+          "$FILENAME",
+          "-",
+        },
+      },
     },
     format_on_save = {
       -- These options will be passed to conform.format()

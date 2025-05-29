@@ -57,9 +57,10 @@ else
     git_ps1="${RED}\$(__git_ps1 \"%s \")${ENDC}"
 
     # export _INFO_PS1="${GREEN}\u${MAGENTA}@\h${ENDC} ${BLUE}\W${ENDC} ${WHITE}\$(jobs | wc -l | tr -d 0 | sed \"s/ //g\")${ENDC}"
+	export jobs_ps1="${WHITE}\$(jobs | wc -l | tr -d 0 | sed \"s/ //g\")${ENDC}"
     export _INFO_PS1="${host_ps1}"
     export prompt_ps1="\n\$ "
-    export PS1="${host_ps1}${cwd_ps1}${git_ps1}${prompt_ps1}"
+    export PS1="${host_ps1}${cwd_ps1}${git_ps1}\$([ \j -gt 0 ] && echo [\j])${prompt_ps1}"
 fi
 
 if [[ -n "$IN_NIX_SHELL" ]]; then

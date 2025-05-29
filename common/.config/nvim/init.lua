@@ -103,6 +103,8 @@ local function set_ft_indent(pattern, indent)
   })
 end
 
+vim.api.nvim_create_user_command('CopyRelPath', "let @* = expand('%')", {})
+
 autocmd("TermOpen", {
   pattern = "*",
   command = "startinsert",
@@ -231,6 +233,17 @@ require("lazy").setup({
       -- 		vim.cmd([[colorscheme tokyonight]])
       -- 	end,
       -- },
+      {
+        'junegunn/vim-easy-align',
+        lazy = false,
+        config = function()
+          -- EasyAlign を visual モードで使用
+          vim.keymap.set('x', 'ga', '<Plug>(EasyAlign)', {})
+
+          -- EasyAlign をノーマルモードで使用
+          vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', {})
+        end
+      },
       {
         "obizip/quietbuddy.nvim",
         lazy = false,    -- make sure we load this during startup if it is your main colorscheme
@@ -431,39 +444,40 @@ require("lazy").setup({
         end,
       },
 
-      -- {
-      -- 	"saghen/blink.cmp",
-      -- 	-- optional: provides snippets for the snippet source
-      -- 	dependencies = "rafamadriz/friendly-snippets",
-      -- 	version = "*",
-      -- 	opts = {
-      -- 		keymap = {
-      -- 			preset = "default",
-      -- 			["<Enter>"] = { "select_and_accept" },
-      -- 		},
-      -- 		completion = {
-      -- 			list = {
-      -- 				selection = {
-      -- 					preselect = false,
-      -- 					auto_insert = true,
-      -- 				},
-      -- 			},
-      -- 			menu = {
-      -- 				draw = {
-      -- 					columns = {
-      -- 						{ "label", "label_description", gap = 1 },
-      -- 						{ "kind" },
-      -- 					},
-      -- 				},
-      -- 			},
-      -- 		},
-      -- 		sources = {
-      -- 			default = { "lsp", "path", "snippets", "buffer" },
-      -- 		},
-      -- 		fuzzy = { implementation = "prefer_rust_with_warning" },
-      -- 	},
-      -- 	opts_extend = { "sources.default" },
-      -- },
+      {
+        "saghen/blink.cmp",
+        lazy = false,
+        -- optional: provides snippets for the snippet source
+        dependencies = "rafamadriz/friendly-snippets",
+        version = "*",
+        opts = {
+          keymap = {
+            preset = "default",
+            -- ["<Enter>"] = { "select_and_accept" },
+          },
+          completion = {
+            list = {
+              selection = {
+                preselect = false,
+                auto_insert = true,
+              },
+            },
+            menu = {
+              draw = {
+                columns = {
+                  { "label", "label_description", gap = 1 },
+                  { "kind" },
+                },
+              },
+            },
+          },
+          sources = {
+            default = { "lsp", "path", "snippets", "buffer" },
+          },
+          fuzzy = { implementation = "prefer_rust_with_warning" },
+        },
+        opts_extend = { "sources.default" },
+      },
 
       {
         "j-hui/fidget.nvim",
@@ -588,7 +602,7 @@ require("lazy").setup({
       {
         "echasnovski/mini.indentscope",
         version = "*",
-        event = "VeryLazy",
+        -- event = "VeryLazy",
         opts = {
           -- Which character to use for drawing scope indicator
           symbol = "║",
