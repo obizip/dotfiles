@@ -13,6 +13,7 @@ config.disable_default_key_bindings = true
 
 config.hide_tab_bar_if_only_one_tab = true
 
+config.macos_forward_to_ime_modifier_mask = 'SHIFT|CTRL'
 -- nightly only :(
 -- config.show_close_tab_button_in_tabs = false
 
