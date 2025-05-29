@@ -1,22 +1,21 @@
 # dotfiles
 
 ## Requirements
-- [GNU stow](https://www.gnu.org/software/stow/)
 - [mise](https://mise.jdx.dev/getting-started.html)
 
 ## Commands
 
-- check
+- install
 ```sh
-stow --simulate common desktop mac
+./install
 ```
 
-- link
+- link only
 ```sh
-stow -vR common desktop mac
+./install --only link
 ```
 
-- unlink
+- uninstall links
 ```sh
-stow -D common desktop mac
+./uninstall
 ```

@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+from __future__ import print_function
+
+import os
+import sys
+from pathlib import Path
+
+CONFIG = "install.conf.yaml"
+
+
+def uninstall():
+    pyyaml_path = Path(__file__).parent / "dotbot/lib/pyyaml/lib"
+    sys.path.append(str(pyyaml_path))
+
+    import yaml
+
+    with open(CONFIG, "r") as fin:
+        conf = yaml.safe_load(fin)
+
+    for section in conf:
+        if "link" in section:
+            for target in section["link"]:
+                realpath = os.path.expanduser(target)
+                if os.path.islink(realpath):
+                    print("Removing ", realpath)
+                    # os.unlink(realpath)
+
+
+if __name__ == "__main__":
+    uninstall()
