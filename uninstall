@@ -24,7 +24,7 @@ def uninstall():
                 realpath = os.path.expanduser(target)
                 if os.path.islink(realpath):
                     print("Removing ", realpath)
-                    # os.unlink(realpath)
+                    os.unlink(realpath)
 
 
 if __name__ == "__main__":
