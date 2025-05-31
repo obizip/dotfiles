@@ -48,7 +48,6 @@ alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
 
 if [ `hostname` = "macbook.local" ]; then
 	if [ -f "${XDG_CONFIG_HOME}/bash/mac.sh" ]; then
-		echo "this is mac!"
 		. "${XDG_CONFIG_HOME}/bash/mac.sh"
 	fi
 fi
