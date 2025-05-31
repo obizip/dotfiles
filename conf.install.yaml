@@ -29,5 +29,14 @@
 
     ~/.ideavimrc: jetbrains/ideavimrc
 
+    ~/.config/gtk-3.0/settings.ini: gtk/gtk-3.0-settings.ini
+
+    ~/.config/sway/config: sway/config
+
+    ~/.config/user-dirs.dirs: xdg/user-dirs.dirs
+
+    ~/.config/zed/settings.json: zed/settings.json
+    ~/.config/zed/keymap.json: zed/keymap.json
+
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
