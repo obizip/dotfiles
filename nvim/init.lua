@@ -498,7 +498,26 @@ require("lazy").setup({
         version = "*",
         opts = {
           keymap = {
-            -- preset = "enter",
+            ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+            ['<C-e>'] = { 'hide' },
+            ['<C-y>'] = { 'select_and_accept' },
+
+            ['<Up>'] = { 'select_prev', 'fallback' },
+            ['<Down>'] = { 'select_next', 'fallback' },
+            ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+            ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+
+            ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+            ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+
+            ['<Tab>'] = { 'select_prev', 'fallback' },
+            ['<S-Tab>'] = { 'select_next', 'fallback' },
+            -- ['<Tab>'] = { 'snippet_forward', 'fallback' },
+            -- ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+
+            ['<C-k>'] = { 'snippet_forward', 'fallback' },
+            ['<C-j>'] = { 'snippet_backward', 'fallback' },
+            -- ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
           },
           completion = {
             list = {
@@ -611,10 +630,10 @@ require("lazy").setup({
         "lewis6991/gitsigns.nvim",
         event = "BufReadPre",
         opts = {
-          signcolumn = false, -- Toggle with `:Gitsigns toggle_signs`
-          numhl = true,       -- Toggle with `:Gitsigns toggle_numhl`
-          linehl = false,     -- Toggle with `:Gitsigns toggle_linehl`
-          word_diff = false,  -- Toggle with `:Gitsigns toggle_word_diff`
+          signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+          numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
+          linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
+          word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
         },
       },
       {
@@ -676,7 +695,7 @@ require("lazy").setup({
         -- event = "VeryLazy",
         opts = {
           -- Which character to use for drawing scope indicator
-          symbol = "║",
+          symbol = "|",
         },
       },
     },
