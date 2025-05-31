@@ -8,11 +8,61 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-CONFIG_DIR="${XDG_CONFIG_HOME}/bash/conf.d"
-if [ -d ${CONFIG_DIR} ]; then
-  configs=(`find $CONFIG_DIR -name "*.sh" | sort`)
-  for config in ${configs[*]}; do
-    source $config
-  done
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export PAGER=bat
+export EDITOR=nvim
+
+export PATH="$HOME/.local/bin:$PATH"
+
+shopt -s extglob
+
+# Prompt
+GRAY="\\[\\e[0;30m\\]"
+RED="\\[\\e[0;31m\\]"
+GREEN="\\[\\e[0;32m\\]"
+YELLOW="\\[\\e[0;33m\\]"
+BLUE="\\[\\e[0;34m\\]"
+MAGENTA="\\[\\e[0;35m\\]"
+CYAN="\\[\\e[0;36m\\]"
+WHITE="\\[\\e[0;37m\\]"
+ENDC="\\[\\e[0m\\]"
+
+export PS1="${GREEN}\u@\h${ENDC}:${BLUE}\w${ENDC}\n\$ "
+
+alias ..="cd .."
+alias ....="cd ../.."
+alias so=". ${HOME}/.bashrc"
+alias d="docker"
+alias dc="docker compose"
+alias g="git"
+alias j="jobs"
+alias lg="lazygit"
+alias l="eza -al"
+alias ls="eza"
+alias sl="ls"
+alias ll="eza -l"
+alias la="eza -a"
+alias lla="eza -al"
+alias v="nvim"
+alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
+
+if [ `hostname` = "macbook.local" ]; then
+	if [ -f "${XDG_CONFIG_HOME}/bash/mac.sh" ]; then
+		echo "this is mac!"
+		. "${XDG_CONFIG_HOME}/bash/mac.sh"
+	fi
 fi
 
+# eval "$(mise activate bash)"
+# eval "$(mise activate bash --shims)"
+eval "$(fzf --bash)"
+
+# yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
