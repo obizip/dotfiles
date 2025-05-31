@@ -1,8 +1,8 @@
 [user]
-	name = obizip
-	email = git@obizip.jp
+    name = obizip
+    email = git@obizip.jp
 [ghq]
-	root = ~/Code
+    root = ~/Code
 [core]
     editor = vim
 [init]
