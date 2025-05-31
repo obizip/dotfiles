@@ -1,0 +1,17 @@
+# set ft=toml
+
+[tools]
+fzf = "latest"
+lazygit = "latest"
+ripgrep = "latest"
+neovim = "latest"
+usage = "latest"
+bat = "latest"
+yazi = "latest"
+pre-commit = "latest"
+gh = "latest"
+starship = "latest"
+eza = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = []

@@ -9,15 +9,18 @@
     ~/.gitconfig: git/gitconfig
     ~/.config/git/ignore: git/ignore
 
+    ~/.config/starship.toml: starship/starship.toml
+
     ~/.bashrc: bash/bashrc
     ~/.bash_profile: bash/bash_profile
     ~/.config/bash/mac.sh: bash/mac.sh
+
+    ~/.config/mise/config.toml: mise/config
 
     ~/.config/nvim/init.lua: nvim/init.lua
 
     ~/.config/yazi/yazi.toml: yazi/yazi.toml
     ~/.config/yazi/keymap.toml: yazi/keymap.toml
-    # ~/.config/mise: mise/config.toml
 
     ~/.config/wezterm/wezterm.lua: wezterm/wezterm.lua
     ~/.config/wezterm/keymaps.lua: wezterm/keymaps.lua
