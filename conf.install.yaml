@@ -23,7 +23,7 @@
     ~/.config/yazi/keymap.toml: yazi/keymap.toml
 
     ~/.config/wezterm/wezterm.lua: wezterm/wezterm.lua
-    ~/.config/wezterm/keymaps.lua: wezterm/keymaps.lua
+    ~/.config/wezterm/keymap.lua: wezterm/keymap.lua
 
     ~/.config/tmux/tmux.conf: tmux/tmux.conf
 

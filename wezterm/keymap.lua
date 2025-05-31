@@ -48,7 +48,7 @@ return {
 
   key_tables = {
     copy_mode = {
-      { key = 'Enter',  mods = 'NONE',  action = act.CopyMode 'MoveToStartOfNextLine' },
+      { key = 'Enter',  mods = 'NONE',  action = act.Multiple { { CopyTo = 'ClipboardAndPrimarySelection' }, { CopyMode = 'Close' } } },
       { key = 'Escape', mods = 'NONE',  action = act.CopyMode 'Close' },
       { key = '[',      mods = 'CTRL',  action = act.CopyMode 'Close' },
       { key = 'Space',  mods = 'NONE',  action = act.CopyMode { SetSelectionMode = 'Cell' } },
