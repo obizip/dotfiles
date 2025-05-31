@@ -16,18 +16,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 shopt -s extglob
 
-# Prompt
-GRAY="\\[\\e[0;30m\\]"
-RED="\\[\\e[0;31m\\]"
-GREEN="\\[\\e[0;32m\\]"
-YELLOW="\\[\\e[0;33m\\]"
-BLUE="\\[\\e[0;34m\\]"
-MAGENTA="\\[\\e[0;35m\\]"
-CYAN="\\[\\e[0;36m\\]"
-WHITE="\\[\\e[0;37m\\]"
-ENDC="\\[\\e[0m\\]"
-
-export PS1="${GREEN}\u@\h${ENDC}:${BLUE}\w${ENDC}\n\$ "
+export PS1="\[\e[0;32m\]\u@\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0m\]\n\$ "
 
 alias ..="cd .."
 alias ....="cd ../.."
@@ -46,14 +35,14 @@ alias lla="eza -al"
 alias v="nvim"
 alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
 
-if [ `hostname` = "macbook.local" ]; then
-	if [ -f "${XDG_CONFIG_HOME}/bash/mac.sh" ]; then
-		. "${XDG_CONFIG_HOME}/bash/mac.sh"
-	fi
+if [[ "$(hostname)" == "macbook.local" ]]; then
+    if [ -f "${XDG_CONFIG_HOME}/bash/mac.sh" ]; then
+        source "${XDG_CONFIG_HOME}/bash/mac.sh"
+    fi
 fi
 
-# eval "$(mise activate bash)"
-# eval "$(mise activate bash --shims)"
+eval "$(mise activate bash)"
+eval "$(starship init bash)"
 eval "$(fzf --bash)"
 
 # yazi
