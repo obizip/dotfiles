@@ -2,7 +2,6 @@
     link:
       relink: true
       create: true
-      glob: true
 
 - clean: ['~']
 
@@ -12,17 +11,20 @@
 
     ~/.bashrc: bash/bashrc
     ~/.bash_profile: bash/bash_profile
-    ~/.config/bash/conf.d: bash/conf.d/*
+    ~/.config/bash/mac.sh: bash/mac.sh
 
-    ~/.config/nvim: nvim/**
-    ~/.config/yazi: yazi/**
-    ~/.config/mise: mise/**
-    ~/.config/alacritty: alacritty/**
-    ~/.config/wezterm: wezterm/**
-    ~/.config/tmux: tmux/**
+    ~/.config/nvim/init.lua: nvim/init.lua
+
+    ~/.config/yazi/yazi.toml: yazi/yazi.toml
+    ~/.config/yazi/keymap.toml: yazi/keymap.toml
+    # ~/.config/mise: mise/config.toml
+
+    ~/.config/wezterm/wezterm.lua: wezterm/wezterm.lua
+    ~/.config/wezterm/keymaps.lua: wezterm/keymaps.lua
+
+    ~/.config/tmux/tmux.conf: tmux/tmux.conf
 
     ~/.ideavimrc: jetbrains/ideavimrc
-
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
