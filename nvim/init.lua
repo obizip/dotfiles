@@ -130,8 +130,8 @@ usercmd('CopyRelPath', "let @* = expand('%')", {})
 -- Keymaps
 -------------------------------
 
-nnoremap("<C-h>", cmd("bn | file"))
-nnoremap("<C-l>", cmd("bp | file"))
+nnoremap("<C-h>", cmd("bn"))
+nnoremap("<C-l>", cmd("bp"))
 nnoremap("<C-k>", "<C-w><C-w>")
 nnoremap("<ESC><ESC>", cmd("noh"))
 
@@ -141,12 +141,12 @@ inoremap("<C-a>", "<C-o>^")
 inoremap("<C-e>", "<end>")
 inoremap("<C-y>", "<C-r>+") -- paste
 
-cnoremap("<C-b>", "<left>")
-cnoremap("<C-f>", "<right>")
-cnoremap("<C-a>", "<home>")
-cnoremap("<C-e>", "<end>")
+-- cnoremap("<C-b>", "<left>")
+-- cnoremap("<C-f>", "<right>")
+-- cnoremap("<C-a>", "<home>")
+-- cnoremap("<C-e>", "<end>")
 cnoremap("<C-y>", "<C-r>+") -- paste
-cnoremap("<C-x>", "<C-f>")  -- open cmdwin
+-- cnoremap("<C-x>", "<C-f>")  -- open cmdwin
 
 nnoremap("j", "gj")
 nnoremap("k", "gk")
@@ -262,19 +262,49 @@ require("lazy").setup({
         end,
       },
       {
+        'nvim-lualine/lualine.nvim',
+        lazy = false,
+        opts = {
+          options = {
+            theme = {
+              normal = {
+                a = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
+                b = { fg = '#8D8CD8', bg = '#333333', gui = 'bold' },
+                c = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
+                x = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
+                y = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
+                z = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
+              },
+            },
+            icons_enabled = false,
+            component_separators = { left = "", right = "" },
+            section_separators = { left = "", right = "" },
+          },
+          sections = {
+            lualine_a = { { 'filename', path = 1 } },
+            lualine_b = { 'branch', 'diagnostics' },
+            lualine_z = { 'location' }
+          },
+          inactive_sections = {
+            lualine_a = { { 'filename', path = 1 } },
+            lualine_z = { 'location' }
+          },
+        }
+      },
+      {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
         config = function()
           require("nvim-treesitter.configs").setup({
             -- A list of parser names, or "all" (the five listed parsers should always be installed)
-            ensure_installed = { "rust", "go", "python", "lua", "vim", "vimdoc", "yaml", "json", "javascript", "typescript", "html", "css" },
+            -- ensure_installed = { "rust", "go", "python", "lua", "vim", "vimdoc", "yaml", "json", "javascript", "typescript", "html", "css" },
 
             -- Install parsers synchronously (only applied to `ensure_installed`)
-            sync_install = true,
+            -- sync_install = true,
 
             -- Automatically install missing parsers when entering buffer
             -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-            auto_install = false,
+            auto_install = true,
 
             highlight = {
               enable = true,
@@ -331,6 +361,7 @@ require("lazy").setup({
             "<leader>x",
             "<cmd>Trouble diagnostics toggle<cr>",
             desc = "Diagnostics (Trouble)",
+
           },
           -- {
           --   "<leader>xX",
@@ -499,7 +530,7 @@ require("lazy").setup({
         opts = {
           keymap = {
             ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-            ['<C-e>'] = { 'hide' },
+            -- ['<C-e>'] = { 'hide' },
             ['<C-y>'] = { 'select_and_accept' },
 
             ['<Up>'] = { 'select_prev', 'fallback' },
@@ -510,8 +541,8 @@ require("lazy").setup({
             ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
             ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
-            ['<Tab>'] = { 'select_prev', 'fallback' },
-            ['<S-Tab>'] = { 'select_next', 'fallback' },
+            ['<Tab>'] = { 'select_next', 'fallback' },
+            ['<S-Tab>'] = { 'select_prev', 'fallback' },
             -- ['<Tab>'] = { 'snippet_forward', 'fallback' },
             -- ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
 
@@ -611,19 +642,6 @@ require("lazy").setup({
           })
 
           vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols" })
-
-          -- vim.cmd [[set completeopt+=menuone,noselect,popup]]
-          -- vim.lsp.start({
-          --   name = '*',
-          --   on_attach = function(client, bufnr)
-          --     vim.lsp.completion.enable(true, client.id, bufnr, {
-          --       autotrigger = true, -- 自動補完を有効にする
-          --       convert = function(item)
-          --         return { abbr = item.label:gsub('%b()', '') }
-          --       end,
-          --     })
-          --   end,
-          -- })
         end,
       },
       {
