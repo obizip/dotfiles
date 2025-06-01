@@ -13,6 +13,7 @@ $git_status\
 $sudo\
 $line_break\
 $jobs\
+$container\
 $character"""
 
 [username]
@@ -30,3 +31,6 @@ truncation_length = 8
 
 [git_branch]
 format = '[$branch(:$remote_branch)]($style) '
+
+[container]
+format = '[\[$name\]]($style) '
