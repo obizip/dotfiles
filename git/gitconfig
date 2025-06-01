@@ -22,3 +22,5 @@
     sh = show
     pr = pull -r
     ps = push
+[safe]
+	directory = /workspace
