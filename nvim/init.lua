@@ -250,16 +250,12 @@ require("lazy").setup({
         end
       },
       {
-        "obizip/quietbuddy.nvim",
-        lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-        priority = 1000, -- make sure to load this before all the other start plugins
-        dependencies = {
-          "tjdevries/colorbuddy.nvim"
-        },
+        "obizip/bquiet.nvim",
+        lazy = false,
+        priority = 1000,
         config = function()
-          -- load the colorscheme here
-          vim.cmd([[colorscheme quietbuddy]])
-        end,
+          vim.cmd.colorscheme("bquiet")
+        end
       },
       {
         'nvim-lualine/lualine.nvim',
@@ -268,12 +264,20 @@ require("lazy").setup({
           options = {
             theme = {
               normal = {
-                a = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
-                b = { fg = '#8D8CD8', bg = '#333333', gui = 'bold' },
-                c = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
-                x = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
-                y = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
-                z = { fg = '#cccccc', bg = '#333333', gui = 'bold' },
+                a = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
+                b = { fg = '#8D8CD8', bg = '#202020', gui = 'bold' },
+                c = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
+                x = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
+                y = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
+                z = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
+              },
+              inactive = {
+                a = { fg = '#cccccc', bg = '#101010' },
+                b = { fg = '#8D8CD8', bg = '#101010' },
+                c = { fg = '#cccccc', bg = '#101010' },
+                x = { fg = '#cccccc', bg = '#101010' },
+                y = { fg = '#cccccc', bg = '#101010' },
+                z = { fg = '#cccccc', bg = '#101010' },
               },
             },
             icons_enabled = false,
@@ -283,10 +287,17 @@ require("lazy").setup({
           sections = {
             lualine_a = { { 'filename', path = 1 } },
             lualine_b = { 'branch', 'diagnostics' },
+            lualine_c = {},
+            lualine_x = {},
+            lualine_y = {},
             lualine_z = { 'location' }
           },
           inactive_sections = {
             lualine_a = { { 'filename', path = 1 } },
+            lualine_b = {},
+            lualine_c = {},
+            lualine_x = {},
+            lualine_y = {},
             lualine_z = { 'location' }
           },
         }
