@@ -1,7 +1,18 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
 
-return {
+local function is_macos()
+  local handle = io.popen("uname")
+  local os_name = handle:read("*a")
+  handle:close()
+
+  os_name = os_name:gsub("%s+", ""):lower() -- Remove whitespace and convert to lowercase for easier comparison
+
+  return os_name == "darwin"
+end
+
+
+local keymap = {
   keys = {
     { key = 'n',  mods = 'ALT',        action = act.ActivateTabRelative(1) },
     { key = 'p',  mods = 'ALT',        action = act.ActivateTabRelative(-1) },
@@ -123,3 +134,11 @@ return {
     },
   }
 }
+
+if is_macos() then
+  local act = wezterm.action
+  table.insert(keymap.keys, { key = 'c',  mods = 'SUPER', action = act.CopyTo 'Clipboard' })
+  table.insert(keymap.keys, { key = 'v',  mods = 'SUPER', action = act.PasteFrom 'Clipboard' })
+end
+
+return keymap
