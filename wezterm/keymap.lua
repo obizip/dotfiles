@@ -3,6 +3,10 @@ local act = wezterm.action
 
 local function is_macos()
   local handle = io.popen("uname")
+  if handle == nil then
+    return false
+  end
+
   local os_name = handle:read("*a")
   handle:close()
 
