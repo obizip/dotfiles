@@ -21,7 +21,7 @@ vim.o.undofile = true
 
 -- Display --
 vim.o.termguicolors = true
-vim.o.number = false
+vim.o.number = true
 vim.o.relativenumber = false
 
 vim.o.cmdheight = 1
@@ -30,7 +30,7 @@ vim.o.showcmd = false
 vim.o.laststatus = 2
 vim.o.wildmode = "list:longest,list:full"
 vim.o.scrolloff = 4
-vim.o.signcolumn = "yes:1"
+-- vim.o.signcolumn = "yes:1"
 -- vim.o.colorcolumn = "100"
 vim.o.cursorline = true
 vim.o.list = true
@@ -251,6 +251,7 @@ require("lazy").setup({
       },
       {
         "obizip/bquiet.nvim",
+        -- dir = "~/tmp/bquiet.nvim",
         lazy = false,
         priority = 1000,
         config = function()
@@ -401,16 +402,31 @@ require("lazy").setup({
             -- You can also customize some of the format options for the filetype
             rust = { "rustfmt", lsp_format = "fallback" },
             -- You can use a function here to determine the formatters dynamically
-            python = function(bufnr)
-              if require("conform").get_formatter_info("ruff_format", bufnr).available then
-                return { "ruff_format" }
-              else
-                return { "isort", "black" }
-              end
-            end,
+            -- python = function(bufnr)
+            --   if require("conform").get_formatter_info("ruff_format", bufnr).available then
+            --     return { "ruff_format" }
+            --   else
+            --     return { "isort", "black" }
+            --   end
+            -- end,
+            python = { "ruff_format", "ruff_fix" },
             ocaml = { "ocamlformat" },
           },
           formatters = {
+            ruff_fix = {
+              args = {
+                "check",
+                "--fix",
+                "--select",
+                "I",
+                "--force-exclude",
+                "--exit-zero",
+                "--no-cache",
+                "--stdin-filename",
+                "$FILENAME",
+                "-",
+              },
+            },
             ocamlformat = {
               command = "ocamlformat",
               args = {
@@ -652,17 +668,19 @@ require("lazy").setup({
             },
           })
 
-          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols" })
+          -- local lspconfig = require('lspconfig')
+          -- vim.lsp.config("pyright", lspconfig.configs.pyright)
+          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols", "ty" })
         end,
       },
       {
         "lewis6991/gitsigns.nvim",
         event = "BufReadPre",
         opts = {
-          signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-          numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
-          linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
-          word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+          signcolumn = false, -- Toggle with `:Gitsigns toggle_signs`
+          numhl = true,       -- Toggle with `:Gitsigns toggle_numhl`
+          linehl = false,     -- Toggle with `:Gitsigns toggle_linehl`
+          word_diff = false,  -- Toggle with `:Gitsigns toggle_word_diff`
         },
       },
       {
