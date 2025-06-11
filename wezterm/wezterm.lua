@@ -4,7 +4,7 @@ local keymap = require 'keymap'
 local config = wezterm.config_builder()
 
 config.font = wezterm.font 'CodeNewRoman Nerd Font Mono'
-config.font_size = 14
+config.font_size = 15
 
 config.keys = keymap.keys
 config.key_tables = keymap.key_tables
