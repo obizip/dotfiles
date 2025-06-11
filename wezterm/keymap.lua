@@ -11,7 +11,6 @@ local function is_macos()
   handle:close()
 
   os_name = os_name:gsub("%s+", ""):lower() -- Remove whitespace and convert to lowercase for easier comparison
-
   return os_name == "darwin"
 end
 
@@ -140,9 +139,11 @@ local keymap = {
 }
 
 if is_macos() then
-  local act = wezterm.action
-  table.insert(keymap.keys, { key = 'c',  mods = 'SUPER', action = act.CopyTo 'Clipboard' })
-  table.insert(keymap.keys, { key = 'v',  mods = 'SUPER', action = act.PasteFrom 'Clipboard' })
+  table.insert(keymap.keys, { key = 'c', mods = 'SUPER', action = act.CopyTo 'Clipboard' })
+  table.insert(keymap.keys, { key = 'v', mods = 'SUPER', action = act.PasteFrom 'Clipboard' })
+  table.insert(keymap.keys, { key = '=', mods = 'SUPER', action = act.IncreaseFontSize })
+  table.insert(keymap.keys, { key = '-', mods = 'SUPER', action = act.DecreaseFontSize })
+  table.insert(keymap.keys, { key = '0', mods = 'SUPER', action = act.ResetFontSize })
 end
 
 return keymap
