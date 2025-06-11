@@ -14,6 +14,7 @@ $sudo\
 $line_break\
 $jobs\
 $container\
+$python\
 $character"""
 
 [username]
@@ -34,3 +35,6 @@ format = '[$branch(:$remote_branch)]($style) '
 
 [container]
 format = '[\[$name\]]($style) '
+
+[python]
+format = '$virtualenv'
