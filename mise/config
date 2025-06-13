@@ -12,6 +12,7 @@ pre-commit = "latest"
 gh = "latest"
 starship = "latest"
 eza = "latest"
+task = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
