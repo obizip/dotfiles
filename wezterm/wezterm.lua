@@ -12,7 +12,7 @@ config.mouse_bindings = keymap.mouse_bindings
 
 config.colors = {
   foreground = '#EEEEEE',
-  background = '#282a34',
+  background = '#2d2530',
   brights = {
     'grey',
     'red',
