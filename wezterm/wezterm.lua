@@ -3,7 +3,7 @@ local keymap = require 'keymap'
 
 local config = wezterm.config_builder()
 
-config.font = wezterm.font 'CodeNewRoman Nerd Font Mono'
+config.font = wezterm.font 'Explex35 Console NF'
 config.font_size = 15
 
 config.keys = keymap.keys
