@@ -668,9 +668,18 @@ require("lazy").setup({
             },
           })
 
+          -- vim.lsp.config('ocamlls', {
+          --   cmd = { 'ocamllsp' },
+          --   filetypes = { 'ocaml', 'reason' },
+          --   root_dir = function(bufnr, on_dir)
+          --     local fname = vim.api.nvim_buf_get_name(bufnr)
+          --     on_dir(util.root_pattern('*.opam', 'esy.json', 'package.json')(fname))
+          --   end,
+          -- })
+
           -- local lspconfig = require('lspconfig')
           -- vim.lsp.config("pyright", lspconfig.configs.pyright)
-          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols", "ty" })
+          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols", "ocamllsp" })
         end,
       },
       {
