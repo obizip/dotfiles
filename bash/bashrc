@@ -32,9 +32,10 @@ alias sl="ls"
 alias ll="eza -l"
 alias la="eza -a"
 alias lla="eza -al"
+alias lt="ls -l --reverse --sort=modified"
 alias v="nvim"
 alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
-alias dev-sh="docker compose exec -it dev bash"
+alias devsh="docker compose exec -it dev bash"
 
 if [[ "$(hostname)" == "macbook.local" ]]; then
     if [ -f "${XDG_CONFIG_HOME}/bash/mac.sh" ]; then
