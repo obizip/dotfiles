@@ -35,6 +35,7 @@ vim.o.scrolloff = 4
 vim.o.cursorline = true
 vim.o.list = true
 vim.opt.listchars = { nbsp = "+", trail = "-", tab = "  ", lead = " " }
+vim.o.splitbelow = true
 
 -- Tab & Indent --
 vim.o.tabstop = 4
@@ -754,6 +755,21 @@ require("lazy").setup({
           symbol = "|",
         },
       },
+      {
+        "pappasam/nvim-repl",
+        event = "VeryLazy",
+        opts = {
+          filetype_commands = {
+            ocaml = { cmd = "ocaml", filetype = "ocaml" }
+          },
+          open_window_default = "10new"
+        },
+        keys = {
+          { "<Leader>sc", "<Plug>(ReplSendCell)",   mode = "n", desc = "Send Repl Cell" },
+          { "<Leader>sl", "<Plug>(ReplSendLine)",   mode = "n", desc = "Send Repl Line" },
+          { "<Leader>sl", "<Plug>(ReplSendVisual)", mode = "x", desc = "Send Repl Visual Selection" },
+        },
+      }
     },
   },
 })
