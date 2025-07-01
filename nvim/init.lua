@@ -17,6 +17,7 @@ vim.o.swapfile = false
 vim.o.backup = false
 vim.o.hidden = true
 vim.o.autowrite = true
+vim.o.autoread = true
 vim.o.undofile = true
 
 -- Display --
@@ -26,6 +27,7 @@ vim.o.relativenumber = false
 
 vim.o.cmdheight = 1
 vim.o.showmode = false
+vim.o.showmatch = true
 vim.o.showcmd = false
 vim.o.laststatus = 2
 vim.o.wildmode = "list:longest,list:full"
@@ -252,7 +254,7 @@ require("lazy").setup({
       },
       {
         "obizip/bquiet.nvim",
-        -- dir = "~/tmp/bquiet.nvim",
+        -- dir = "~/dev/bquiet.nvim",
         lazy = false,
         priority = 1000,
         config = function()
@@ -326,7 +328,7 @@ require("lazy").setup({
             },
 
             indent = {
-              enable = false,
+              enable = true,
             },
 
           })
@@ -412,6 +414,7 @@ require("lazy").setup({
             -- end,
             python = { "ruff_format", "ruff_fix" },
             ocaml = { "ocamlformat" },
+            php = { "php_cs_fixer" },
           },
           formatters = {
             ruff_fix = {
@@ -769,7 +772,7 @@ require("lazy").setup({
           { "<Leader>sl", "<Plug>(ReplSendLine)",   mode = "n", desc = "Send Repl Line" },
           { "<Leader>sl", "<Plug>(ReplSendVisual)", mode = "x", desc = "Send Repl Visual Selection" },
         },
-      }
+      },
     },
   },
 })
