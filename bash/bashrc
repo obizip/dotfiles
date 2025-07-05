@@ -8,16 +8,51 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export PAGER=bat
-export EDITOR=nvim
-
+export EDITOR=vim
 export PATH="$HOME/.local/bin:$PATH"
 
 shopt -s extglob
 
-export PS1="\[\e[0;32m\]\u@\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0m\]\n\$ "
+# Completion
+if [[ -e "/etc/bash_completion" ]]; then
+	. "/etc/bash_completion" 
+fi
 
+#
+# Prompt
+# 
+GRAY="\[\e[2;33m\]"
+RED="\[\e[0;31m\]"
+GREEN="\[\e[0;32m\]"
+BLUE="\[\e[0;34m\]"
+CYAN="\[\e[0;36m\]"
+RESET="\[\e[0m\]"
+
+export PS1="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${CYAN}\w${RESET}\n\$ "
+
+# Git Prompt
+git_prompt_paths=(
+    "/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
+    "/etc/bash_completion.d/git-prompt"
+)
+for git_prompt_path in "${git_prompt_paths[@]}"; do
+	if [[ -e $git_prompt_path ]]; then
+		. $git_prompt_path
+
+		GIT_PS1_SHOWDIRTYSTATE=true
+		GIT_PS1_SHOWUNTRACKEDFILES=true
+		GIT_PS1_SHOWSTASHSTATE=true
+		GIT_PS1_SHOWUPSTREAM=auto
+
+		first_line="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${CYAN}\w${RESET}"
+		second_line="${RED}\$(__git_ps1 '(%s)')${RESET}\$${GRAY}\$([ \j -gt 0 ] && echo '*')${RESET} "
+		export PS1="${first_line}\n${second_line}"
+	fi
+done
+
+#
+# Aliases
+#
 alias ..="cd .."
 alias ....="cd ../.."
 alias so=". ${HOME}/.bashrc"
@@ -26,14 +61,12 @@ alias dc="docker compose"
 alias g="git"
 alias j="jobs"
 alias lg="lazygit"
-alias l="eza -al"
-alias ls="eza"
+alias l="ls -al"
+alias ll="ls -l"
+alias la="ls -a"
+alias lla="ls -al"
 alias sl="ls"
-alias ll="eza -l"
-alias la="eza -a"
-alias lla="eza -al"
-alias lt="ls -l --reverse --sort=modified"
-alias v="nvim"
+# alias v="nvim"
 alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
 alias devsh="docker compose exec -it dev bash"
 
@@ -43,16 +76,29 @@ if [[ "$(hostname)" == "macbook.local" ]]; then
     fi
 fi
 
-eval "$(mise activate bash)"
-eval "$(starship init bash)"
-eval "$(fzf --bash)"
+if [[ -e ${HOME}/.config/mise/config.toml ]]; then
+	eval "$(mise activate bash)"
+	eval "$(fzf --bash)"
+	# eval "$(starship init bash)"
 
-# yazi
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
+	export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+	export PAGER=bat
+	
+	alias l="eza -al"
+	alias ls="eza"
+	alias ll="eza -l"
+	alias la="eza -a"
+	alias lla="eza -al"
+	alias lt="eza -l --reverse --sort=modified"
+
+	# yazi
+	function y() {
+		local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+		yazi "$@" --cwd-file="$tmp"
+		if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+			builtin cd -- "$cwd"
+		fi
+		rm -f -- "$tmp"
+	}
+fi
+

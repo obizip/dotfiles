@@ -13,6 +13,11 @@ if [ -f /opt/homebrew/bin/brew ]; then
     fi
 fi
 
+mac_git_completion="/Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash"
+if [ -f $mac_git_completion  ]; then
+	. $mac_git_completion
+fi
+
 alias skim="open -a Skim.app"
 
 new_repo() {
