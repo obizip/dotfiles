@@ -17,6 +17,8 @@
 
     ~/.config/mise/config.toml: mise/config
 
+    ~/.vimrc: vim/vimrc
+
     ~/.config/nvim/init.lua: nvim/init.lua
 
     ~/.config/yazi/yazi.toml: yazi/yazi.toml
