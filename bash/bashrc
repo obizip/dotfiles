@@ -11,6 +11,8 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export EDITOR=vim
 export PATH="$HOME/.local/bin:$PATH"
 
+export FZF_DEFAULT_OPTS="--walker-skip .git,node_modules,target,vendor"
+
 shopt -s extglob
 
 # Completion
@@ -61,11 +63,12 @@ alias dc="docker compose"
 alias g="git"
 alias j="jobs"
 alias lg="lazygit"
-alias l="ls -al"
-alias ll="ls -l"
-alias la="ls -a"
-alias lla="ls -al"
-alias sl="ls"
+alias ls="ls --color"
+alias l="ls -al --color"
+alias ll="ls -l --color"
+alias la="ls -a --color"
+alias lla="ls -al --color"
+alias sl="ls --color"
 # alias v="nvim"
 alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
 alias devsh="docker compose exec -it dev bash"
