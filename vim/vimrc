@@ -8,7 +8,7 @@ set encoding=utf-8
 " set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
 
 set number
-" set signcolumn=auto
+set signcolumn=yes
 set numberwidth=1
 set cursorline
 
@@ -17,7 +17,6 @@ set noswapfile
 set confirm
 set autoread
 set hidden
-set showmatch
 
 set wrapscan
 set incsearch
@@ -79,12 +78,15 @@ Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
 Plug 'lambdalisue/vim-fern'
 Plug 'lambdalisue/vim-fern-hijack'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 
 call plug#end()
 
@@ -95,6 +97,15 @@ nnoremap <leader>p :GFiles<cr>
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>c :Files ~/.config<cr>
 nnoremap <leader>t :Fern . -drawer -toggle<CR>
+nnoremap <leader>/ :Rg<CR>
+nnoremap <leader>d :Sayonara<CR>
+
+let g:gitgutter_sign_priority = 1
+
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr>"
 
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -102,6 +113,7 @@ function! s:on_lsp_buffer_enabled() abort
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> ge <plug>(lsp-document-diagnostics)
     nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
     nmap <buffer> gr <plug>(lsp-references)
     nmap <buffer> gi <plug>(lsp-implementation)
@@ -110,11 +122,12 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> [g <plug>(lsp-previous-diagnostic)
     nmap <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
+	nmap <buffer> <leader>v :let g:lsp_diagnostics_virtual_text_enabled = !get(g:, 'lsp_diagnostics_virtual_text_enabled', 0)<CR>:e<CR>
     " nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
     " nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    autocmd! BufWritePre *.rs,*.go,*.php call execute('LspDocumentFormatSync')
     
     " refer to doc to add more commands
 endfunction
@@ -129,10 +142,28 @@ let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('~/.vim/vim-lsp.log')
 
 let g:lsp_document_code_action_signs_enabled = 0
-let g:lsp_diagnostics_virtual_text_enabled = 0
+let g:lsp_diagnostics_virtual_text_enabled = 1
 " let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_diagnostics_float_cursor = 1
+let g:lsp_diagnostics_float_cursor = 0
 let g:lsp_diagnostics_highlights_enabled = 0
+let g:lsp_diagnostics_virtual_text_align = "right"
+let g:lsp_diagnostics_float_insert_mode_enabled = 0
+
+if executable('phpactor')
+    augroup lsp_phpactor
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'phpactor',
+            \ 'cmd':  {server_info->['phpactor', 'language-server']},
+			\ 'root_uri': {server_info->lsp#utils#path_to_uri(
+			\	lsp#utils#find_nearest_parent_file_directory(
+			\		lsp#utils#get_buffer_path(),
+			\		['composer.json', '.git/']
+			\	))},
+            \ 'allowlist': ['php'],
+            \ })
+    augroup END
+endif
 
 " fern.vim
 let g:fern#default_hidden = 1
