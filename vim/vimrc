@@ -100,6 +100,12 @@ nnoremap <leader>t :Fern . -drawer -toggle<CR>
 nnoremap <leader>/ :Rg<CR>
 nnoremap <leader>d :Sayonara<CR>
 
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 let g:gitgutter_sign_priority = 1
 
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
