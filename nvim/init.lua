@@ -582,6 +582,8 @@ require("lazy").setup({
             -- ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
           },
           completion = {
+            accept = { auto_brackets = { enabled = false }, },
+            documentation = { auto_show = true, auto_show_delay_ms = 500 },
             list = {
               selection = {
                 preselect = false,
@@ -645,8 +647,8 @@ require("lazy").setup({
               nnoremap("ga", vim.lsp.buf.code_action, "Code Action")
 
               nnoremap("ge", vim.diagnostic.open_float, "Open Floating Diagnostic Window")
-              nnoremap("g[", vim.diagnostic.goto_prev, "Go To Previous Diagnostic")
-              nnoremap("g]", vim.diagnostic.goto_next, "Go To Next Diagnostic")
+              nnoremap("g[", function() vim.diagnostic.jump({ count = -1 }) end, "Go To Previous Diagnostic")
+              nnoremap("g]", function() vim.diagnostic.jump({ count = 1 }) end, "Go To Next Diagnostic")
               nnoremap("g=", vim.lsp.buf.format, "Format")
               nnoremap("grn", vim.lsp.buf.rename, "Rename Symbol")
               nnoremap("<leader>r", vim.lsp.buf.rename, "Rename Symbol")
@@ -655,7 +657,20 @@ require("lazy").setup({
 
 
           vim.diagnostic.config({
-            virtual_text = false, signs = true, underline = false
+            virtual_text = false,
+            underline = false,
+            loclist = {
+              severity = { min = vim.diagnostic.severity.WARN }
+            },
+            jump = {
+              float = true,
+              severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR }
+            },
+            signs = {
+              text = {
+                [vim.diagnostic.severity.HINT] = '',
+              },
+            }
           })
 
           require("mason").setup()
@@ -668,6 +683,18 @@ require("lazy").setup({
                 diagnostics = {
                   globals = { 'vim' }
                 },
+              }
+            },
+          })
+
+          vim.lsp.config('rust_analyzer', {
+            settings = {
+              ['rust-analyzer'] = {
+                completion = {
+                  callable = {
+                    snippets = "none"
+                  }
+                }
               }
             },
           })
