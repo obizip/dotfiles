@@ -16,9 +16,15 @@ export FZF_DEFAULT_OPTS="--walker-skip .git,node_modules,target,vendor"
 shopt -s extglob
 
 # Completion
-if [[ -e "/etc/bash_completion" ]]; then
-	. "/etc/bash_completion" 
-fi
+bash_completion_paths=(
+    "/etc/bash_completion" # debian
+    "/etc/bash/bash_completion" # alpine
+)
+for bash_completion_path in "${bash_completion_paths[@]}"; do
+	if [[ -e $bash_completion_path ]]; then
+		. $bash_completion_path
+	fi
+done
 
 #
 # Prompt
@@ -35,7 +41,8 @@ export PS1="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${CYAN}\w${RESET}\n\$ "
 # Git Prompt
 git_prompt_paths=(
     "/Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh"
-    "/etc/bash_completion.d/git-prompt"
+    "/etc/bash_completion.d/git-prompt" # debian 
+    "/usr/share/git-core/git-prompt.sh" # alpine
 )
 for git_prompt_path in "${git_prompt_paths[@]}"; do
 	if [[ -e $git_prompt_path ]]; then
@@ -105,3 +112,10 @@ if [[ -e ${HOME}/.config/mise/config.toml ]]; then
 	}
 fi
 
+if [[ -e "$HOME/.cargo/env" ]]; then
+	. "$HOME/.cargo/env"
+fi
+
+if [[ -e "/usr/local/cargo/bin" ]]; then
+	export PATH="/usr/local/cargo/bin:$PATH"
+fi
