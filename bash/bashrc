@@ -77,7 +77,7 @@ alias la="ls -a --color"
 alias lla="ls -al --color"
 alias sl="ls --color"
 # alias v="nvim"
-alias tree="tree -I '.venv|.git|node_modules|__pycache__|target'"
+alias tree="tree -I '.venv|.git|node_modules|__pycache__|target|vendor'"
 alias devsh="docker compose exec -it dev bash"
 
 if [[ "$(hostname)" == "macbook.local" ]]; then
