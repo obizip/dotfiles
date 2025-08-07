@@ -1,21 +1,13 @@
 # dotfiles
 
-## Requirements
-- [mise](https://mise.jdx.dev/getting-started.html)
+# Symbolic link
 
-## Commands
-
-- install
+- link
 ```sh
-./install
+./symlink link entries.json --extra mac
 ```
 
-- link only
+- unlink
 ```sh
-./install --only link
-```
-
-- uninstall links
-```sh
-./uninstall
+./symlink unlink
 ```
