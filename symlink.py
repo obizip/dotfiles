@@ -1,0 +1,286 @@
+import argparse
+import json
+import os
+import time
+from dataclasses import dataclass
+from pathlib import Path
+
+import tomllib
+
+
+def info(message: str):
+    print(f"\033[32m[INFO]\033[0m {message}")
+
+
+def warn(message: str):
+    print(f"\033[33m[WARN]\033[0m {message}")
+
+
+def error(message: str):
+    print(f"\033[31m[ERROR]\033[0m {message}")
+
+
+def make_entry_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
+    src = Path(src_str).absolute()
+    dest = Path(os.path.expandvars(dest_str)).expanduser().absolute()
+    return src, dest
+
+
+def parse_entries(
+    raw_entries: dict[str, str | dict[str, str]], extra_tables: set[str]
+) -> dict[Path, Path]:
+    entries: dict[Path, Path] = dict()
+    for k, v in raw_entries.items():
+        if isinstance(v, str):
+            dest_str, src_str = k, v
+            src, dest = make_entry_paths(src_str=src_str, dest_str=dest_str)
+            entries[dest] = src
+        elif isinstance(v, dict):
+            table, str_entries = k, v
+            if table in extra_tables:
+                pairs = [
+                    make_entry_paths(src_str=src_str, dest_str=dest_str)
+                    for dest_str, src_str in str_entries.items()
+                ]
+                entries |= {dest: src for src, dest in pairs}
+
+    return entries
+
+
+def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]:
+    if entries_path.exists():
+        try:
+            with entries_path.open("rb") as f:
+                raw_entries = tomllib.load(f)
+                entries = parse_entries(
+                    raw_entries=raw_entries, extra_tables=extra_tables
+                )
+                return entries
+        except Exception as e:
+            error(f"Failed to open {entries_path}: {e}")
+            exit(1)
+    else:
+        error(f"Entries path does not exists: {entries_path}")
+        exit(1)
+
+
+def load_last_entries(last_entries_path: Path) -> dict[Path, Path]:
+    if last_entries_path.exists():
+        try:
+            with last_entries_path.open("rb") as f:
+                last_entries = json.load(f)
+                entries: dict[Path, Path] = dict()
+                for dest, src in last_entries.items():
+                    assert isinstance(dest, str)
+                    assert isinstance(src, str)
+                    entries[Path(dest)] = Path(src)
+                return entries
+
+        except Exception as e:
+            warn(f"Failed to open or read {last_entries_path}: {e}")
+    return dict()
+
+
+@dataclass
+class LinkArguments:
+    entries_path: Path
+    extra_tables: set[str]
+    simulate: bool
+    move_exists: bool
+    unlink_exists: bool
+    autoremove: bool
+    last_entries_path: Path
+
+
+def handle_link_command(args) -> None:
+    args = LinkArguments(
+        entries_path=args.entries_path.absolute(),
+        extra_tables=set(args.extra or []),
+        simulate=args.simulate,
+        move_exists=args.move_exists,
+        unlink_exists=args.unlink_exists,
+        autoremove=args.autoremove,
+        last_entries_path=args.last_entries.absolute(),
+    )
+    do_link_command(args)
+
+
+def set_link_args(
+    subparsers: argparse._SubParsersAction,
+) -> None:
+    parser_link = subparsers.add_parser("link")
+    parser_link.add_argument(
+        "entries_path",
+        type=Path,
+        help="Path to the TOML file containing the symbolic link entries.",
+    )
+    parser_link.add_argument(
+        "--extra",
+        nargs="+",
+        type=str,
+        help="List of the Additional table names in the entries.",
+    )
+    parser_link.add_argument(
+        "--simulate",
+        action="store_true",
+        help="Enable simulating mode. It prints the actions that would be taken without actually modifying the filesystem.",
+    )
+    parser_link.add_argument(
+        "--move-exists",
+        action="store_true",
+        help="Enable to move existing destinations",
+    )
+    parser_link.add_argument(
+        "--unlink-exists",
+        action="store_true",
+        help="Enable to unlink existing destinations",
+    )
+    parser_link.add_argument(
+        "--autoremove",
+        action="store_true",
+        help="Enable to unlink unused destinations",
+    )
+    parser_link.add_argument(
+        "--last-entries",
+        type=Path,
+        default=Path(".symlink/last_entries.json"),
+        help="Path to the JSON file where the previously linked entries are recorded.",
+    )
+    parser_link.set_defaults(func=handle_link_command)
+
+
+def do_link_command(args: LinkArguments):
+    entries = load_entries(
+        entries_path=args.entries_path, extra_tables=args.extra_tables
+    )
+    last_entries = load_last_entries(last_entries_path=args.last_entries_path)
+
+    move_path = Path(f".symlink/backup/{time.strftime('%y%m%d%H%M%S')}").absolute()
+
+    linked_entries = dict()
+    for dest, src in entries.items():
+        ok = link(
+            src=src,
+            dest=dest,
+            simulate=args.simulate,
+            move_exists=args.move_exists,
+            unlink_exists=args.unlink_exists,
+            move_path=move_path,
+        )
+        if ok:
+            linked_entries[dest] = src
+
+    merged_entries = last_entries | linked_entries
+
+    if args.autoremove:
+        unused = set(last_entries.keys()) - set(entries.keys())
+        for dest in unused:
+            unlink(dest=dest, simulate=args.simulate)
+        merged_entries = {k: v for k, v in merged_entries.items() if k not in unused}
+
+    if not args.simulate:
+        args.last_entries_path.parent.mkdir(parents=True, exist_ok=True)
+        with args.last_entries_path.open("w") as f:
+            str_entries = {str(dest): str(src) for dest, src in merged_entries.items()}
+            json.dump(str_entries, f, indent=2, sort_keys=True)
+
+
+def link(
+    src: Path,
+    dest: Path,
+    simulate: bool,
+    move_exists: bool,
+    unlink_exists: bool,
+    move_path: Path,
+) -> bool:
+    if dest.is_symlink():
+        linked_src = dest.resolve()
+        if src == linked_src:
+            info(f"Already linked: {dest}")
+            return True
+
+        if not unlink_exists:
+            warn(
+                f"Already linked with different source: {src} != {linked_src} -> {dest}"
+            )
+            return False
+
+        info(f"Unlink existing symbolic link: {dest}")
+        if not simulate:
+            dest.unlink(missing_ok=True)
+
+    elif dest.exists(follow_symlinks=False):
+        if move_exists:
+            moved_dest = move_path / dest.name
+            moved_dest.parent.mkdir(parents=True, exist_ok=True)
+            info(f"Move existing file/directory: {dest} -> {moved_dest}")
+            if not simulate:
+                dest.rename(moved_dest)
+        else:
+            warn(f"File or directory already exists: {dest}")
+            return False
+
+    info(f"Link: {src} -> {dest}")
+    if not simulate:
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.symlink_to(src)
+
+    return True
+
+
+@dataclass
+class UnlinkArguments:
+    simulate: bool
+    last_entries_path: Path
+
+
+def handle_unlink_command(args) -> None:
+    args = UnlinkArguments(
+        simulate=args.simulate,
+        last_entries_path=args.last_entries.absolute(),
+    )
+    do_unlink_command(args)
+
+
+def set_unlink_args(
+    subparsers: argparse._SubParsersAction,
+) -> None:
+    parser_unlink = subparsers.add_parser("unlink")
+    parser_unlink.add_argument(
+        "--simulate",
+        action="store_true",
+        help="Enable simulating mode. It prints the actions that would be taken without actually modifying the filesystem.",
+    )
+    parser_unlink.add_argument(
+        "--last-entries",
+        type=Path,
+        default=Path(".last_entries.json"),
+        help="Path to the JSON file where the previously linked entries are recorded.",
+    )
+    parser_unlink.set_defaults(func=handle_unlink_command)
+
+
+def do_unlink_command(args: UnlinkArguments):
+    last_entries = load_last_entries(last_entries_path=args.last_entries_path)
+    for dest_str in last_entries.keys():
+        unlink(dest=Path(dest_str), simulate=args.simulate)
+
+
+def unlink(dest: Path, simulate: bool):
+    if dest.is_symlink():
+        info(f"Unlink: {dest}")
+        if not simulate:
+            dest.unlink(missing_ok=True)
+    else:
+        info(f"Unlink target is not symbolic link. Do nothing: {dest}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(prog="symlink")
+    subparsers = parser.add_subparsers(dest="subcommand", required=True)
+
+    set_link_args(subparsers)
+    set_unlink_args(subparsers)
+
+    args = parser.parse_args()
+    args.func(args)
