@@ -1,0 +1,24 @@
+{
+  "${HOME}/.gitconfig"                   : "git/gitconfig",
+  "${HOME}/.config/git/ignore"           : "git/ignore",
+  "${HOME}/.bashrc"                      : "bash/bashrc",
+  "${HOME}/.bash_profile"                : "bash/bash_profile",
+  "${HOME}/.vimrc"                       : "vim/vimrc",
+  "${HOME}/.ideavimrc"                   : "jetbrains/ideavimrc",
+  "${HOME}/.config/nvim/init.lua"        : "nvim/init.lua",
+  "${HOME}/.config/yazi/yazi.toml"       : "yazi/yazi.toml",
+  "${HOME}/.config/yazi/keymap.toml"     : "yazi/keymap.toml",
+  "${HOME}/.config/wezterm/wezterm.lua"  : "wezterm/wezterm.lua",
+  "${HOME}/.config/wezterm/keymap.lua"   : "wezterm/keymap.lua",
+  "${HOME}/.config/tmux/tmux.conf"       : "tmux/tmux.conf",
+  "${HOME}/.config/gtk-3.0/settings.ini" : "gtk/gtk-3.0-settings.ini",
+  "${HOME}/.config/user-dirs.dirs"       : "xdg/user-dirs.dirs",
+  "${HOME}/.config/zed/settings.json"    : "zed/settings.json",
+  "${HOME}/.config/zed/keymap.json"      : "zed/keymap.json",
+  "linux": {
+    "${HOME}/.config/sway/config": "sway/config"
+  },
+  "mac": {
+    "${HOME}/.config/bash/mac.sh": "bash/mac.sh"
+  }
+}

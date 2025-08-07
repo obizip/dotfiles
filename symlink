@@ -1,11 +1,14 @@
+#!/usr/bin/python3
 import argparse
 import json
 import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Union
 
-import tomllib
+DEFAULT_LAST_ENTRIES_PATH = Path(".symlink/last_entries.json")
+DEFAULT_MOVE_PATH = Path(f".symlink/backup/{time.strftime('%y%m%d%H%M%S')}").absolute()
 
 
 def info(message: str):
@@ -27,7 +30,7 @@ def make_entry_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
 
 
 def parse_entries(
-    raw_entries: dict[str, str | dict[str, str]], extra_tables: set[str]
+    raw_entries: dict[str, Union[str, dict[str, str]]], extra_tables: set[str]
 ) -> dict[Path, Path]:
     entries: dict[Path, Path] = dict()
     for k, v in raw_entries.items():
@@ -51,7 +54,7 @@ def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]
     if entries_path.exists():
         try:
             with entries_path.open("rb") as f:
-                raw_entries = tomllib.load(f)
+                raw_entries = json.load(f)
                 entries = parse_entries(
                     raw_entries=raw_entries, extra_tables=extra_tables
                 )
@@ -112,7 +115,7 @@ def set_link_args(
     parser_link.add_argument(
         "entries_path",
         type=Path,
-        help="Path to the TOML file containing the symbolic link entries.",
+        help="Path to the JSON file containing the symbolic link entries.",
     )
     parser_link.add_argument(
         "--extra",
@@ -143,7 +146,7 @@ def set_link_args(
     parser_link.add_argument(
         "--last-entries",
         type=Path,
-        default=Path(".symlink/last_entries.json"),
+        default=DEFAULT_LAST_ENTRIES_PATH,
         help="Path to the JSON file where the previously linked entries are recorded.",
     )
     parser_link.set_defaults(func=handle_link_command)
@@ -155,8 +158,6 @@ def do_link_command(args: LinkArguments):
     )
     last_entries = load_last_entries(last_entries_path=args.last_entries_path)
 
-    move_path = Path(f".symlink/backup/{time.strftime('%y%m%d%H%M%S')}").absolute()
-
     linked_entries = dict()
     for dest, src in entries.items():
         ok = link(
@@ -165,7 +166,7 @@ def do_link_command(args: LinkArguments):
             simulate=args.simulate,
             move_exists=args.move_exists,
             unlink_exists=args.unlink_exists,
-            move_path=move_path,
+            move_path=DEFAULT_MOVE_PATH,
         )
         if ok:
             linked_entries[dest] = src
@@ -209,7 +210,7 @@ def link(
         if not simulate:
             dest.unlink(missing_ok=True)
 
-    elif dest.exists(follow_symlinks=False):
+    elif dest.exists():
         if move_exists:
             moved_dest = move_path / dest.name
             moved_dest.parent.mkdir(parents=True, exist_ok=True)
@@ -254,7 +255,7 @@ def set_unlink_args(
     parser_unlink.add_argument(
         "--last-entries",
         type=Path,
-        default=Path(".last_entries.json"),
+        default=DEFAULT_LAST_ENTRIES_PATH,
         help="Path to the JSON file where the previously linked entries are recorded.",
     )
     parser_unlink.set_defaults(func=handle_unlink_command)
@@ -264,6 +265,8 @@ def do_unlink_command(args: UnlinkArguments):
     last_entries = load_last_entries(last_entries_path=args.last_entries_path)
     for dest_str in last_entries.keys():
         unlink(dest=Path(dest_str), simulate=args.simulate)
+    if not args.simulate:
+        args.last_entries_path.unlink()
 
 
 def unlink(dest: Path, simulate: bool):
