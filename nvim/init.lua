@@ -124,6 +124,7 @@ set_ft_indent({
   "javascriptreact",
   "typescriptreact",
   "ocaml",
+  "sql",
 }, 2)
 
 local usercmd = vim.api.nvim_create_user_command
@@ -415,6 +416,7 @@ require("lazy").setup({
             python = { "ruff_format", "ruff_fix" },
             ocaml = { "ocamlformat" },
             php = { "php_cs_fixer" },
+            sql = { "sql_formatter" },
           },
           formatters = {
             ruff_fix = {
@@ -557,7 +559,7 @@ require("lazy").setup({
         event = "InsertEnter",
         -- optional: provides snippets for the snippet source
         dependencies = "rafamadriz/friendly-snippets",
-        version = "*",
+        version = "1.*",
         opts = {
           keymap = {
             ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
