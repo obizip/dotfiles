@@ -119,3 +119,7 @@ fi
 if [[ -e "/usr/local/cargo/bin" ]]; then
 	export PATH="/usr/local/cargo/bin:$PATH"
 fi
+
+if [[ -e "$HOME/.opam" ]]; then
+	eval $(opam env)
+fi
