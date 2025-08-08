@@ -1,10 +1,13 @@
 local wezterm = require 'wezterm'
 local keymap = require 'keymap'
+local host_config = require 'host_config'
 
 local config = wezterm.config_builder()
 
-config.font = wezterm.font 'Explex35 Console NF'
 config.font_size = 15
+
+config.disable_default_key_bindings = true
+config.hide_tab_bar_if_only_one_tab = true
 
 config.keys = keymap.keys
 config.key_tables = keymap.key_tables
@@ -25,8 +28,6 @@ config.colors = {
   },
 }
 
-config.disable_default_key_bindings = true
-config.hide_tab_bar_if_only_one_tab = true
-config.macos_forward_to_ime_modifier_mask = 'SHIFT|CTRL'
+config = host_config.apply(config)
 
 return config
