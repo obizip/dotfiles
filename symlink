@@ -138,9 +138,9 @@ def link(
     elif dest.exists():
         if move_exists:
             moved_dest = move_path / dest.name
-            moved_dest.parent.mkdir(parents=True, exist_ok=True)
             info(f"Move existing file/directory: {dest} -> {moved_dest}")
             if not simulate:
+                moved_dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.rename(moved_dest)
         else:
             warn(f"File or directory already exists: {dest}")
@@ -214,22 +214,21 @@ def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]
 
 
 def parse_entries(
-    raw_entries: dict[str, Union[str, dict[str, str]]], extra_tables: set[str]
+    raw_entries: dict[str, dict[str, str]], extra_tables: set[str]
 ) -> dict[Path, Path]:
+    entries_tables = list(raw_entries.keys())
+    link_tables = [
+        table for table in entries_tables if table in ({"default"} | extra_tables)
+    ]
+
     entries: dict[Path, Path] = dict()
-    for k, v in raw_entries.items():
-        if isinstance(v, str):
-            dest_str, src_str = k, v
-            src, dest = make_entry_to_paths(src_str=src_str, dest_str=dest_str)
-            entries[dest] = src
-        elif isinstance(v, dict):
-            table, str_entries = k, v
-            if table in extra_tables:
-                pairs = [
-                    make_entry_to_paths(src_str=src_str, dest_str=dest_str)
-                    for dest_str, src_str in str_entries.items()
-                ]
-                entries |= {dest: src for src, dest in pairs}
+    for table in link_tables:
+        str_entries = raw_entries[table]
+        pairs = [
+            make_entry_to_paths(src_str=src_str, dest_str=dest_str)
+            for dest_str, src_str in str_entries.items()
+        ]
+        entries |= {dest: src for src, dest in pairs}
 
     return entries
 
