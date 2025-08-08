@@ -11,77 +11,15 @@ DEFAULT_LAST_ENTRIES_PATH = Path(".symlink/last_entries.json")
 DEFAULT_MOVE_PATH = Path(f".symlink/backup/{time.strftime('%y%m%d%H%M%S')}").absolute()
 
 
-def info(message: str):
-    print(f"\033[32m[INFO]\033[0m {message}")
+def main():
+    parser = argparse.ArgumentParser(prog="symlink")
+    subparsers = parser.add_subparsers(dest="subcommand", required=True)
 
+    set_link_args(subparsers)
+    set_unlink_args(subparsers)
 
-def warn(message: str):
-    print(f"\033[33m[WARN]\033[0m {message}")
-
-
-def error(message: str):
-    print(f"\033[31m[ERROR]\033[0m {message}")
-
-
-def make_entry_to_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
-    src = Path(src_str).absolute()
-    dest = Path(os.path.expandvars(dest_str)).expanduser().absolute()
-    return src, dest
-
-
-def parse_entries(
-    raw_entries: dict[str, Union[str, dict[str, str]]], extra_tables: set[str]
-) -> dict[Path, Path]:
-    entries: dict[Path, Path] = dict()
-    for k, v in raw_entries.items():
-        if isinstance(v, str):
-            dest_str, src_str = k, v
-            src, dest = make_entry_to_paths(src_str=src_str, dest_str=dest_str)
-            entries[dest] = src
-        elif isinstance(v, dict):
-            table, str_entries = k, v
-            if table in extra_tables:
-                pairs = [
-                    make_entry_to_paths(src_str=src_str, dest_str=dest_str)
-                    for dest_str, src_str in str_entries.items()
-                ]
-                entries |= {dest: src for src, dest in pairs}
-
-    return entries
-
-
-def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]:
-    if entries_path.exists():
-        try:
-            with entries_path.open("rb") as f:
-                raw_entries = json.load(f)
-                entries = parse_entries(
-                    raw_entries=raw_entries, extra_tables=extra_tables
-                )
-                return entries
-        except Exception as e:
-            error(f"Failed to open {entries_path}: {e}")
-            exit(1)
-    else:
-        error(f"Entries path does not exists: {entries_path}")
-        exit(1)
-
-
-def load_last_entries(last_entries_path: Path) -> dict[Path, Path]:
-    if last_entries_path.exists():
-        try:
-            with last_entries_path.open("rb") as f:
-                last_entries = json.load(f)
-                entries: dict[Path, Path] = dict()
-                for dest, src in last_entries.items():
-                    assert isinstance(dest, str)
-                    assert isinstance(src, str)
-                    entries[Path(dest)] = Path(src)
-                return entries
-
-        except Exception as e:
-            warn(f"Failed to open or read {last_entries_path}: {e}")
-    return dict()
+    args = parser.parse_args()
+    args.func(args)
 
 
 @dataclass
@@ -93,19 +31,6 @@ class LinkArguments:
     unlink_exists: bool
     autoremove: bool
     last_entries_path: Path
-
-
-def handle_link_command(args) -> None:
-    args = LinkArguments(
-        entries_path=args.entries_path.absolute(),
-        extra_tables=set(args.extra or []),
-        simulate=args.simulate,
-        move_exists=args.move_exists,
-        unlink_exists=args.unlink_exists,
-        autoremove=args.autoremove,
-        last_entries_path=args.last_entries.absolute(),
-    )
-    do_link_command(args)
 
 
 def set_link_args(
@@ -150,6 +75,19 @@ def set_link_args(
         help="Path to the JSON file where the previously linked entries are recorded.",
     )
     parser_link.set_defaults(func=handle_link_command)
+
+
+def handle_link_command(args) -> None:
+    args = LinkArguments(
+        entries_path=args.entries_path.absolute(),
+        extra_tables=set(args.extra or []),
+        simulate=args.simulate,
+        move_exists=args.move_exists,
+        unlink_exists=args.unlink_exists,
+        autoremove=args.autoremove,
+        last_entries_path=args.last_entries.absolute(),
+    )
+    do_link_command(args)
 
 
 def do_link_command(args: LinkArguments):
@@ -235,14 +173,6 @@ class UnlinkArguments:
     last_entries_path: Path
 
 
-def handle_unlink_command(args) -> None:
-    args = UnlinkArguments(
-        simulate=args.simulate,
-        last_entries_path=args.last_entries.absolute(),
-    )
-    do_unlink_command(args)
-
-
 def set_unlink_args(
     subparsers: argparse._SubParsersAction,
 ) -> None:
@@ -259,6 +189,14 @@ def set_unlink_args(
         help="Path to the JSON file where the previously linked entries are recorded.",
     )
     parser_unlink.set_defaults(func=handle_unlink_command)
+
+
+def handle_unlink_command(args) -> None:
+    args = UnlinkArguments(
+        simulate=args.simulate,
+        last_entries_path=args.last_entries.absolute(),
+    )
+    do_unlink_command(args)
 
 
 def do_unlink_command(args: UnlinkArguments):
@@ -278,12 +216,78 @@ def unlink(dest: Path, simulate: bool):
         info(f"Unlink target is not symbolic link. Do nothing: {dest}")
 
 
+def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]:
+    if entries_path.exists():
+        try:
+            with entries_path.open("rb") as f:
+                raw_entries = json.load(f)
+                entries = parse_entries(
+                    raw_entries=raw_entries, extra_tables=extra_tables
+                )
+                return entries
+        except Exception as e:
+            error(f"Failed to open {entries_path}: {e}")
+            exit(1)
+    else:
+        error(f"Entries path does not exists: {entries_path}")
+        exit(1)
+
+
+def parse_entries(
+    raw_entries: dict[str, Union[str, dict[str, str]]], extra_tables: set[str]
+) -> dict[Path, Path]:
+    entries: dict[Path, Path] = dict()
+    for k, v in raw_entries.items():
+        if isinstance(v, str):
+            dest_str, src_str = k, v
+            src, dest = make_entry_to_paths(src_str=src_str, dest_str=dest_str)
+            entries[dest] = src
+        elif isinstance(v, dict):
+            table, str_entries = k, v
+            if table in extra_tables:
+                pairs = [
+                    make_entry_to_paths(src_str=src_str, dest_str=dest_str)
+                    for dest_str, src_str in str_entries.items()
+                ]
+                entries |= {dest: src for src, dest in pairs}
+
+    return entries
+
+
+def make_entry_to_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
+    src = Path(src_str).absolute()
+    dest = Path(os.path.expandvars(dest_str)).expanduser().absolute()
+    return src, dest
+
+
+def load_last_entries(last_entries_path: Path) -> dict[Path, Path]:
+    if last_entries_path.exists():
+        try:
+            with last_entries_path.open("rb") as f:
+                last_entries = json.load(f)
+                entries: dict[Path, Path] = dict()
+                for dest, src in last_entries.items():
+                    assert isinstance(dest, str)
+                    assert isinstance(src, str)
+                    entries[Path(dest)] = Path(src)
+                return entries
+
+        except Exception as e:
+            warn(f"Failed to open or read {last_entries_path}: {e}")
+    return dict()
+
+
+def info(message: str):
+    print(f"\033[32m[INFO]\033[0m {message}")
+
+
+def warn(message: str):
+    print(f"\033[33m[WARN]\033[0m {message}")
+
+
+def error(message: str):
+    print(f"\033[31m[ERROR]\033[0m {message}")
+
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog="symlink")
-    subparsers = parser.add_subparsers(dest="subcommand", required=True)
-
-    set_link_args(subparsers)
-    set_unlink_args(subparsers)
-
-    args = parser.parse_args()
-    args.func(args)
+    main()
