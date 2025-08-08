@@ -31,6 +31,6 @@
   },
   "mac": {
     "${HOME}/.config/bash/mac.sh":             "bash/mac.sh",
-    "${HOME}/.config/wezterm/host_config.lua": "wezterm/mac.lua"
+    "${HOME}/.config/wezterm/host_config.lua": "wezterm/hosts/mac.lua"
   }
 }
