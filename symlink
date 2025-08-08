@@ -3,7 +3,6 @@ import argparse
 import json
 import os
 import time
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Union
 
@@ -20,17 +19,6 @@ def main():
 
     args = parser.parse_args()
     args.func(args)
-
-
-@dataclass
-class LinkArguments:
-    entries_path: Path
-    extra_tables: set[str]
-    simulate: bool
-    move_exists: bool
-    unlink_exists: bool
-    autoremove: bool
-    last_entries_path: Path
 
 
 def add_link_parser(
@@ -77,20 +65,19 @@ def add_link_parser(
     parser_link.set_defaults(func=handle_link_command)
 
 
-def handle_link_command(args) -> None:
-    args = LinkArguments(
-        entries_path=args.entries_path.absolute(),
-        extra_tables=set(args.extra or []),
-        simulate=args.simulate,
-        move_exists=args.move_exists,
-        unlink_exists=args.unlink_exists,
-        autoremove=args.autoremove,
-        last_entries_path=args.last_entries.absolute(),
-    )
-    do_link_command(args)
+class LinkArguments:
+    def __init__(self, args):
+        self.entries_path: Path = args.entries_path.absolute()
+        self.extra_tables: set[str] = set(args.extra or [])
+        self.simulate: bool = args.simulate
+        self.move_exists: bool = args.move_exists
+        self.unlink_exists: bool = args.unlink_exists
+        self.autoremove: bool = args.autoremove
+        self.last_entries_path: Path = args.last_entries.absolute()
 
 
-def do_link_command(args: LinkArguments):
+def handle_link_command(args):
+    args = LinkArguments(args)
     entries = load_entries(
         entries_path=args.entries_path, extra_tables=args.extra_tables
     )
@@ -167,12 +154,6 @@ def link(
     return True
 
 
-@dataclass
-class UnlinkArguments:
-    simulate: bool
-    last_entries_path: Path
-
-
 def add_unlink_parser(
     subparsers: argparse._SubParsersAction,
 ) -> None:
@@ -191,15 +172,14 @@ def add_unlink_parser(
     parser_unlink.set_defaults(func=handle_unlink_command)
 
 
-def handle_unlink_command(args) -> None:
-    args = UnlinkArguments(
-        simulate=args.simulate,
-        last_entries_path=args.last_entries.absolute(),
-    )
-    do_unlink_command(args)
+class UnlinkArguments:
+    def __init__(self, args):
+        self.simulate: bool = args.simulate
+        self.last_entries_path: Path = args.last_entries.absolute()
 
 
-def do_unlink_command(args: UnlinkArguments):
+def handle_unlink_command(args):
+    args = UnlinkArguments(args)
     last_entries = load_last_entries(last_entries_path=args.last_entries_path)
     for dest_str in last_entries.keys():
         unlink(dest=Path(dest_str), simulate=args.simulate)
