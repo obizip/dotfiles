@@ -15,8 +15,8 @@ def main():
     parser = argparse.ArgumentParser(prog="symlink")
     subparsers = parser.add_subparsers(dest="subcommand", required=True)
 
-    set_link_args(subparsers)
-    set_unlink_args(subparsers)
+    add_link_parser(subparsers)
+    add_unlink_parser(subparsers)
 
     args = parser.parse_args()
     args.func(args)
@@ -33,7 +33,7 @@ class LinkArguments:
     last_entries_path: Path
 
 
-def set_link_args(
+def add_link_parser(
     subparsers: argparse._SubParsersAction,
 ) -> None:
     parser_link = subparsers.add_parser("link")
@@ -173,7 +173,7 @@ class UnlinkArguments:
     last_entries_path: Path
 
 
-def set_unlink_args(
+def add_unlink_parser(
     subparsers: argparse._SubParsersAction,
 ) -> None:
     parser_unlink = subparsers.add_parser("unlink")
