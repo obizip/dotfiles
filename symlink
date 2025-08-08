@@ -23,7 +23,7 @@ def error(message: str):
     print(f"\033[31m[ERROR]\033[0m {message}")
 
 
-def make_entry_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
+def make_entry_to_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
     src = Path(src_str).absolute()
     dest = Path(os.path.expandvars(dest_str)).expanduser().absolute()
     return src, dest
@@ -36,13 +36,13 @@ def parse_entries(
     for k, v in raw_entries.items():
         if isinstance(v, str):
             dest_str, src_str = k, v
-            src, dest = make_entry_paths(src_str=src_str, dest_str=dest_str)
+            src, dest = make_entry_to_paths(src_str=src_str, dest_str=dest_str)
             entries[dest] = src
         elif isinstance(v, dict):
             table, str_entries = k, v
             if table in extra_tables:
                 pairs = [
-                    make_entry_paths(src_str=src_str, dest_str=dest_str)
+                    make_entry_to_paths(src_str=src_str, dest_str=dest_str)
                     for dest_str, src_str in str_entries.items()
                 ]
                 entries |= {dest: src for src, dest in pairs}
