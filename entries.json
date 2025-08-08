@@ -25,8 +25,9 @@
     "${HOME}/.config/zed/settings.json":       "zed/settings.json",
     "${HOME}/.config/zed/keymap.json":         "zed/keymap.json"
   },
-  "linux": {
-    "${HOME}/.config/sway/config": "sway/config"
+  "g3plus": {
+    "${HOME}/.config/sway/config":             "sway/config",
+    "${HOME}/.config/wezterm/host_config.lua": "wezterm/hosts/g3plus.lua"
   },
   "mac": {
     "${HOME}/.config/bash/mac.sh":             "bash/mac.sh",
