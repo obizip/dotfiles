@@ -793,7 +793,7 @@ require("lazy").setup({
             direction = "float",
             hidden = true,
             on_open = function(term)
-              tnoremap("<leader>g", "<CMD>close<CR>", "Hide Tig")
+              tnoremap("<C-\\>", "<CMD>close<CR>", "Hide Tig")
             end,
           })
 
