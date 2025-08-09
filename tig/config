@@ -14,5 +14,9 @@ set diff-view   = line-number:yes,interval=1 text:yes,commit-title-overflow=no
 bind generic U        !git pull
 bind generic g        move-first-line
 bind generic G        move-last-line
+bind diff    g        move-first-line
+bind diff    G        move-last-line
+bind main    g        move-first-line
+bind main    G        move-last-line
 bind generic <Ctrl-f> scroll-page-down
 bind generic <Ctrl-b> scroll-page-up
