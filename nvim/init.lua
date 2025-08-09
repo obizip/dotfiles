@@ -780,24 +780,29 @@ require("lazy").setup({
         },
       },
       {
-        "kdheepak/lazygit.nvim",
-        lazy = true,
-        cmd = {
-          "LazyGit",
-          "LazyGitConfig",
-          "LazyGitCurrentFile",
-          "LazyGitFilter",
-          "LazyGitFilterCurrentFile",
-        },
-        -- optional for floating window border decoration
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-        },
-        -- setting the keybinding for LazyGit with 'keys' is recommended in
-        -- order to load the plugin when the command is run for the first time
-        keys = {
-          { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-        }
+        'akinsho/toggleterm.nvim',
+        version = "*",
+        lazy = false,
+        config = function()
+          require("toggleterm").setup()
+
+          local term = require("toggleterm.terminal").Terminal
+          local tig_term = term:new({
+            cmd = "tig status",
+            dir = "git_dir",
+            direction = "float",
+            hidden = true,
+            on_open = function(term)
+              tnoremap("<leader>g", "<CMD>close<CR>", "Hide Tig")
+            end,
+          })
+
+          function ToggleTigTerminal()
+            tig_term:toggle()
+          end
+
+          nnoremap("<leader>g", "<cmd>lua ToggleTigTerminal()<CR>", "Open tig")
+        end
       },
       {
         "kevinhwang91/nvim-hlslens",
