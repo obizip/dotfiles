@@ -1,0 +1,18 @@
+# Apperence
+set show-notes                 = yes
+set show-changes               = yes
+set status-show-untracked-dirs = yes
+
+# Show line nuber
+set pager-view  = line-number:yes,interval=1 text
+set stage-view  = line-number:yes,interval=1 text
+set log-view    = line-number:yes,interval=1 text
+set blob-view   = line-number:yes,interval=1 text
+set diff-view   = line-number:yes,interval=1 text:yes,commit-title-overflow=no
+
+# key bindings
+bind generic U        !git pull
+bind generic g        move-first-line
+bind generic G        move-last-line
+bind generic <Ctrl-f> scroll-page-down
+bind generic <Ctrl-b> scroll-page-up

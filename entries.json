@@ -5,6 +5,7 @@
 
     "${HOME}/.gitconfig":                      "git/gitconfig",
     "${HOME}/.config/git/ignore":              "git/ignore",
+    "${HOME}/.config/tig/config":              "tig/config",
 
     "${HOME}/.vimrc":                          "vim/vimrc",
     "${HOME}/.ideavimrc":                      "jetbrains/ideavimrc",
