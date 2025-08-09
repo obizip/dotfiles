@@ -134,8 +134,8 @@ usercmd('CopyRelPath', "let @* = expand('%')", {})
 -- Keymaps
 -------------------------------
 
-nnoremap("<C-h>", cmd("bn"))
-nnoremap("<C-l>", cmd("bp"))
+-- nnoremap("<C-h>", cmd("bn"))
+-- nnoremap("<C-l>", cmd("bp"))
 nnoremap("<C-k>", "<C-w><C-w>")
 nnoremap("<ESC><ESC>", cmd("noh"))
 
@@ -466,6 +466,60 @@ require("lazy").setup({
         config = function()
           require("oil").setup()
         end,
+      },
+      {
+        "j-morano/buffer_manager.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        lazy = false,
+        config = function()
+          local opts = { noremap = true }
+          -- Setup
+          require("buffer_manager").setup({
+            -- select_menu_item_commands = {
+            --   v = {
+            --     key = "<C-v>",
+            --     command = "vsplit"
+            --   },
+            --   h = {
+            --     key = "<C-h>",
+            --     command = "split"
+            --   }
+            -- },
+            focus_alternate_buffer = false,
+            short_file_names = false,
+            short_term_names = false,
+            loop_nav = true,
+            highlight = 'Normal:BufferManagerBorder',
+            win_extra_options = {
+              winhighlight = 'Normal:BufferManagerNormal',
+            },
+          })
+          -- Navigate buffers bypassing the menu
+          local bmui = require("buffer_manager.ui")
+          local keys = '1234567890'
+          for i = 1, #keys do
+            local key = keys:sub(i, i)
+            nnoremap(
+              string.format('<leader>%s', key),
+              function() bmui.nav_file(i) end,
+              string.format("Open Buffer%s", key)
+            )
+          end
+          -- Just the menu
+          nnoremap('<leader><leader>', bmui.toggle_quick_menu, "Open Buffer Manager")
+          tnoremap('<leader><leader>', bmui.toggle_quick_menu, "Open Buffer Manager")
+          -- Open menu and search
+          -- map({ 't', 'n' }, '<M-m>', function()
+          --   bmui.toggle_quick_menu()
+          --   -- wait for the menu to open
+          --   vim.defer_fn(function()
+          --     vim.fn.feedkeys('/')
+          --   end, 50)
+          -- end, opts)
+          -- Next/Prev
+          nnoremap('<C-l>', bmui.nav_next)
+          nnoremap('<C-h>', bmui.nav_prev)
+        end
       },
 
       {
