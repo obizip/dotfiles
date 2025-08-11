@@ -92,12 +92,12 @@ eval "$(fzf --bash)"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=bat
 
-alias l="eza -al"
-alias ls="eza"
-alias ll="eza -l"
-alias la="eza -a"
-alias lla="eza -al"
-alias lt="eza -l --reverse --sort=modified"
+# alias l="eza -al"
+# alias ls="eza"
+# alias ll="eza -l"
+# alias la="eza -a"
+# alias lla="eza -al"
+# alias lt="eza -l --reverse --sort=modified"
 
 # yazi
 function y() {
