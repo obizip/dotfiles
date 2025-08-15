@@ -1,6 +1,6 @@
 # dotfiles
 
-# Symbolic link
+## Symbolic link
 
 - link
 ```sh
