@@ -12,6 +12,7 @@
     "${HOME}/.config/nvim/init.lua":           "nvim/init.lua",
 
     "${HOME}/.config/tmux/tmux.conf":          "tmux/tmux.conf",
+    "${HOME}/.config/tmux/copy_command.sh":    "tmux/copy_command.sh",
 
     "${HOME}/.config/yazi/yazi.toml":          "yazi/yazi.toml",
     "${HOME}/.config/yazi/keymap.toml":        "yazi/keymap.toml",
