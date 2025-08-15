@@ -159,12 +159,17 @@ nnoremap("gk", "k")
 nnoremap("Y", "y$")
 nnoremap("<leader>n", cmd("set nu! | set rnu!"), "Toggle number")
 
+nnoremap("<C-h>", "<C-w>h")
+nnoremap("<C-j>", "<C-w>j")
+nnoremap("<C-k>", "<C-w>k")
+nnoremap("<C-l>", "<C-w>l")
+
 vnoremap("j", "gj")
 vnoremap("k", "gk")
 vnoremap("gj", "j")
 vnoremap("gk", "k")
 
-tnoremap("<Esc>", [[<C-\><C-n>]])
+-- tnoremap("<Esc>", [[<C-\><C-n>]])
 
 -- ref: https://zenn.dev/vim_jp/articles/2024-10-07-vim-insert-uppercase
 vim.keymap.set("i", "<C-l>", function()
@@ -517,8 +522,8 @@ require("lazy").setup({
           --   end, 50)
           -- end, opts)
           -- Next/Prev
-          nnoremap('<C-l>', bmui.nav_next)
-          nnoremap('<C-h>', bmui.nav_prev)
+          nnoremap('<C-n>', bmui.nav_next)
+          nnoremap('<C-p>', bmui.nav_prev)
         end
       },
 
