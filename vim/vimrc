@@ -4,13 +4,18 @@ filetype indent plugin on
 set termguicolors
 set background=dark
 
+colorscheme quiet
+hi Constant guifg=lightsteelblue
+hi Statement guifg=darkgrey
+
 set encoding=utf-8
 " set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
 
-set number
-set signcolumn=yes
-set numberwidth=1
-set cursorline
+" set number
+" set signcolumn=yes
+" set numberwidth=1
+" set cursorline
+set wildmode=list:longest,list:full
 
 set nobackup
 set noswapfile
@@ -53,8 +58,12 @@ inoremap <C-b> <left>
 inoremap <C-a> <C-o>^
 inoremap <C-e> <end>
 " nnoremap <ESC><ESC> :noh<cr>
-nnoremap <C-h> :bp<cr>
-nnoremap <C-l> :bn<cr>
+nnoremap <C-p> :bp<cr>
+nnoremap <C-n> :bn<cr>
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 function s:toupper_prev_word()
   let col = getpos('.')[2]
@@ -73,24 +82,24 @@ endif
 
 call plug#begin()
 
-Plug 'obizip/bquiet.vim'
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'skywind3000/asyncrun.vim'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'mattn/vim-lsp-settings'
 Plug 'lambdalisue/vim-fern'
 Plug 'lambdalisue/vim-fern-hijack'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 
 call plug#end()
 
-colorscheme bquiet
+" automatically open quickfix window when AsyncRun command is executed
+" set the quickfix window 6 lines height.
+let g:asyncrun_open = 10
+let g:asyncrun_exit = "silent doautocmd QuickFixCmdPost make"
+
+" colorscheme bquiet
 
 nnoremap <leader>f :Files<cr>
 nnoremap <leader>p :GFiles<cr>
@@ -98,7 +107,9 @@ nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>c :Files ~/.config<cr>
 nnoremap <leader>t :Fern . -drawer -toggle<CR>
 nnoremap <leader>/ :Rg<CR>
-nnoremap <leader>d :Sayonara<CR>
+nnoremap <leader>r :copen \| AsyncRun -strip -save=2
+
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -107,73 +118,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 let g:gitgutter_sign_priority = 1
-
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() . "\<cr>" : "\<cr>"
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    " setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    " nmap <buffer> ge <plug>(lsp-document-diagnostics)
-	nnoremap <leader>x <plug>(lsp-document-diagnostics)
-    nmap <buffer> ge :call Open_float_under_cursor()<cr>
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>r <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-	nmap <buffer> <leader>v :let g:lsp_diagnostics_virtual_text_enabled = !get(g:, 'lsp_diagnostics_virtual_text_enabled', 0)<CR>:e<CR>
-    " nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    " nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go,*.php call execute('LspDocumentFormatSync')
-    
-    " refer to doc to add more commands
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-let g:lsp_use_native_client = 1
-
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/.vim/vim-lsp.log')
-
-let g:lsp_document_code_action_signs_enabled = 0
-let g:lsp_diagnostics_virtual_text_enabled = 0
-" let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_diagnostics_float_cursor = 0
-let g:lsp_diagnostics_highlights_enabled = 0
-let g:lsp_diagnostics_virtual_text_align = "right"
-let g:lsp_diagnostics_float_insert_mode_enabled = 0
-
-if executable('phpactor')
-    augroup lsp_phpactor
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'phpactor',
-            \ 'cmd':  {server_info->['phpactor', 'language-server']},
-			\ 'root_uri': {server_info->lsp#utils#path_to_uri(
-			\	lsp#utils#find_nearest_parent_file_directory(
-			\		lsp#utils#get_buffer_path(),
-			\		['composer.json', '.git/']
-			\	))},
-            \ 'allowlist': ['php'],
-            \ })
-    augroup END
-endif
 
 " fern.vim
 let g:fern#default_hidden = 1
@@ -186,121 +130,3 @@ augroup my-fern
   autocmd! *
   autocmd FileType fern call s:init_fern()
 augroup END
-
-
-"
-" Open lsp floating window manually
-" ref: https://github.com/prabirshrestha/vim-lsp/pull/1576
-"
-function! Open_float_under_cursor() abort
-    let l:diagnostic = lsp#internal#diagnostics#under_cursor#get_diagnostic()
-    if empty(l:diagnostic) | return | endif
-    call s:show_float(l:diagnostic)
-    call timer_start(0, {-> execute("au CursorMoved,InsertEnter * ++once :call s:hide_float()")})
-endfunction
-
-" Author: Prabir Shrestha
-" Website: https://github.com/prabirshrestha/vim-lsp
-" License: The MIT License {{{
-"   The MIT License (MIT)
-"
-"   Copyright (c) 2016 Prabir Shrestha
-"
-"   Permission is hereby granted, free of charge, to any person obtaining a copy
-"   of this software and associated documentation files (the "Software"), to deal
-"   in the Software without restriction, including without limitation the rights
-"   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-"   copies of the Software, and to permit persons to whom the Software is
-"   furnished to do so, subject to the following conditions:
-"
-"   The above copyright notice and this permission notice shall be included in all
-"   copies or substantial portions of the Software.
-"
-"   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-"   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-"   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-"   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-"   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-"   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-"   SOFTWARE.
-" }}}
-
-let s:FloatingWindow = vital#lsp#import('VS.Vim.Window.FloatingWindow')
-let s:Buffer = vital#lsp#import('VS.Vim.Buffer')
-
-function! s:show_float(diagnostic) abort
-    let l:doc_win = s:get_doc_win()
-    if !empty(a:diagnostic) && has_key(a:diagnostic, 'message')
-        " Update contents. 
-        call deletebufline(l:doc_win.get_bufnr(), 1, '$')
-        call setbufline(l:doc_win.get_bufnr(), 1, lsp#utils#_split_by_eol(a:diagnostic['message']))
-
-        " Compute size. 
-        if g:lsp_float_max_width >= 1
-            let l:maxwidth = g:lsp_float_max_width
-        elseif g:lsp_float_max_width == 0
-            let l:maxwidth = &columns
-        else
-            let l:maxwidth = float2nr(&columns * 0.4)
-        endif
-        let l:size = l:doc_win.get_size({
-        \   'maxwidth': l:maxwidth,
-        \   'maxheight': float2nr(&lines * 0.4),
-        \ })
-
-        " Compute position.
-        let l:pos = s:compute_position(l:size)
-
-        " Open window. 
-        call l:doc_win.open({
-        \   'row': l:pos[0],
-        \   'col': l:pos[1],
-        \   'width': l:size.width,
-        \   'height': l:size.height,
-        \   'border': v:true,
-        \   'topline': 1,
-        \ })
-    else
-        call s:hide_float()
-    endif
-endfunction
-
-function! s:hide_float() abort
-    let l:doc_win = s:get_doc_win()
-    call l:doc_win.close()
-endfunction
-
-function! s:get_doc_win() abort
-    if exists('s:doc_win')
-        return s:doc_win
-    endif
-
-    let s:doc_win = s:FloatingWindow.new({
-    \   'on_opened': { -> execute('doautocmd <nomodeline> User lsp_float_opened') },
-    \   'on_closed': { -> execute('doautocmd <nomodeline> User lsp_float_closed') }
-    \ })
-    call s:doc_win.set_var('&wrap', 1)
-    call s:doc_win.set_var('&conceallevel', 2)
-    noautocmd silent let l:bufnr = s:Buffer.create()
-    call s:doc_win.set_bufnr(l:bufnr)
-    call setbufvar(s:doc_win.get_bufnr(), '&buftype', 'nofile')
-    call setbufvar(s:doc_win.get_bufnr(), '&bufhidden', 'hide')
-    call setbufvar(s:doc_win.get_bufnr(), '&buflisted', 0)
-    call setbufvar(s:doc_win.get_bufnr(), '&swapfile', 0)
-    return s:doc_win
-endfunction
-
-function! s:compute_position(size) abort
-    let l:pos = screenpos(0, line('.'), col('.'))
-    if l:pos.row == 0 && l:pos.col == 0
-        let l:pos = {'curscol': screencol(), 'row': screenrow()}
-    endif
-    let l:pos = [l:pos.row + 1, l:pos.curscol + 1]
-    if l:pos[0] + a:size.height > &lines
-        let l:pos[0] = l:pos[0] - a:size.height - 3
-    endif
-    if l:pos[1] + a:size.width > &columns
-        let l:pos[1] = l:pos[1] - a:size.width - 3
-    endif
-    return l:pos
-endfunction
