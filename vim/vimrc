@@ -157,8 +157,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
 	nmap <buffer> <leader>v :let g:lsp_diagnostics_virtual_text_enabled = !get(g:, 'lsp_diagnostics_virtual_text_enabled', 0)<CR>:e<CR>
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+    nnoremap <buffer> <expr><Down> lsp#scroll(+4)
+    nnoremap <buffer> <expr><Up> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go,*.php call execute('LspDocumentFormatSync')
@@ -211,5 +211,18 @@ if executable('gopls')
 		\		['go.mod', '.git/']
 		\	))},
 		\ 'allowlist': ['go', 'gomod', 'gowork', 'gotmpl'],
+		\ })
+endif
+
+if executable('clangd')
+	au User lsp_setup call lsp#register_server({
+		\ 'name': 'clangd',
+		\ 'cmd':  {server_info->['clangd', '--enable-config']},
+		\ 'root_uri': {server_info->lsp#utils#path_to_uri(
+		\	lsp#utils#find_nearest_parent_file_directory(
+		\		lsp#utils#get_buffer_path(),
+		\		['compile_commands.json', '.clangd', '.git/']
+		\	))},
+		\ 'allowlist': ['c', 'cpp'],
 		\ })
 endif
