@@ -1,3 +1,5 @@
+vim9script
+
 set mouse=a
 syntax on
 filetype indent plugin on
@@ -5,16 +7,13 @@ set termguicolors
 set background=dark
 
 colorscheme quiet
-hi Constant guifg=lightsteelblue
-hi Statement guifg=darkgrey
+hi Constant   guifg=lightcyan
+hi Type       guifg=lightyellow
+hi Statement  guifg=darkgrey
+hi Comment    guifg=darkseagreen
+hi SignColumn guibg=gray15
 
 set encoding=utf-8
-" set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
-
-" set number
-" set signcolumn=yes
-" set numberwidth=1
-" set cursorline
 set wildmode=list:longest,list:full
 
 set nobackup
@@ -39,45 +38,43 @@ set shiftwidth=0
 set softtabstop=-1
 
 if has('persistent_undo')
-  let s:undodir_path = expand("~/.local/share/vim/undo")
-  if !isdirectory(s:undodir_path)
-    call mkdir(s:undodir_path, "p")
+  var undodir_path = expand("~/.local/share/vim/undo")
+  if !isdirectory(undodir_path)
+    call mkdir(undodir_path, "p")
   endif
-  let &undodir=s:undodir_path
+  execute 'set undodir=' .. undodir_path
   set undofile
 endif
 
 set clipboard+=unnamed
 set backspace=indent,eol,start
 
-" set rtp+=/opt/homebrew/opt/fzf
-
-let mapleader = "\<Space>"
+g:mapleader = "\<Space>"
 
 inoremap <C-f> <right>
 inoremap <C-b> <left>
 inoremap <C-a> <C-o>^
 inoremap <C-e> <end>
-" nnoremap <ESC><ESC> :noh<cr>
 nnoremap <C-p> :bp<cr>
 nnoremap <C-n> :bn<cr>
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap Y     y$
 
-function s:toupper_prev_word()
-  let col = getpos('.')[2]
-  let substring = getline('.')[0:col-1]
-  let word = matchstr(substring, '\v<(\k(<)@!)*$')
+def ToUpperPrevWord(): string
+  var col = getpos('.')[2]
+  var substring = getline('.')[0 : col - 1]
+  var word = matchstr(substring, '\v<(\k(<)@!)*$')
   return toupper(word)
-endfunction
+enddef
 
-inoremap <expr> <C-l> "<C-w>" .. <SID>toupper_prev_word()
+inoremap <expr> <C-l> "<C-w>" .. <SID>ToUpperPrevWord()
 
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+var data_dir = has('nvim') ? stdpath('data') .. '/site' : '~/.vim'
+if empty(glob(data_dir .. '/autoload/plug.vim'))
+  silent execute '!curl -fLo '..data_dir..'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -91,138 +88,95 @@ augroup END
 call plug#begin()
 
 Plug 'junegunn/vim-easy-align'
-Plug 'skywind3000/asyncrun.vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'lambdalisue/vim-fern'
 Plug 'lambdalisue/vim-fern-hijack'
-Plug 'prabirshrestha/vim-lsp'
+Plug 'yegappan/lsp'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 
 call plug#end()
 
-" automatically open quickfix window when AsyncRun command is executed
-" set the quickfix window 6 lines height.
-let g:asyncrun_open = 10
-let g:asyncrun_exit = "silent doautocmd QuickFixCmdPost make"
+nnoremap <leader>f <CMD>Files<cr>
+nnoremap <leader>p <CMD>GFiles<cr>
+nnoremap <leader>b <CMD>Buffers<cr>
+nnoremap <leader>c <CMD>Files ~/.config<cr>
+nnoremap <leader>t <CMD>Fern . -drawer -toggle<CR>
+nnoremap <leader>/ <CMD>Rg<CR>
 
-" colorscheme bquiet
-
-nnoremap <leader>f :Files<cr>
-nnoremap <leader>p :GFiles<cr>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>c :Files ~/.config<cr>
-nnoremap <leader>t :Fern . -drawer -toggle<CR>
-nnoremap <leader>/ :Rg<CR>
-nnoremap <leader>r :copen \| AsyncRun -strip -save=2
-
-command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
+# Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+# Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-let g:gitgutter_sign_priority = 1
+g:gitgutter_sign_priority = 1
 
-" fern.vim
-let g:fern#default_hidden = 1
-function! s:init_fern() abort
+# fern.vim
+g:fern#default_hidden = 1
+def InitFern()
   nmap <buffer> N <Plug>(fern-action-new-path)
   nmap <buffer> <CR> <Plug>(fern-action-open-or-expand)
-endfunction
+enddef
 
 augroup my-fern
   autocmd! *
-  autocmd FileType fern call s:init_fern()
+  autocmd FileType fern call InitFern()
 augroup END
 
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    " setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    " nmap <buffer> ge <plug>(lsp-document-diagnostics)
-	nnoremap <leader>x <plug>(lsp-document-diagnostics)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>r <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-	nmap <buffer> <leader>v :let g:lsp_diagnostics_virtual_text_enabled = !get(g:, 'lsp_diagnostics_virtual_text_enabled', 0)<CR>:e<CR>
-    nnoremap <buffer> <expr><Down> lsp#scroll(+4)
-    nnoremap <buffer> <expr><Up> lsp#scroll(-4)
+var lspOpts = {autoHighlightDiags: true}
+autocmd User LspSetup call LspOptionsSet(lspOpts)
 
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go,*.php call execute('LspDocumentFormatSync')
-    
-    " refer to doc to add more commands
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-let g:lsp_use_native_client = 1
-
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/.vim/vim-lsp.log')
-
-let g:lsp_document_code_action_signs_enabled = 0
-let g:lsp_diagnostics_virtual_text_enabled = 0
-" let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_diagnostics_float_cursor = 0
-let g:lsp_diagnostics_highlights_enabled = 0
-let g:lsp_diagnostics_virtual_text_align = "right"
-let g:lsp_diagnostics_float_insert_mode_enabled = 0
-
-if executable('phpactor')
-    augroup lsp_phpactor
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'phpactor',
-            \ 'cmd':  {server_info->['phpactor', 'language-server']},
-			\ 'root_uri': {server_info->lsp#utils#path_to_uri(
-			\	lsp#utils#find_nearest_parent_file_directory(
-			\		lsp#utils#get_buffer_path(),
-			\		['composer.json', '.git/']
-			\	))},
-            \ 'allowlist': ['php'],
-            \ })
-    augroup END
-endif
-
-if executable('gopls')
-	au User lsp_setup call lsp#register_server({
-		\ 'name': 'gopls',
-		\ 'cmd':  {server_info->['gopls']},
-		\ 'root_uri': {server_info->lsp#utils#path_to_uri(
-		\	lsp#utils#find_nearest_parent_file_directory(
-		\		lsp#utils#get_buffer_path(),
-		\		['go.mod', '.git/']
-		\	))},
-		\ 'allowlist': ['go', 'gomod', 'gowork', 'gotmpl'],
-		\ })
-endif
-
-if executable('clangd')
-	au User lsp_setup call lsp#register_server({
-		\ 'name': 'clangd',
-		\ 'cmd':  {server_info->['clangd', '--enable-config']},
-		\ 'root_uri': {server_info->lsp#utils#path_to_uri(
-		\	lsp#utils#find_nearest_parent_file_directory(
-		\		lsp#utils#get_buffer_path(),
-		\		['compile_commands.json', '.clangd', '.git/']
-		\	))},
-		\ 'allowlist': ['c', 'cpp'],
-		\ })
-endif
+var lspServers = [
+     {
+		  name:     'clangd',
+		  filetype: ['c', 'cpp'],
+		  path:     'clangd',
+		  args:     ['--background-index', '--enable-config']
+	 },
+     {
+  	    name:     'gopls',
+  	    filetype: ['go', 'gomod'],
+  	    path:     'gopls',
+  	    args:     ['serve'],
+  	    syncInit: true
+  	 },
+     {
+         name: 'rust-analyzer',
+         filetype: ['rust'],
+         path: 'rust-analyzer',
+         args: [],
+         syncInit: true,
+     },
+     {
+         name: 'phpactor',
+         filetype: ['php'],
+         path: 'phpactor',
+         args: ['language-server'],
+         syncInit: true,
+     },
+     {
+         name: 'pyright',
+         filetype: ['python'],
+         path: 'pyright-langserver',
+         args: ['--stdio'],
+         syncInit: true,
+     },
+]
+autocmd User LspSetup call LspAddServer(lspServers)
+ 
+def LspKeymap()
+   nnoremap <buffer> ge        <CMD>LspDiag current<CR>
+   nnoremap <buffer> K         <CMD>LspHover<CR>
+   nnoremap <buffer> gd        <CMD>LspGotoDefinition<CR>
+   nnoremap <buffer> <leader>r <CMD>LspRename<CR>
+   nnoremap <buffer> gr        <CMD>LspReferences<CR>
+   nnoremap <buffer> [g        <CMD>LspDiag prev<CR>
+   nnoremap <buffer> ]g        <CMD>LspDiag next<CR>
+   nnoremap <buffer> gs        <CMD>LspSymbolSearch<CR>
+   nnoremap <buffer> gi        <CMD>LspGotoImpl<CR>
+   nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
+   nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
+enddef
+autocmd User LspAttached call LspKeymap()
