@@ -22,6 +22,30 @@ fi
 
 alias skim="open -a Skim.app"
 
+export REPO_ROOT="${HOME}/repo"
+
+clone() {
+    if [ -z "$1" ]; then
+        echo "USAGE: clone <owner/repo>"
+        return 1
+    fi
+
+    local input="$1"
+    local owner="${input%%/*}"
+    local name="${input#*/}"
+
+    local output="${REPO_ROOT}/${owner}-${name}"
+    local path="git@github.com:${owner}/${name}.git"
+
+    if [[ -d "$output" ]]; then
+        echo "Repository already exists: $output" >&2
+        cd "$output" || return 1
+        return
+    fi
+
+    git clone "$path" "$output" && cd "$output"
+}
+
 new_repo() {
     echo "Input the repository name:"
     local repo_name
@@ -33,9 +57,10 @@ new_repo() {
     visibility=$(gum choose "public" "private" "local-only") || exit 1
     echo "[visibility] $visibility"
 
+    local local_path="${REPO_ROOT}/$(git config user.name)-${repo_name}"
+
     if [ $visibility = "local-only" ]; then
-        mkdir -p "$(ghq root)/github.com/$(git config user.name)/${repo_name}"
-        cd "$(ghq root)/github.com/$(git config user.name)/${repo_name}"
+        mkdir -p "$local_path" && cd "$local_path" && git init
         return
     fi
 
@@ -43,22 +68,24 @@ new_repo() {
     echo "Command: $cmd"
     if gum confirm "Do you want to run?"; then
         eval "$cmd"
-        ghq get -p "$(git config user.name)/$repo_name"
-        cd "$(ghq root)/github.com/$(git config user.name)/${repo_name}"
+        local path="git@github.com:$(git config user.name)/${repo_name}.git"
+        git clone "$path" "$local_path" && cd "$local_path"
     else
         echo "aborted!"
     fi
 }
 
 go_repo() {
-    local repodir
-    if repodir="$(ghq list | fzf -1 +m)"; then
-        cd "$(ghq root)/$repodir"
+    local selected
+    selected=$(find "${REPO_ROOT}" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | fzf) || return 1
+    local path="${REPO_ROOT}/${selected}"
+    if [[ -d ${path} ]]; then
+        cd "$path"
     fi
 }
 
 alias nr='new_repo'
-alias gr='cd $(ghq list --full-path | fzf)'
+alias gr='go_repo'
 
 new_project() {
     local title
