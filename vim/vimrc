@@ -125,46 +125,55 @@ augroup my-fern
   autocmd FileType fern call InitFern()
 augroup END
 
-var lspOpts = {autoHighlightDiags: true}
-autocmd User LspSetup call LspOptionsSet(lspOpts)
 
-var lspServers = [
-     {
-		  name:     'clangd',
-		  filetype: ['c', 'cpp'],
-		  path:     'clangd',
-		  args:     ['--background-index', '--enable-config']
-	 },
-     {
-  	    name:     'gopls',
-  	    filetype: ['go', 'gomod'],
-  	    path:     'gopls',
-  	    args:     ['serve'],
-  	    syncInit: true
-  	 },
-     {
-         name: 'rust-analyzer',
-         filetype: ['rust'],
-         path: 'rust-analyzer',
-         args: [],
-         syncInit: true,
-     },
-     {
-         name: 'phpactor',
-         filetype: ['php'],
-         path: 'phpactor',
-         args: ['language-server'],
-         syncInit: true,
-     },
-     {
-         name: 'pyright',
-         filetype: ['python'],
-         path: 'pyright-langserver',
-         args: ['--stdio'],
-         syncInit: true,
-     },
-]
-autocmd User LspSetup call LspAddServer(lspServers)
+def SetupLsp()
+    var lspOpts = {autoHighlightDiags: true}
+    call g:LspOptionsSet(lspOpts)
+
+    var lspServers = [
+         {
+              name:     'clangd',
+              filetype: ['c', 'cpp'],
+              path:     'clangd',
+              args:     ['--background-index', '--enable-config']
+         },
+         {
+            name:     'gopls',
+            filetype: ['go', 'gomod'],
+            path:     'gopls',
+            args:     ['serve'],
+            syncInit: true
+         },
+         {
+             name: 'rust-analyzer',
+             filetype: ['rust'],
+             path: 'rust-analyzer',
+             args: [],
+             syncInit: true,
+         },
+         {
+             name: 'phpactor',
+             filetype: ['php'],
+             path: 'phpactor',
+             args: ['language-server'],
+             syncInit: true,
+         },
+         {
+             name: 'pyright',
+             filetype: ['python'],
+             path: 'pyright-langserver',
+             args: ['--stdio'],
+             syncInit: true,
+         },
+    ]
+
+    for server in lspServers
+        if executable(server.name)
+            call g:LspAddServer([server])
+        endif
+    endfor
+enddef
+autocmd User LspSetup call SetupLsp()
  
 def LspKeymap()
    nnoremap <buffer> ge        <CMD>LspDiag current<CR>
