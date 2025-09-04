@@ -8,9 +8,10 @@ set background=dark
 
 colorscheme quiet
 hi Constant   guifg=lightcyan
-hi Type       guifg=lightyellow
+# hi Type       guifg=lightyellow
 hi Statement  guifg=darkgrey
-hi Comment    guifg=darkseagreen
+hi Define     guifg=darkgrey
+hi Comment    guifg=green4
 hi SignColumn guibg=gray15
 
 set encoding=utf-8
@@ -22,7 +23,7 @@ set confirm
 set autoread
 set hidden
 
-set wrapscan
+set nowrapscan
 set incsearch
 set hlsearch
 set ignorecase
@@ -38,16 +39,32 @@ set shiftwidth=0
 set softtabstop=-1
 
 if has('persistent_undo')
-  var undodir_path = expand("~/.local/share/vim/undo")
-  if !isdirectory(undodir_path)
-    call mkdir(undodir_path, "p")
-  endif
-  execute 'set undodir=' .. undodir_path
-  set undofile
+    var undodir_path = expand("~/.local/share/vim/undo")
+    if !isdirectory(undodir_path)
+        call mkdir(undodir_path, "p")
+    endif
+    execute 'set undodir=' .. undodir_path
+    set undofile
 endif
 
 set clipboard+=unnamed
 set backspace=indent,eol,start
+
+set laststatus=2
+def g:MyStatusLine(): string
+    var prefix = "%<%f\ %h%w%m%r"
+    var suffix = "%-14.(%l,%c%V%)\ %P"
+
+    var isrunning = lsp#lsp#ServerReady()
+    var counts = lsp#lsp#ErrorCount()
+    if !isrunning && (counts.Error > 0) || (counts.Warn > 0)
+        var counts_str = " E:" .. counts.Error .. " W:" .. counts.Warn
+        return prefix .. counts_str .. "%=" .. suffix
+    else
+        return prefix .. "%=" .. suffix
+    endif
+enddef
+set statusline=%!g:MyStatusLine()
 
 g:mapleader = "\<Space>"
 
@@ -64,25 +81,25 @@ nnoremap <C-l> <C-w>l
 nnoremap Y     y$
 
 def ToUpperPrevWord(): string
-  var col = getpos('.')[2]
-  var substring = getline('.')[0 : col - 1]
-  var word = matchstr(substring, '\v<(\k(<)@!)*$')
-  return toupper(word)
+    var col = getpos('.')[2]
+    var substring = getline('.')[0 : col - 1]
+    var word = matchstr(substring, '\v<(\k(<)@!)*$')
+    return toupper(word)
 enddef
 
 inoremap <expr> <C-l> "<C-w>" .. <SID>ToUpperPrevWord()
 
 var data_dir = has('nvim') ? stdpath('data') .. '/site' : '~/.vim'
 if empty(glob(data_dir .. '/autoload/plug.vim'))
-  silent execute '!curl -fLo '..data_dir..'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    silent execute '!curl -fLo '..data_dir..'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 augroup custom_indent
-	autocmd!
+    autocmd!
 
-	autocmd Filetype c setlocal tabstop=2
-	autocmd Filetype cpp setlocal tabstop=2
+    autocmd Filetype c setlocal tabstop=2
+    autocmd Filetype cpp setlocal tabstop=2
 augroup END
 
 call plug#begin()
@@ -96,6 +113,8 @@ Plug 'yegappan/lsp'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+
+Plug 'vim-crystal/vim-crystal'
 
 call plug#end()
 
@@ -112,59 +131,71 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 g:gitgutter_sign_priority = 1
+hi GitGutterAdd guifg=green guibg=gray15
+hi GitGutterChange guifg=lightblue guibg=gray15
+hi GitGutterDelete guifg=red guibg=gray15
 
 # fern.vim
 g:fern#default_hidden = 1
 def InitFern()
-  nmap <buffer> N <Plug>(fern-action-new-path)
-  nmap <buffer> <CR> <Plug>(fern-action-open-or-expand)
+    nmap <buffer> N <Plug>(fern-action-new-path)
+    nmap <buffer> <CR> <Plug>(fern-action-open-or-expand)
 enddef
 
 augroup my-fern
-  autocmd! *
-  autocmd FileType fern call InitFern()
+    autocmd! *
+    autocmd FileType fern call InitFern()
 augroup END
 
-
 def SetupLsp()
-    var lspOpts = {autoHighlightDiags: true}
+    var lspOpts = {
+        autoComplete: false,
+        autoHighlightDiags: true,
+    }
     call g:LspOptionsSet(lspOpts)
 
     var lspServers = [
-         {
-              name:     'clangd',
-              filetype: ['c', 'cpp'],
-              path:     'clangd',
-              args:     ['--background-index', '--enable-config']
-         },
-         {
+        {
+            name:     'clangd',
+            filetype: ['c', 'cpp'],
+            path:     'clangd',
+            args:     ['--background-index', '--enable-config']
+        },
+        {
             name:     'gopls',
             filetype: ['go', 'gomod'],
             path:     'gopls',
             args:     ['serve'],
             syncInit: true
-         },
-         {
-             name: 'rust-analyzer',
-             filetype: ['rust'],
-             path: 'rust-analyzer',
-             args: [],
-             syncInit: true,
-         },
-         {
-             name: 'phpactor',
-             filetype: ['php'],
-             path: 'phpactor',
-             args: ['language-server'],
-             syncInit: true,
-         },
-         {
-             name: 'pyright',
-             filetype: ['python'],
-             path: 'pyright-langserver',
-             args: ['--stdio'],
-             syncInit: true,
-         },
+        },
+        {
+            name: 'rust-analyzer',
+            filetype: ['rust'],
+            path: 'rust-analyzer',
+            args: [],
+            syncInit: true,
+        },
+        {
+            name: 'phpactor',
+            filetype: ['php'],
+            path: 'phpactor',
+            args: ['language-server'],
+            syncInit: true,
+        },
+        {
+            name: 'pyright',
+            filetype: ['python'],
+            path: 'pyright-langserver',
+            args: ['--stdio'],
+            syncInit: true,
+        },
+        {
+            name: 'crystalline',
+            filetype: ['crystal'],
+            path: 'crystalline',
+            args: ['--stdio'],
+            syncInit: true,
+        },
     ]
 
     for server in lspServers
@@ -174,18 +205,34 @@ def SetupLsp()
     endfor
 enddef
 autocmd User LspSetup call SetupLsp()
- 
+
+def g:OpenDiagLocList()
+    var counts = lsp#lsp#ErrorCount()
+
+    var total = 0
+    for [_, cnt] in items(counts)
+        total += cnt
+    endfor
+
+    if total > 0
+        execute "LspDiag show"
+    else
+        execute "lclose"
+    endif
+enddef
+
 def LspKeymap()
-   nnoremap <buffer> ge        <CMD>LspDiag current<CR>
-   nnoremap <buffer> K         <CMD>LspHover<CR>
-   nnoremap <buffer> gd        <CMD>LspGotoDefinition<CR>
-   nnoremap <buffer> <leader>r <CMD>LspRename<CR>
-   nnoremap <buffer> gr        <CMD>LspReferences<CR>
-   nnoremap <buffer> [g        <CMD>LspDiag prev<CR>
-   nnoremap <buffer> ]g        <CMD>LspDiag next<CR>
-   nnoremap <buffer> gs        <CMD>LspSymbolSearch<CR>
-   nnoremap <buffer> gi        <CMD>LspGotoImpl<CR>
-   nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
-   nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
+    nnoremap <buffer> ge        <CMD>LspDiag current<CR>
+    nnoremap <buffer> K         <CMD>LspHover<CR>
+    nnoremap <buffer> gd        <CMD>LspGotoDefinition<CR>
+    nnoremap <buffer> <leader>r <CMD>LspRename<CR>
+    nnoremap <buffer> <leader>x <CMD>call g:OpenDiagLocList()<CR>
+    nnoremap <buffer> gr        <CMD>LspReferences<CR>
+    nnoremap <buffer> [g        <CMD>LspDiag prev<CR>
+    nnoremap <buffer> ]g        <CMD>LspDiag next<CR>
+    nnoremap <buffer> gs        <CMD>LspSymbolSearch<CR>
+    nnoremap <buffer> gi        <CMD>LspGotoImpl<CR>
+    nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
+    nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
 enddef
 autocmd User LspAttached call LspKeymap()
