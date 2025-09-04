@@ -13,6 +13,7 @@
 
     "${HOME}/.config/tmux/tmux.conf":          "tmux/tmux.conf",
     "${HOME}/.config/tmux/copy_command.sh":    "tmux/copy_command.sh",
+    "${HOME}/.config/tmux/host.conf":          "tmux/host.conf",
 
     "${HOME}/.config/yazi/yazi.toml":          "yazi/yazi.toml",
     "${HOME}/.config/yazi/keymap.toml":        "yazi/keymap.toml",
@@ -33,6 +34,7 @@
   },
   "mac": {
     "${HOME}/.config/bash/mac.sh":             "bash/mac.sh",
+    "${HOME}/.config/tmux/host.conf":          "tmux/mac.conf",
     "${HOME}/.config/wezterm/host_config.lua": "wezterm/hosts/mac.lua"
   }
 }
