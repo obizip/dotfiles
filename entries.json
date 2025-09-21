@@ -12,6 +12,7 @@
     "${HOME}/.config/nvim/init.lua":           "nvim/init.lua",
 
     "${HOME}/.config/tmux/tmux.conf":          "tmux/tmux.conf",
+    "${HOME}/.config/tmux/tmux_alt.conf":      "tmux/tmux_alt.conf",
     "${HOME}/.config/tmux/copy_command.sh":    "tmux/copy_command.sh",
     "${HOME}/.config/tmux/host.conf":          "tmux/host.conf",
 
@@ -19,7 +20,6 @@
     "${HOME}/.config/yazi/keymap.toml":        "yazi/keymap.toml",
 
     "${HOME}/.config/gtk-3.0/settings.ini":    "gtk/gtk-3.0-settings.ini",
-    "${HOME}/.config/user-dirs.dirs":          "xdg/user-dirs.dirs",
 
     "${HOME}/.config/wezterm/wezterm.lua":     "wezterm/wezterm.lua",
     "${HOME}/.config/wezterm/keymap.lua":      "wezterm/keymap.lua",
