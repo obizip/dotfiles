@@ -113,6 +113,7 @@ Plug 'yegappan/lsp'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'vim-python/python-syntax'
 
 Plug 'vim-crystal/vim-crystal'
 
@@ -148,9 +149,25 @@ augroup my-fern
 augroup END
 
 def SetupLsp()
+    hi link LspDiagInlineError Normal
+    hi LspDiagInlineError guifg=NONE guibg=NONE cterm=underline
+    hi link LspDiagInlineHint Normal
+    hi LspDiagInlineHint guifg=NONE guibg=NONE cterm=underline
+    hi link LspDiagInlineInfo Normal
+    hi LspDiagInlineInfo guifg=NONE guibg=NONE cterm=underline
+    hi link LspDiagInlineWarning Normal
+    hi LspDiagInlineWarning guifg=NONE guibg=NONE cterm=underline
+
+    hi LspDiagSignErrorText   guifg=red
+    hi LspDiagSignHintText    guifg=green
+    hi LspDiagSignInfoText    guifg=blue
+    hi LspDiagSignWarningText guifg=orange
+
     var lspOpts = {
         autoComplete: false,
+        completionMatcher: "fuzzy",
         autoHighlightDiags: true,
+        highlightDiagInline: true,
     }
     call g:LspOptionsSet(lspOpts)
 
@@ -236,3 +253,7 @@ def LspKeymap()
     nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
 enddef
 autocmd User LspAttached call LspKeymap()
+
+# python-syntax 
+g:python_highlight_all = 1
+hi link pythonImport Statement
