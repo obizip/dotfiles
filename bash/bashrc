@@ -11,7 +11,7 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 export EDITOR=vim
 export PATH="$HOME/.local/bin:$PATH"
 
-export FZF_DEFAULT_OPTS="--walker-skip .git,node_modules,target,vendor"
+export FZF_DEFAULT_OPTS="--walker-skip .git,node_modules,vendor"
 
 export LSCOLORS="ExFxCxDxBxegedabagac" # 全体的に明るい色に
 
@@ -83,6 +83,7 @@ alias sl="ls -FG --color=auto"
 alias v="nvim"
 alias tree="tree -I '.venv|.git|node_modules|__pycache__|target|vendor'"
 alias devsh="docker compose exec -it dev bash"
+alias zip="zip -x '**/.DS_Store' -x '**/__MACOSX'"
 
 if [[ "$(hostname)" == "macbook.local" ]]; then
     if [ -f "${XDG_CONFIG_HOME}/bash/mac.sh" ]; then
