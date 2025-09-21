@@ -168,6 +168,7 @@ def SetupLsp()
         completionMatcher: "fuzzy",
         autoHighlightDiags: true,
         highlightDiagInline: true,
+        hoverInPreview: true,
     }
     call g:LspOptionsSet(lspOpts)
 
