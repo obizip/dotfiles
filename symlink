@@ -78,6 +78,8 @@ class LinkArguments:
 
 def handle_link_command(args):
     args = LinkArguments(args)
+    if args.simulate:
+        info("[ SIMULATE ]")
     entries = load_entries(
         entries_path=args.entries_path, extra_tables=args.extra_tables
     )
