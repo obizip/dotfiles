@@ -216,20 +216,17 @@ def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]
 def parse_entries(
     raw_entries: dict[str, dict[str, str]], extra_tables: set[str]
 ) -> dict[Path, Path]:
-    entries_tables = list(raw_entries.keys())
-    link_tables = [
-        table for table in entries_tables if table in ({"default"} | extra_tables)
-    ]
-
     entries: dict[Path, Path] = dict()
-    for table in link_tables:
+    for table in ["default"] + list(extra_tables):
         str_entries = raw_entries[table]
         pairs = [
             make_entry_to_paths(src_str=src_str, dest_str=dest_str)
             for dest_str, src_str in str_entries.items()
         ]
-        entries |= {dest: src for src, dest in pairs}
-
+        for src, dest in pairs:
+            if dest in entries:
+                info(f"Overwritten: {dest} -> {src}")
+            entries[dest] = src
     return entries
 
 
