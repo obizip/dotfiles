@@ -490,6 +490,7 @@ require("lazy").setup({
             --     command = "split"
             --   }
             -- },
+            height = 0.75,
             focus_alternate_buffer = false,
             short_file_names = false,
             short_term_names = false,
