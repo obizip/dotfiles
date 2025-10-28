@@ -1,21 +1,21 @@
 vim9script
 
+if has('vim_starting')
+    &t_SI = "\e[6 q"
+    &t_EI = "\e[2 q"
+    &t_SR = "\e[4 q"
+endif
+
 set mouse=a
 syntax on
 filetype indent plugin on
 set termguicolors
 set background=dark
-
-colorscheme quiet
-hi Constant   guifg=lightcyan
-# hi Type       guifg=lightyellow
-hi Statement  guifg=darkgrey
-hi Define     guifg=darkgrey
-hi Comment    guifg=green4
-hi SignColumn guibg=gray15
+set timeoutlen=500
 
 set encoding=utf-8
 set wildmode=list:longest,list:full
+set completeopt=menuone,preview,popup,noinsert
 
 set nobackup
 set noswapfile
@@ -23,6 +23,7 @@ set confirm
 set autoread
 set hidden
 
+set noshowmode
 set nowrapscan
 set incsearch
 set hlsearch
@@ -52,6 +53,8 @@ set backspace=indent,eol,start
 
 set laststatus=2
 def g:MyStatusLine(): string
+    # var mode = mode()
+    # var prefix = "%<" .. mode() .. " " .. "%f\ %h%w%m%r"
     var prefix = "%<%f\ %h%w%m%r"
     var suffix = "%-14.(%l,%c%V%)\ %P"
 
@@ -80,6 +83,10 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap Y     y$
 
+# nnoremap <leader> D :%bd
+# command! CloseAllBuffers :%bd
+# CloseOtherBuffers :%bd | :e#
+
 def ToUpperPrevWord(): string
     var col = getpos('.')[2]
     var substring = getline('.')[0 : col - 1]
@@ -101,6 +108,27 @@ augroup custom_indent
     autocmd Filetype c setlocal tabstop=2
     autocmd Filetype cpp setlocal tabstop=2
 augroup END
+
+colorscheme quiet
+# hi! Normal     guifg=#e4e4e4 guibg=#181818
+hi! Constant   guifg=lightcyan
+hi! String     guifg=lightcyan
+hi! Type       guifg=lightyellow
+hi! Statement  guifg=darkgrey
+hi! Define     guifg=darkgrey
+hi! Comment    guifg=green4
+hi! SignColumn guibg=gray15
+
+hi! Pmenu         guifg=NONE    guibg=#3a3a3a guisp=NONE gui=NONE term=reverse
+hi! PmenuExtra    guifg=#767676 guibg=#3a3a3a guisp=NONE gui=NONE term=NONE
+hi! PmenuExtraSel guifg=#9e9e9e guibg=#585858 guisp=NONE gui=NONE term=NONE
+hi! PmenuKind     guifg=#5f8787 guibg=#3a3a3a guisp=NONE gui=NONE term=NONE
+hi! PmenuKindSel  guifg=#5f8787 guibg=#585858 guisp=NONE gui=NONE term=NONE
+hi! PmenuMatch    guifg=#ffaf5f guibg=#3a3a3a guisp=NONE gui=NONE term=NONE
+hi! PmenuMatchSel guifg=#ffaf5f guibg=#585858 guisp=NONE gui=NONE term=NONE
+hi! PmenuSbar     guifg=NONE    guibg=NONE    guisp=NONE gui=NONE term=reverse
+hi! PmenuSel      guifg=NONE    guibg=#585858 guisp=NONE gui=NONE term=bold
+hi! PmenuThumb    guifg=NONE    guibg=#767676 guisp=NONE gui=NONE term=NONE
 
 call plug#begin()
 
@@ -149,28 +177,35 @@ augroup my-fern
 augroup END
 
 def SetupLsp()
-    hi link LspDiagInlineError Normal
-    hi LspDiagInlineError guifg=NONE guibg=NONE cterm=underline
-    hi link LspDiagInlineHint Normal
-    hi LspDiagInlineHint guifg=NONE guibg=NONE cterm=underline
-    hi link LspDiagInlineInfo Normal
-    hi LspDiagInlineInfo guifg=NONE guibg=NONE cterm=underline
-    hi link LspDiagInlineWarning Normal
-    hi LspDiagInlineWarning guifg=NONE guibg=NONE cterm=underline
+    # hi link LspDiagInlineError Normal
+    hi! LspDiagInlineError guifg=NONE guibg=NONE cterm=underline
+    # hi link LspDiagInlineHint Normal
+    hi! LspDiagInlineHint guifg=NONE guibg=NONE cterm=underline
+    # hi link LspDiagInlineInfo Normal
+    hi! LspDiagInlineInfo guifg=NONE guibg=NONE cterm=underline
+    # hi link LspDiagInlineWarning Normal
+    hi! LspDiagInlineWarning guifg=NONE guibg=NONE cterm=underline
 
-    hi LspDiagSignErrorText   guifg=red
-    hi LspDiagSignHintText    guifg=green
-    hi LspDiagSignInfoText    guifg=blue
-    hi LspDiagSignWarningText guifg=orange
+    hi! LspDiagSignErrorText   guifg=red
+    hi! LspDiagSignHintText    guifg=green
+    hi! LspDiagSignInfoText    guifg=blue
+    hi! LspDiagSignWarningText guifg=orange
+
+    # hi link LspSigActiveParameter Normal
+    hi! LspSigActiveParameter guifg=lightyellow
 
     var lspOpts = {
         autoComplete: false,
         completionMatcher: "fuzzy",
         autoHighlightDiags: true,
         highlightDiagInline: true,
-        hoverInPreview: true,
+        echoSignature: true,
+        # omniComplete: true,
+        condensedCompletionMenu: true,
     }
     call g:LspOptionsSet(lspOpts)
+
+    set keywordprg=":LspHover"
 
     var lspServers = [
         {
@@ -252,6 +287,7 @@ def LspKeymap()
     nnoremap <buffer> gi        <CMD>LspGotoImpl<CR>
     nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
     nnoremap <buffer> gt        <CMD>LspGotoTypeDef<CR>
+    nnoremap <buffer> <leader>R <CMD>LspServer restart<CR>
 enddef
 autocmd User LspAttached call LspKeymap()
 
