@@ -36,5 +36,8 @@
     "${HOME}/.config/bash/mac.sh":             "bash/mac.sh",
     "${HOME}/.config/tmux/host.conf":          "tmux/mac.conf",
     "${HOME}/.config/wezterm/host_config.lua": "wezterm/hosts/mac.lua"
+  },
+  "container": {
+    "${HOME}/.config/nvim/init.lua":           "nvim/container_init.lua"
   }
 }
