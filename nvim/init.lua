@@ -281,43 +281,12 @@ require("lazy").setup({
         'nvim-lualine/lualine.nvim',
         lazy = false,
         opts = {
-          options = {
-            theme = {
-              normal = {
-                a = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
-                b = { fg = '#8D8CD8', bg = '#202020', gui = 'bold' },
-                c = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
-                x = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
-                y = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
-                z = { fg = '#cccccc', bg = '#202020', gui = 'bold' },
-              },
-              inactive = {
-                a = { fg = '#cccccc', bg = '#101010' },
-                b = { fg = '#8D8CD8', bg = '#101010' },
-                c = { fg = '#cccccc', bg = '#101010' },
-                x = { fg = '#cccccc', bg = '#101010' },
-                y = { fg = '#cccccc', bg = '#101010' },
-                z = { fg = '#cccccc', bg = '#101010' },
-              },
-            },
-            icons_enabled = false,
-            component_separators = { left = "", right = "" },
-            section_separators = { left = "", right = "" },
-          },
           sections = {
-            lualine_a = { { 'filename', path = 1 } },
+            lualine_a = { 'mode' },
             lualine_b = { 'branch', 'diagnostics' },
-            lualine_c = {},
-            lualine_x = {},
-            lualine_y = {},
-            lualine_z = { 'location' }
-          },
-          inactive_sections = {
-            lualine_a = { { 'filename', path = 1 } },
-            lualine_b = {},
-            lualine_c = {},
-            lualine_x = {},
-            lualine_y = {},
+            lualine_c = { 'filename' },
+            lualine_x = { 'diff', 'filetype' },
+            lualine_y = { 'progress' },
             lualine_z = { 'location' }
           },
         }
@@ -389,26 +358,26 @@ require("lazy").setup({
         cmd = "Trouble",
         keys = {
           {
-            "<leader>x",
+            "<leader>xx",
             "<cmd>Trouble diagnostics toggle<cr>",
             desc = "Diagnostics (Trouble)",
 
           },
-          -- {
-          --   "<leader>xX",
-          --   "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-          --   desc = "Buffer Diagnostics (Trouble)",
-          -- },
-          -- {
-          --   "<leader>xL",
-          --   "<cmd>Trouble loclist toggle<cr>",
-          --   desc = "Location List (Trouble)",
-          -- },
-          -- {
-          --   "<leader>xQ",
-          --   "<cmd>Trouble qflist toggle<cr>",
-          --   desc = "Quickfix List (Trouble)",
-          -- },
+          {
+            "<leader>xX",
+            "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+            desc = "Buffer Diagnostics (Trouble)",
+          },
+          {
+            "<leader>xL",
+            "<cmd>Trouble loclist toggle<cr>",
+            desc = "Location List (Trouble)",
+          },
+          {
+            "<leader>xQ",
+            "<cmd>Trouble qflist toggle<cr>",
+            desc = "Quickfix List (Trouble)",
+          },
         },
       },
       {
@@ -487,7 +456,6 @@ require("lazy").setup({
         dependencies = { "nvim-lua/plenary.nvim" },
         lazy = false,
         config = function()
-          local opts = { noremap = true }
           -- Setup
           require("buffer_manager").setup({
             -- select_menu_item_commands = {
@@ -719,8 +687,8 @@ require("lazy").setup({
               nnoremap("ga", vim.lsp.buf.code_action, "Code Action")
 
               nnoremap("ge", vim.diagnostic.open_float, "Open Floating Diagnostic Window")
-              nnoremap("g[", function() vim.diagnostic.jump({ count = -1 }) end, "Go To Previous Diagnostic")
-              nnoremap("g]", function() vim.diagnostic.jump({ count = 1 }) end, "Go To Next Diagnostic")
+              nnoremap("[g", function() vim.diagnostic.jump({ count = -1 }) end, "Go To Previous Diagnostic")
+              nnoremap("]g", function() vim.diagnostic.jump({ count = 1 }) end, "Go To Next Diagnostic")
               nnoremap("g=", vim.lsp.buf.format, "Format")
               nnoremap("grn", vim.lsp.buf.rename, "Rename Symbol")
               nnoremap("<leader>r", vim.lsp.buf.rename, "Rename Symbol")
@@ -732,15 +700,15 @@ require("lazy").setup({
             virtual_text = false,
             underline = false,
             loclist = {
-              severity = { min = vim.diagnostic.severity.WARN }
+              -- severity = { min = vim.diagnostic.severity.WARN }
             },
             jump = {
               float = true,
-              severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR }
+              -- severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR }
             },
             signs = {
               text = {
-                [vim.diagnostic.severity.HINT] = '',
+                -- [vim.diagnostic.severity.HINT] = '',
               },
             }
           })
@@ -808,7 +776,7 @@ require("lazy").setup({
             dir = "git_dir",
             direction = "float",
             hidden = true,
-            on_open = function(term)
+            on_open = function(_)
               tnoremap("<C-\\>", "<CMD>close<CR>", "Hide Tig")
             end,
           })
