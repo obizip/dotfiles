@@ -220,6 +220,20 @@ require("lazy").setup({
       end
     },
     {
+      'nvim-lualine/lualine.nvim',
+      lazy = false,
+      opts = {
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch', 'diagnostics' },
+          lualine_c = { 'filename' },
+          lualine_x = { 'diff', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' }
+        },
+      }
+    },
+    {
       "neovim/nvim-lspconfig",
       lazy = false,
       version = "1.x",
