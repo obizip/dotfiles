@@ -210,19 +210,14 @@ require("lazy").setup({
   defaults = { lazy = true },
   spec = {
     {
-      "folke/tokyonight.nvim",
-      lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-      priority = 1000, -- make sure to load this before all the other start plugins
+      "p00f/alabaster.nvim",
+      lazy = false,
+      priority = 1000,
       config = function()
-        require("tokyonight").setup({
-          style = "night",
-          on_highlights = function(hl, colors)
-            hl.DiagnosticUnnecessary = { fg = colors.comment }
-          end
-        })
-
-        vim.cmd([[colorscheme tokyonight]])
-      end,
+        vim.cmd.colorscheme("alabaster")
+        vim.api.nvim_set_hl(0, "@keyword", { fg = "#999999" })
+        vim.api.nvim_set_hl(0, "@keyword.function", { fg = "#999999" })
+      end
     },
     {
       "neovim/nvim-lspconfig",

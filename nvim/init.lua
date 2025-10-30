@@ -258,13 +258,23 @@ require("lazy").setup({
           vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', {})
         end
       },
+      -- {
+      --   "obizip/bquiet.nvim",
+      --   -- dir = "~/dev/bquiet.nvim",
+      --   lazy = false,
+      --   priority = 1000,
+      --   config = function()
+      --     vim.cmd.colorscheme("bquiet")
+      --   end
+      -- },
       {
-        "obizip/bquiet.nvim",
-        -- dir = "~/dev/bquiet.nvim",
+        "p00f/alabaster.nvim",
         lazy = false,
         priority = 1000,
         config = function()
-          vim.cmd.colorscheme("bquiet")
+          vim.cmd.colorscheme("alabaster")
+          vim.api.nvim_set_hl(0, "@keyword", { fg = "#999999" })
+          vim.api.nvim_set_hl(0, "@keyword.function", { fg = "#999999" })
         end
       },
       {
