@@ -11,7 +11,7 @@
     a = add
     s = status
     b = branch
-    l = log
+    l = log --oneline --graph --decorate
     c = commit
     d = diff
     cm = commit -m

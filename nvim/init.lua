@@ -24,6 +24,7 @@ vim.o.undofile = true
 vim.o.termguicolors = true
 vim.o.number = true
 vim.o.relativenumber = false
+vim.o.winborder = "single"
 
 vim.o.cmdheight = 1
 vim.o.showmode = false
@@ -32,7 +33,7 @@ vim.o.showcmd = false
 vim.o.laststatus = 2
 vim.o.wildmode = "list:longest,list:full"
 vim.o.scrolloff = 4
--- vim.o.signcolumn = "yes:1"
+vim.o.signcolumn = "yes:1"
 -- vim.o.colorcolumn = "100"
 vim.o.cursorline = true
 vim.o.list = true
@@ -113,6 +114,16 @@ end
 autocmd("TermOpen", {
   pattern = "*",
   command = "startinsert",
+})
+
+autocmd("FileType", {
+  desc = "User: fix backdrop for lazy window",
+  pattern = "lazy_backdrop",
+  group = vim.api.nvim_create_augroup("lazynvim-fix", { clear = true }),
+  callback = function(ctx)
+    local win = vim.fn.win_findbuf(ctx.buf)[1]
+    vim.api.nvim_win_set_config(win, { border = "none" })
+  end,
 })
 
 set_ft_indent({
@@ -258,29 +269,21 @@ require("lazy").setup({
           vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', {})
         end
       },
-      -- {
-      --   "obizip/bquiet.nvim",
-      --   -- dir = "~/dev/bquiet.nvim",
-      --   lazy = false,
-      --   priority = 1000,
-      --   config = function()
-      --     vim.cmd.colorscheme("bquiet")
-      --   end
-      -- },
       {
-        "p00f/alabaster.nvim",
+        "obizip/bquiet.nvim",
+        -- dir = "~/repo/obizip-bquiet.nvim/",
         lazy = false,
         priority = 1000,
         config = function()
-          vim.cmd.colorscheme("alabaster")
-          vim.api.nvim_set_hl(0, "@keyword", { fg = "#999999" })
-          vim.api.nvim_set_hl(0, "@keyword.function", { fg = "#999999" })
+          require("bquiet").setup({})
+          vim.cmd.colorscheme("bquiet")
         end
       },
       {
         'nvim-lualine/lualine.nvim',
         lazy = false,
         opts = {
+          options = { section_separators = '', component_separators = '' },
           sections = {
             lualine_a = { 'mode' },
             lualine_b = { 'branch', 'diagnostics' },
@@ -351,6 +354,13 @@ require("lazy").setup({
             },
           }
         },
+      },
+      {
+        'norcalli/nvim-colorizer.lua',
+        event = "VeryLazy",
+        config = function()
+          require("colorizer").setup()
+        end
       },
       {
         "folke/trouble.nvim",
@@ -639,7 +649,23 @@ require("lazy").setup({
             },
           },
           sources = {
-            default = { "lsp", "path", "snippets", "buffer" },
+            default = function(_)
+              local success, node = pcall(vim.treesitter.get_node)
+              if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+                return { 'buffer' }
+              elseif vim.bo.filetype == 'lua' then
+                return { 'lsp', 'path' }
+              else
+                return { 'lsp', 'path', 'snippets', 'buffer' }
+              end
+            end,
+            providers = {
+              snippets = {
+                should_show_items = function(ctx)
+                  return ctx.trigger.initial_kind ~= 'trigger_character'
+                end
+              }
+            }
           },
           fuzzy = { implementation = "lua" },
         },
@@ -739,6 +765,13 @@ require("lazy").setup({
             },
           })
 
+          -- vim.lsp.config('denols', {
+          --   root_markers = { 'deno.json', 'deno.jsonc' },
+          -- })
+          -- vim.lsp.config('tsserver', {
+          --   root_markers = { 'package.json' },
+          -- })
+
           -- vim.lsp.config('ocamlls', {
           --   cmd = { 'ocamllsp' },
           --   filetypes = { 'ocaml', 'reason' },
@@ -750,7 +783,7 @@ require("lazy").setup({
 
           -- local lspconfig = require('lspconfig')
           -- vim.lsp.config("pyright", lspconfig.configs.pyright)
-          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "denols", "ocamllsp" })
+          vim.lsp.enable({ "lua_ls", "rust_analyzer", "gopls", "pyright", "ocamllsp" })
         end,
       },
       {
@@ -845,6 +878,28 @@ require("lazy").setup({
           { "<Leader>sl", "<Plug>(ReplSendVisual)", mode = "x", desc = "Send Repl Visual Selection" },
         },
       },
+      -- {
+      --   "scalameta/nvim-metals",
+      --   ft = { "scala", "sbt", "java" },
+      --   opts = function()
+      --     local metals_config = require("metals").bare_config()
+      --     metals_config.on_attach = function(client, bufnr)
+      --       -- your on_attach function
+      --     end
+      --
+      --     return metals_config
+      --   end,
+      --   config = function(self, metals_config)
+      --     local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+      --     vim.api.nvim_create_autocmd("FileType", {
+      --       pattern = self.ft,
+      --       callback = function()
+      --         require("metals").initialize_or_attach(metals_config)
+      --       end,
+      --       group = nvim_metals_group,
+      --     })
+      --   end
+      -- }
     },
   },
 })

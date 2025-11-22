@@ -19,6 +19,21 @@ export FZF_DEFAULT_OPTS="--walker-skip .git,node_modules,vendor"
 export LSCOLORS="ExFxCxDxBxegedabagac" # 全体的に明るい色に
 
 shopt -s extglob
+shopt -s globstar
+shopt -s nocaseglob
+shopt -s dirspell
+shopt -s cdspell
+shopt -s dotglob
+shopt -s checkwinsize
+shopt -s histappend
+shopt -s cmdhist
+
+# 不要履歴を避ける
+HISTCONTROL=ignoreboth
+HISTIGNORE="ls:ls -l:ll:clear:fg"
+
+# コマンドごとに即保存 & 最新履歴を取り込む
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a; history -n"
 
 # Completion
 bash_completion_paths=(
@@ -38,10 +53,11 @@ GRAY="\[\e[2;33m\]"
 RED="\[\e[0;31m\]"
 GREEN="\[\e[0;32m\]"
 BLUE="\[\e[0;34m\]"
+MAGENTA="\[\e[0;35m\]"
 CYAN="\[\e[0;36m\]"
 RESET="\[\e[0m\]"
 
-export PS1="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${CYAN}\w${RESET}\n\$ "
+export PS1="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${MAGENTA}\w${RESET}\n\$ "
 
 # Git Prompt
 git_prompt_paths=(
@@ -58,7 +74,7 @@ for git_prompt_path in "${git_prompt_paths[@]}"; do
 		GIT_PS1_SHOWSTASHSTATE=true
 		GIT_PS1_SHOWUPSTREAM=auto
 
-		first_line="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${CYAN}\w${RESET}"
+		first_line="${GREEN}\u${RESET}@${GREEN}\h${RESET}:${MAGENTA}\w${RESET}"
 		second_line="${RED}\$(__git_ps1 '(%s)')${RESET}\$${GRAY}\$([ \j -gt 0 ] && echo '*')${RESET} "
 		export PS1="${first_line}\n${second_line}"
 	fi
@@ -106,6 +122,10 @@ export PAGER=bat
 # alias lla="eza -al"
 # alias lt="eza -l --reverse --sort=modified"
 
+function mkcd() {
+	mkdir -p "$1" && cd "$1";
+}
+
 # yazi
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -131,3 +151,6 @@ fi
 if [[ -e "$HOME/.opam" ]]; then
 	eval $(opam env)
 fi
+
+# export PATH="$PATH:/Users/obi/Library/Application Support/Coursier/bin"
+# export PATH="$(cs java-home)/bin:$PATH"

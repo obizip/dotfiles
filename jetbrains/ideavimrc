@@ -13,6 +13,7 @@ set shellslash
 set expandtab
 set autoindent
 set smartindent
+set scrolloff=5
 
 " idea only
 set ideajoin
@@ -22,8 +23,77 @@ set surround
 set commentary
 set quickscope
 
-vnoremap < <gv
-vnoremap > >gv
+" =====================================================
+" IdeaVim: Neovim LSP ライクなキーマッピング
+" =====================================================
+
+" Leader キー
+let mapleader = " "
+
+" -----------------------------------------------------
+" Neovim LSP ライク機能
+" JetBrains のアクションを Neovim の LSP キーバインドに寄せる
+" -----------------------------------------------------
+
+" LSP: 定義ジャンプ (g d)
+nnoremap gd :action GotoDeclaration<CR>
+
+" LSP: 参照検索 (g r)
+nnoremap gr :action FindUsages<CR>
+
+" LSP: 実装ジャンプ (g i)
+nnoremap gi :action GotoImplementation<CR>
+
+" LSP: 型ジャンプ (g t)
+nnoremap gt :action GotoTypeDeclaration<CR>
+
+" LSP: デフォルトの K（ホバー）
+nnoremap K :action ShowHoverInfo<CR>
+
+" LSP: リネーム (<leader> r n)
+nnoremap <leader>rn :action RenameElement<CR>
+
+" LSP: コードアクション (<leader> c a)
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+
+" LSP: organise imports (<leader> o)
+nnoremap <leader>o :action OptimizeImports<CR>
+
+" LSP: format (<leader> f)
+nnoremap <leader>= :action ReformatCode<CR>
+
+" -----------------------------------------------------
+" Telescope 風（ファイル検索、シンボル検索）
+" -----------------------------------------------------
+
+" <leader>ff = ファイル検索
+nnoremap <leader>ff :action GotoFile<CR>
+
+" <leader>fg = grep 検索
+nnoremap <leader>fg :action FindInPath<CR>
+
+" <leader>fs = シンボル検索
+nnoremap <leader>fs :action SearchEverywhere<CR>
+
+" <leader>fb = バッファ一覧
+nnoremap <leader>fb :action RecentFiles<CR>
+
+
+" -----------------------------------------------------
+" ウインドウ移動 (Neovim と同じ)
+" -----------------------------------------------------
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
+" nnoremap <C-l> <C-w>l
+
+" -----------------------------------------------------
+" Neovim ターミナル風 (Idea Terminal)
+" -----------------------------------------------------
+" nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
+
+" vnoremap < <gv
+" vnoremap > >gv
 
 inoremap <C-a> <C-o>^
 inoremap <C-e> <C-o>$<Right>
@@ -35,12 +105,45 @@ inoremap <C-k> <C-o>D<Right>
 nnoremap j gj
 nnoremap k gk
 
-let mapleader = "\<Space>"
-nnoremap gd :action GotoDeclaration<CR>
-nnoremap gi :action GotoImplementation<CR>
-nnoremap gs :action GotoSuperMethod<CR>
-nnoremap ge :action ShowErrorDescription<CR>
-nnoremap K :action QuickImplementation<CR>
-nnoremap <leader>j :action NotebookSelectCellBelowAction<cr>
-nnoremap <leader>k :action NotebookSelectCellAboveAction<cr>
-nnoremap <leader>f :action GoToFile<cr>
+" let mapleader = "\<Space>"
+" nnoremap gd :action GotoDeclaration<CR>
+" nnoremap gi :action GotoImplementation<CR>
+" nnoremap gs :action GotoSuperMethod<CR>
+" nnoremap ge :action ShowErrorDescription<CR>
+" nnoremap K :action QuickImplementation<CR>
+" nnoremap <leader>j :action NotebookSelectCellBelowAction<cr>
+" nnoremap <leader>k :action NotebookSelectCellAboveAction<cr>
+" nnoremap <leader>f :action GoToFile<cr>
+
+sethandler <S-CR> a:ide
+sethandler <S-Left> a:ide
+sethandler <C-Left> a:ide
+sethandler <S-Up> a:ide
+sethandler <S-Right> a:ide
+sethandler <C-Right> a:ide
+sethandler <S-Down> a:ide
+sethandler <C-2> a:ide
+sethandler <C-S-2> a:ide
+sethandler <C-6> a:ide
+sethandler <C-S-6> a:ide
+sethandler <C-A> a:ide
+sethandler <C-B> a:ide
+sethandler <C-C> a:ide
+sethandler <C-D> a:ide
+sethandler <C-E> a:ide
+sethandler <C-F> a:ide
+sethandler <C-G> a:ide
+sethandler <C-H> a:ide
+sethandler <C-I> a:ide
+sethandler <C-J> a:ide
+sethandler <C-K> a:ide
+sethandler <C-L> a:ide
+sethandler <C-M> a:ide
+sethandler <C-N> a:ide
+sethandler <C-O> a:ide
+sethandler <C-P> a:ide
+sethandler <C-R> a:ide
+sethandler <C-S> a:ide
+sethandler <C-T> a:ide
+sethandler <C-V> a:ide
+sethandler <C-W> a:ide
