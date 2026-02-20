@@ -13,20 +13,20 @@ config.keys = keymap.keys
 config.key_tables = keymap.key_tables
 config.mouse_bindings = keymap.mouse_bindings
 
-config.colors = {
-  foreground = '#EEEEEE',
-  background = '#2d2530',
-  brights = {
-    'grey',
-    'red',
-    'lime',
-    'yellow',
-    'dodgerblue',
-    'fuchsia',
-    'aqua',
-    'white',
-  },
-}
+-- config.colors = {
+--   foreground = '#EEEEEE',
+--   background = '#2d2530',
+--   brights = {
+--     'grey',
+--     'red',
+--     'lime',
+--     'yellow',
+--     'dodgerblue',
+--     'fuchsia',
+--     'aqua',
+--     'white',
+--   },
+-- }
 
 config = host_config.apply(config)
 
