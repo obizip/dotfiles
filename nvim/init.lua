@@ -471,7 +471,7 @@ now(function()
 		},
 	})
 
-	require("nvim-treesitter").install({ "vimdoc", "lua", "html", "typescript", "tsx", "html", "css" })
+	-- require("nvim-treesitter").install({ "vimdoc", "lua", "html", "typescript", "tsx", "html", "css" })
 
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = { "vimdoc", "c3", "nim", "typescript", "typescriptreact" },
@@ -481,16 +481,22 @@ now(function()
 	})
 end)
 
--- add("obizip/bquiet.nvim")
--- require("bquiet").setup({ style = "dark" })
--- vim.cmd.colorscheme("bquiet")
+-- now(function()
+-- 	add("obizip/bquiet.nvim")
+-- 	require("bquiet").setup({ style = "dark" })
+-- 	vim.cmd.colorscheme("bquiet")
+-- end)
 now(function()
-	-- add("folke/tokyonight.nvim")
-	add("catppuccin/nvim")
-
-	vim.cmd([[colorscheme catppuccin-nvim]])
+	add("dchinmay2/alabaster.nvim")
+	vim.cmd.colorscheme("alabaster")
 end)
-
+-- now(function()
+-- 	-- add("folke/tokyonight.nvim")
+-- 	add("catppuccin/nvim")
+--
+-- 	vim.cmd([[colorscheme catppuccin-nvim]])
+-- end)
+--
 now(function()
 	add("folke/which-key.nvim")
 	require("which-key").setup({
@@ -583,7 +589,7 @@ now(function()
 	add("nvim-tree/nvim-tree.lua")
 	require("nvim-tree").setup({
 		view = {
-			width = 20,
+			width = 30,
 		},
 		renderer = {
 			indent_width = 2,
