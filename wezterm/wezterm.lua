@@ -1,6 +1,6 @@
-local wezterm = require 'wezterm'
-local keymap = require 'keymap'
-local host_config = require 'host_config'
+local wezterm = require("wezterm")
+local keymap = require("keymap")
+local host_config = require("host_config")
 
 local config = wezterm.config_builder()
 
@@ -13,20 +13,34 @@ config.keys = keymap.keys
 config.key_tables = keymap.key_tables
 config.mouse_bindings = keymap.mouse_bindings
 
--- config.colors = {
---   foreground = '#EEEEEE',
---   background = '#2d2530',
---   brights = {
---     'grey',
---     'red',
---     'lime',
---     'yellow',
---     'dodgerblue',
---     'fuchsia',
---     'aqua',
---     'white',
---   },
--- }
+config.colors = {
+	ansi = {
+		"#000000",
+		"#cc5555",
+		"#55cc55",
+		"#cdcd55",
+		"#5555cc",
+		"#cc55cc",
+		"#7acaca",
+		"#cccccc",
+	},
+	brights = {
+		"#555555",
+		"#ff5555",
+		"#55ff55",
+		"#ffff55",
+		"#5555ff",
+		"#ff55ff",
+		"#55ffff",
+		"#ffffff",
+	},
+	cursor_bg = "#53ae71",
+	cursor_border = "#53ae71",
+	cursor_fg = "#000000",
+	foreground = "#cecece",
+	background = "#0e1415",
+	indexed = {},
+}
 
 config = host_config.apply(config)
 
