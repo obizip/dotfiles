@@ -227,7 +227,7 @@ def parse_entries(
         ]
         for src, dest in pairs:
             if dest in entries:
-                info(f"Overwritten: {dest} -> {src}")
+                info(f"Overwritten by a extra config: {dest} -> {src}")
             entries[dest] = src
     return entries
 
