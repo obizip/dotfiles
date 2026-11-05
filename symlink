@@ -1,231 +1,246 @@
 #!/usr/bin/python3
+
 import argparse
 import json
 import os
-import time
+import sys
+import tempfile
+from dataclasses import dataclass
+from enum import Enum, auto
 from pathlib import Path
-from typing import Union
+from typing import Optional
 
 DEFAULT_LAST_ENTRIES_PATH = Path(".symlink/last_entries.json")
-DEFAULT_MOVE_PATH = Path(f".symlink/backup/{time.strftime('%y%m%d%H%M%S')}").absolute()
+DEFAULT_BACKUP_ROOT = Path(".symlink/backup")
 
 
-def main():
+class ActionKind(Enum):
+    LINK = auto()
+    REPLACE = auto()
+    MOVE = auto()
+    ALREADY = auto()
+    UNLINK = auto()
+    ABSENT = auto()
+    SKIP = auto()
+
+
+@dataclass(frozen=True)
+class Action:
+    kind: ActionKind
+    dest: Path
+    src: Path
+    message: str
+
+
+def main() -> int:
     parser = argparse.ArgumentParser(prog="symlink")
     subparsers = parser.add_subparsers(dest="subcommand", required=True)
-
     add_link_parser(subparsers)
     add_unlink_parser(subparsers)
-
     args = parser.parse_args()
-    args.func(args)
+    try:
+        if args.simulate:
+            info("[ SIMULATE ]")
+        args.func(args)
+    except (OSError, ValueError, RuntimeError) as exc:
+        error(str(exc))
+        return 1
+    return 0
 
 
-def add_link_parser(
-    subparsers: argparse._SubParsersAction,
-) -> None:
-    parser_link = subparsers.add_parser("link")
-    parser_link.add_argument(
-        "entries_path",
-        type=Path,
-        help="Path to the JSON file containing the symbolic link entries.",
+def add_common_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--simulate", action="store_true",
+        help="Print planned actions without modifying the filesystem.",
     )
-    parser_link.add_argument(
-        "--extra",
-        nargs="+",
-        type=str,
-        help="List of the Additional table names in the entries.",
+    parser.add_argument(
+        "--last-entries", type=Path, default=DEFAULT_LAST_ENTRIES_PATH,
+        help="Path to the JSON file recording previously linked entries.",
     )
-    parser_link.add_argument(
-        "--simulate",
-        action="store_true",
-        help="Enable simulating mode. It prints the actions that would be taken without actually modifying the filesystem.",
-    )
-    parser_link.add_argument(
-        "--move-exists",
-        action="store_true",
-        help="Enable to move existing destinations",
-    )
-    parser_link.add_argument(
-        "--unlink-exists",
-        action="store_true",
-        help="Enable to unlink existing destinations",
-    )
-    parser_link.add_argument(
-        "--autoremove",
-        action="store_true",
-        help="Enable to unlink unused destinations",
-    )
-    parser_link.add_argument(
-        "--last-entries",
-        type=Path,
-        default=DEFAULT_LAST_ENTRIES_PATH,
-        help="Path to the JSON file where the previously linked entries are recorded.",
-    )
-    parser_link.set_defaults(func=handle_link_command)
 
 
-class LinkArguments:
-    def __init__(self, args):
-        self.entries_path: Path = args.entries_path.absolute()
-        self.extra_tables: set[str] = set(args.extra or [])
-        self.simulate: bool = args.simulate
-        self.move_exists: bool = args.move_exists
-        self.unlink_exists: bool = args.unlink_exists
-        self.autoremove: bool = args.autoremove
-        self.last_entries_path: Path = args.last_entries.absolute()
-
-
-def handle_link_command(args):
-    args = LinkArguments(args)
-    if args.simulate:
-        info("[ SIMULATE ]")
-    entries = load_entries(
-        entries_path=args.entries_path, extra_tables=args.extra_tables
+def add_link_parser(subparsers: argparse._SubParsersAction) -> None:
+    parser = subparsers.add_parser("link")
+    parser.add_argument("entries_path", type=Path, help="Path to the JSON link entries.")
+    parser.add_argument(
+        "--extra", nargs="+", default=[],
+        help="Additional tables, applied in order; later tables take precedence.",
     )
-    last_entries = load_last_entries(last_entries_path=args.last_entries_path)
+    parser.add_argument(
+        "--move-exists", action="store_true", help="Back up existing files/directories."
+    )
+    parser.add_argument(
+        "--unlink-exists", action="store_true", help="Replace existing symbolic links."
+    )
+    parser.add_argument(
+        "--autoremove", action="store_true", help="Remove unused managed links."
+    )
+    add_common_arguments(parser)
+    parser.set_defaults(func=handle_link_command)
 
-    linked_entries = dict()
-    for dest, src in entries.items():
-        ok = link(
-            src=src,
-            dest=dest,
-            simulate=args.simulate,
-            move_exists=args.move_exists,
-            unlink_exists=args.unlink_exists,
-            move_path=DEFAULT_MOVE_PATH,
-        )
-        if ok:
-            linked_entries[dest] = src
 
-    merged_entries = last_entries | linked_entries
+def add_unlink_parser(subparsers: argparse._SubParsersAction) -> None:
+    parser = subparsers.add_parser("unlink")
+    add_common_arguments(parser)
+    parser.set_defaults(func=handle_unlink_command)
 
+
+def handle_link_command(args: argparse.Namespace) -> None:
+    entries = load_entries(args.entries_path, args.extra)
+    last_entries = load_last_entries(args.last_entries)
+    actions = plan_links(entries, args.move_exists, args.unlink_exists)
     if args.autoremove:
-        unused = set(last_entries.keys()) - set(entries.keys())
-        for dest in unused:
-            unlink(dest=dest, simulate=args.simulate)
-        merged_entries = {k: v for k, v in merged_entries.items() if k not in unused}
+        unused = {dest: src for dest, src in last_entries.items() if dest not in entries}
+        actions.extend(plan_unlinks(unused))
 
-    if not args.simulate:
-        args.last_entries_path.parent.mkdir(parents=True, exist_ok=True)
-        with args.last_entries_path.open("w") as f:
-            str_entries = {str(dest): str(src) for dest, src in merged_entries.items()}
-            json.dump(str_entries, f, indent=2, sort_keys=True)
-
-
-def link(
-    src: Path,
-    dest: Path,
-    simulate: bool,
-    move_exists: bool,
-    unlink_exists: bool,
-    move_path: Path,
-) -> bool:
-    if dest.is_symlink():
-        linked_src = dest.resolve()
-        if src == linked_src:
-            info(f"Already linked: {dest}")
-            return True
-
-        if not unlink_exists:
-            warn(
-                f"Already linked with different source: {src} != {linked_src} -> {dest}"
-            )
-            return False
-
-        info(f"Unlink existing symbolic link: {dest}")
-        if not simulate:
-            dest.unlink(missing_ok=True)
-
-    elif dest.exists():
-        if move_exists:
-            moved_dest = move_path / dest.name
-            info(f"Move existing file/directory: {dest} -> {moved_dest}")
-            if not simulate:
-                moved_dest.parent.mkdir(parents=True, exist_ok=True)
-                dest.rename(moved_dest)
+    completed = execute_actions(actions, simulate=args.simulate)
+    merged_entries = dict(last_entries)
+    for dest in completed:
+        if dest in entries:
+            merged_entries[dest] = entries[dest]
         else:
-            warn(f"File or directory already exists: {dest}")
-            return False
-
-    info(f"Link: {src} -> {dest}")
-    if not simulate:
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.symlink_to(src)
-
-    return True
-
-
-def add_unlink_parser(
-    subparsers: argparse._SubParsersAction,
-) -> None:
-    parser_unlink = subparsers.add_parser("unlink")
-    parser_unlink.add_argument(
-        "--simulate",
-        action="store_true",
-        help="Enable simulating mode. It prints the actions that would be taken without actually modifying the filesystem.",
-    )
-    parser_unlink.add_argument(
-        "--last-entries",
-        type=Path,
-        default=DEFAULT_LAST_ENTRIES_PATH,
-        help="Path to the JSON file where the previously linked entries are recorded.",
-    )
-    parser_unlink.set_defaults(func=handle_unlink_command)
-
-
-class UnlinkArguments:
-    def __init__(self, args):
-        self.simulate: bool = args.simulate
-        self.last_entries_path: Path = args.last_entries.absolute()
-
-
-def handle_unlink_command(args):
-    args = UnlinkArguments(args)
-    last_entries = load_last_entries(last_entries_path=args.last_entries_path)
-    for dest_str in last_entries.keys():
-        unlink(dest=Path(dest_str), simulate=args.simulate)
+            merged_entries.pop(dest, None)
     if not args.simulate:
-        args.last_entries_path.unlink()
+        save_last_entries(args.last_entries, merged_entries)
 
 
-def unlink(dest: Path, simulate: bool):
-    if dest.is_symlink():
-        info(f"Unlink: {dest}")
-        if not simulate:
-            dest.unlink(missing_ok=True)
-    else:
-        info(f"Unlink target is not symbolic link. Do nothing: {dest}")
+def handle_unlink_command(args: argparse.Namespace) -> None:
+    last_entries = load_last_entries(args.last_entries)
+    completed = execute_actions(plan_unlinks(last_entries), simulate=args.simulate)
+    if not args.simulate:
+        remaining = {dest: src for dest, src in last_entries.items() if dest not in completed}
+        if remaining:
+            save_last_entries(args.last_entries, remaining)
+        else:
+            args.last_entries.unlink(missing_ok=True)
 
 
-def load_entries(entries_path: Path, extra_tables: set[str]) -> dict[Path, Path]:
-    if entries_path.exists():
-        try:
-            with entries_path.open("rb") as f:
-                raw_entries = json.load(f)
-                entries = parse_entries(
-                    raw_entries=raw_entries, extra_tables=extra_tables
-                )
-                return entries
-        except Exception as e:
-            error(f"Failed to open {entries_path}: {e}")
-            exit(1)
-    else:
-        error(f"Entries path does not exists: {entries_path}")
-        exit(1)
+def link_matches(dest: Path, src: Path) -> bool:
+    return dest.is_symlink() and dest.resolve() == src.resolve()
 
 
-def parse_entries(
-    raw_entries: dict[str, dict[str, str]], extra_tables: set[str]
-) -> dict[Path, Path]:
-    entries: dict[Path, Path] = dict()
-    for table in ["default"] + list(extra_tables):
-        str_entries = raw_entries[table]
-        pairs = [
-            make_entry_to_paths(src_str=src_str, dest_str=dest_str)
-            for dest_str, src_str in str_entries.items()
-        ]
-        for src, dest in pairs:
+def plan_links(
+    entries: dict[Path, Path], move_exists: bool, unlink_exists: bool
+) -> list[Action]:
+    actions = []
+    for dest, src in entries.items():
+        if dest.is_symlink():
+            if link_matches(dest, src):
+                kind = ActionKind.ALREADY
+                message = f"Already linked: {dest}"
+            elif unlink_exists:
+                kind = ActionKind.REPLACE
+                message = f"Replace symbolic link: {dest} -> {src}"
+            else:
+                kind = ActionKind.SKIP
+                message = f"Already linked with different source: {dest} -> {dest.readlink()}"
+        elif dest.exists():
+            if move_exists:
+                kind = ActionKind.MOVE
+                message = f"Back up existing file/directory and link: {dest} -> {src}"
+            else:
+                kind = ActionKind.SKIP
+                message = f"File or directory already exists: {dest}"
+        else:
+            kind = ActionKind.LINK
+            message = f"Link: {src} -> {dest}"
+        actions.append(Action(kind, dest, src, message))
+    return actions
+
+
+def plan_unlinks(entries: dict[Path, Path]) -> list[Action]:
+    actions = []
+    for dest, src in entries.items():
+        if link_matches(dest, src):
+            kind = ActionKind.UNLINK
+            message = f"Unlink: {dest}"
+        elif not dest.is_symlink() and not dest.exists():
+            kind = ActionKind.ABSENT
+            message = f"Already absent: {dest}"
+        else:
+            kind = ActionKind.SKIP
+            message = f"Managed link has changed; keep destination and history: {dest}"
+        actions.append(Action(kind, dest, src, message))
+    return actions
+
+
+def execute_actions(
+    actions: list[Action], simulate: bool, backup_root: Path = DEFAULT_BACKUP_ROOT
+) -> set[Path]:
+    completed = set()
+    backup_path = None
+    for action in actions:
+        if action.kind is ActionKind.SKIP:
+            warn(action.message)
+            continue
+        info(action.message)
+        if simulate:
+            completed.add(action.dest)
+            continue
+
+        if action.kind is ActionKind.UNLINK:
+            # Check ownership again immediately before removing the link.
+            if not link_matches(action.dest, action.src):
+                warn(f"Managed link has changed; keep destination: {action.dest}")
+                continue
+            action.dest.unlink()
+        elif action.kind is ActionKind.LINK:
+            create_link(action)
+        elif action.kind is ActionKind.REPLACE:
+            action.dest.unlink()
+            create_link(action)
+        elif action.kind is ActionKind.MOVE:
+            backup_path = backup_existing(action.dest, backup_root, backup_path)
+            create_link(action)
+        completed.add(action.dest)
+    return completed
+
+
+def create_link(action: Action) -> None:
+    action.dest.parent.mkdir(parents=True, exist_ok=True)
+    action.dest.symlink_to(action.src)
+
+
+def backup_existing(dest: Path, backup_root: Path, backup_path: Optional[Path]) -> Path:
+    if backup_path is None:
+        backup_root.mkdir(parents=True, exist_ok=True)
+        backup_path = Path(tempfile.mkdtemp(prefix="run-", dir=backup_root))
+    # Preserve the absolute destination's directory structure.
+    absolute_dest = Path(os.path.abspath(dest))
+    moved_dest = backup_path / absolute_dest.relative_to(absolute_dest.anchor)
+    moved_dest.parent.mkdir(parents=True, exist_ok=True)
+    info(f"Move: {dest} -> {moved_dest}")
+    dest.rename(moved_dest)
+    return backup_path
+
+
+def read_json(path: Path) -> object:
+    with path.open(encoding="utf-8") as file:
+        return json.load(file)
+
+
+def validate_entries(raw_entries: object, context: str) -> dict[str, str]:
+    if not isinstance(raw_entries, dict) or any(
+        not isinstance(dest, str) or not isinstance(src, str)
+        for dest, src in raw_entries.items()
+    ):
+        raise ValueError(f"{context}: expected an object mapping destinations to sources")
+    return raw_entries
+
+
+def load_entries(entries_path: Path, extra_tables: list[str]) -> dict[Path, Path]:
+    return parse_entries(read_json(entries_path), extra_tables)
+
+
+def parse_entries(raw_entries: object, extra_tables: list[str]) -> dict[Path, Path]:
+    if not isinstance(raw_entries, dict):
+        raise ValueError("Entries must be an object containing named tables")
+    entries = {}
+    for table in ["default", *extra_tables]:
+        if table not in raw_entries:
+            raise ValueError(f"Entries table does not exist: {table}")
+        for dest_str, src_str in validate_entries(raw_entries[table], table).items():
+            src, dest = make_entry_to_paths(src_str, dest_str)
             if dest in entries:
                 info(f"Overwritten: {dest} -> {src}")
             entries[dest] = src
@@ -233,39 +248,56 @@ def parse_entries(
 
 
 def make_entry_to_paths(src_str: str, dest_str: str) -> tuple[Path, Path]:
+    # Source paths remain relative to the working directory, as in the original CLI.
     src = Path(src_str).absolute()
     dest = Path(os.path.expandvars(dest_str)).expanduser().absolute()
     return src, dest
 
 
 def load_last_entries(last_entries_path: Path) -> dict[Path, Path]:
-    if last_entries_path.exists():
-        try:
-            with last_entries_path.open("rb") as f:
-                last_entries = json.load(f)
-                entries: dict[Path, Path] = dict()
-                for dest, src in last_entries.items():
-                    assert isinstance(dest, str)
-                    assert isinstance(src, str)
-                    entries[Path(dest)] = Path(src)
-                return entries
-
-        except Exception as e:
-            warn(f"Failed to open or read {last_entries_path}: {e}")
-    return dict()
+    try:
+        raw_entries = read_json(last_entries_path)
+    except FileNotFoundError:
+        return {}
+    str_entries = validate_entries(raw_entries, str(last_entries_path))
+    entries = {}
+    for dest, src in str_entries.items():
+        if not Path(dest).is_absolute() or not Path(src).is_absolute():
+            raise ValueError(f"{last_entries_path}: history paths must be absolute")
+        entries[Path(dest)] = Path(src)
+    return entries
 
 
-def info(message: str):
+def save_last_entries(path: Path, entries: dict[Path, Path]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.", delete=False
+        ) as file:
+            temporary_path = Path(file.name)
+            json.dump(
+                {str(dest): str(src) for dest, src in entries.items()},
+                file, indent=2, sort_keys=True,
+            )
+            file.write("\n")
+        temporary_path.replace(path)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
+
+
+def info(message: str) -> None:
     print(f"\033[32m[INFO]\033[0m {message}")
 
 
-def warn(message: str):
+def warn(message: str) -> None:
     print(f"\033[33m[WARN]\033[0m {message}")
 
 
-def error(message: str):
-    print(f"\033[31m[ERROR]\033[0m {message}")
+def error(message: str) -> None:
+    print(f"\033[31m[ERROR]\033[0m {message}", file=sys.stderr)
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
