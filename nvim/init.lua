@@ -443,6 +443,28 @@ p.add({
 
 -- UI
 p.add({
+	url = "https://github.com/j-morano/buffer_manager.nvim",
+	config = function()
+		require("buffer_manager").setup()
+
+		-- Setup
+		require("buffer_manager").setup({ height = 0.75 })
+		-- Navigate buffers bypassing the menu
+		local bmui = require("buffer_manager.ui")
+		local keys = "1234567890"
+		for i = 1, #keys do
+			local key = keys:sub(i, i)
+			nnoremap(string.format("<Leader>%s", key), function()
+				bmui.nav_file(i)
+			end)
+		end
+		nnoremap("<Leader>b", bmui.toggle_quick_menu, "Toggle Buffer Viewer")
+		nnoremap("<C-n>", bmui.nav_next)
+		nnoremap("<C-p>", bmui.nav_prev)
+	end,
+})
+
+p.add({
 	url = "https://github.com/nvim-lualine/lualine.nvim",
 	config = function()
 		require("lualine").setup({
