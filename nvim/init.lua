@@ -194,7 +194,9 @@ end
 p.add({
 	url = "https://github.com/obizip/bquiet.nvim",
 	config = function()
-		require("bquiet").setup({})
+		require("bquiet").setup({
+			style = "dark",
+		})
 		vim.cmd.colorscheme("bquiet")
 	end,
 })
