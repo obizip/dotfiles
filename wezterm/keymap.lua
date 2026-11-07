@@ -16,6 +16,8 @@ end
 
 local keymap = {
 	keys = {
+		-- Send a logical Backspace event when Ctrl-H is pressed.
+		{ key = "h", mods = "CTRL", action = act.SendKey({ key = "Backspace" }) },
 		{ key = "n", mods = "ALT", action = act.ActivateTabRelative(1) },
 		{ key = "p", mods = "ALT", action = act.ActivateTabRelative(-1) },
 		{ key = "-", mods = "ALT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },

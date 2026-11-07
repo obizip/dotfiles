@@ -194,7 +194,9 @@ end
 p.add({
 	url = "https://github.com/obizip/bquiet.nvim",
 	config = function()
-		require("bquiet").setup({})
+		require("bquiet").setup({
+			style = "dark",
+		})
 		vim.cmd.colorscheme("bquiet")
 	end,
 })
@@ -355,6 +357,7 @@ p.add({
 	config = function()
 		require("telescope").setup({
 			defaults = {
+				path_display = { "filename_first" },
 				file_ignore_patterns = {
 					".git/",
 					"yarn.lock",

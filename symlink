@@ -242,7 +242,7 @@ def parse_entries(raw_entries: object, extra_tables: list[str]) -> dict[Path, Pa
         for dest_str, src_str in validate_entries(raw_entries[table], table).items():
             src, dest = make_entry_to_paths(src_str, dest_str)
             if dest in entries:
-                info(f"Overwritten: {dest} -> {src}")
+                info(f"Overwritten by a extra config: {dest} -> {src}")
             entries[dest] = src
     return entries
 

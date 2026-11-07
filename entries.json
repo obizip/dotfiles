@@ -16,6 +16,8 @@
     "${HOME}/.config/tmux/copy_command.sh":    "tmux/copy_command.sh",
     "${HOME}/.config/tmux/host.conf":          "tmux/host.conf",
 
+    "${HOME}/.config/herdr/config.toml":       "herdr/config.toml",
+
     "${HOME}/.config/yazi/yazi.toml":          "yazi/yazi.toml",
     "${HOME}/.config/yazi/keymap.toml":        "yazi/keymap.toml",
 
